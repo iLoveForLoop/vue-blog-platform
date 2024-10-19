@@ -2,11 +2,18 @@
 </script>
 
 <template>
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-      <div class="col-6 bg-dark" style="height: 100vh">
-        <h2 class="text-light text-center">Home Rants</h2>
-      </div>
+  <div
+    class="d-flex bg-dark w-100 p-2 justify-content-center"
+    style="height: 100vh"
+  >
+    <div>
+      <h2 class="text-light">Home Rants</h2>
     </div>
   </div>
 </template>
+
+<style scoped>
+.mr {
+  margin-right: 8em;
+}
+</style>

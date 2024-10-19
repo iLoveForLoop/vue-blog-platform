@@ -2,56 +2,29 @@
 </script>
 
 <template>
-  <!-- <div
-    class="navbar bg-body-secondary py-3 px-5 d-flex justify-content-between poppins-regular"
+  <div
+    class="bg-body-secondary py-2 poppins-regular d-flex justify-content-between"
   >
-    <div class="">
-      <a class="fs-3 text-bg-dark p-2 rounded" href="#">
+    <div class="col-3 d-flex justify-content-start ps-5">
+      <a class="fs-3 text-dark p-2 text-decoration-none" href="#">
         <i class="bi bi-bootstrap-fill"></i>
-        Bayking
+        Rants
       </a>
     </div>
 
-    <div class="d-flex gap-4 fs-5">
-      <router-link to="/create" class="text-dark text-decoration-none"
-        >Create</router-link
-      >
-      <router-link to="/" class="text-dark text-decoration-none"
-        >Home</router-link
-      >
-      <router-link to="/profile" class="text-dark text-decoration-none"
-        >Profile</router-link
-      >
-    </div>
-
-    <div class="">
-      <a class="text-dark small-text text-decoration-none" href="#"> Logout </a>
-    </div>
-  </div> -->
-
-  <div class="bg-body-secondary py-2 poppins-regular">
-    <div class="row">
-      <div class="col-3 d-flex justify-content-start ps-5">
-        <a class="fs-3 text-dark p-2 text-decoration-none" href="#">
-          <i class="bi bi-bootstrap-fill"></i>
-          Rants
-        </a>
-      </div>
-      <div class="col-6 d-flex justify-content-between align-items-center pad">
-        <router-link to="/create" class="text-dark text-decoration-none"
-          >Create</router-link
-        >
-        <router-link to="/" class="text-dark text-decoration-none"
-          >Rants</router-link
-        >
-        <router-link to="/profile" class="text-dark text-decoration-none"
-          >Profile</router-link
-        >
-      </div>
-      <div class="col-3 d-flex justify-content-end align-items-center pe-5">
-        <a class="text-dark small-text text-decoration-none" href="#">
-          <i class="bi bi-gear"></i>
-        </a>
+    <div class="col-3 d-flex justify-content-end align-items-center pe-5">
+      <div class="container">
+        <form class="d-flex" role="search">
+          <input
+            class="form-control me-2 rounded-pill border border-2 border-dark custom-input"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="border-0 bg-transparent fs-5" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -60,10 +33,16 @@
 
 <style scoped>
 .small-text {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .pad {
   padding: 0 5em;
+}
+
+.custom-input:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #f9fdf9;
+  outline: none;
 }
 </style>

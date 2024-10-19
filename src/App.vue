@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import Sidebar from './components/Sidebar.vue'
 import Navbar from './components/Navbar.vue'
 import { ref } from 'vue'
 
@@ -12,8 +12,11 @@ const logchecker = data => {
 
 <template>
   <div class="bg-secondary" style="height: 100vh">
-    <Navbar v-if="isLoggedIn" />
-    <RouterView @checklog="logchecker" />
+    <Navbar />
+    <div class="d-flex justify-content-center">
+      <Sidebar />
+      <RouterView @checklog="logchecker" />
+    </div>
   </div>
 </template>
 
