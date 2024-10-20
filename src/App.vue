@@ -14,7 +14,6 @@ const logchecker = data => {
   <div class="bg-secondary" style="height: 100vh">
     <Navbar />
     <div class="d-flex justify-content-center">
-      <Sidebar />
       <RouterView @checklog="logchecker" />
     </div>
   </div>

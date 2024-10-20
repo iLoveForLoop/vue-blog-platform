@@ -1,18 +1,36 @@
 <script setup>
+import Sidebar from './Sidebar.vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+const store = useStore()
+
+// Safely access user email with a fallback value
+const userEmail = computed(() => store.state.user?.email || 'Guest')
 </script>
 
 <template>
   <div
-    class="bg-body-secondary py-2 poppins-regular d-flex justify-content-between"
+    class="bg-body-secondary poppins-regular d-flex justify-content-between"
+    style="height: 9vh"
   >
-    <div class="col-3 d-flex justify-content-start ps-5">
-      <a class="fs-3 text-dark p-2 text-decoration-none" href="#">
+    <div class="d-flex justify-content-start gap-3">
+      <Sidebar />
+      <a
+        class="fs-3 text-dark p-2 text-decoration-none d-flex align-items-center gap-2"
+        href="#"
+      >
         <i class="bi bi-bootstrap-fill"></i>
         Rants
       </a>
     </div>
 
-    <div class="col-3 d-flex justify-content-end align-items-center pe-5">
+    <div class="d-flex align-items-center">
+      <!-- Use conditional rendering for user email -->
+      <h6>{{ userEmail }}</h6>
+    </div>
+
+    <div class="col-3 d-flex justify-content-end align-items-center me-5 my-2">
       <div class="container">
         <form class="d-flex" role="search">
           <input
@@ -29,7 +47,6 @@
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .small-text {

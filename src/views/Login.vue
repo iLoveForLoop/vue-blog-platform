@@ -1,30 +1,43 @@
 <script setup>
 import { ref, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRouter()
+const store = useStore()
 const emit = defineEmits(['checklog'])
-
-const sendData = () => {}
 
 const email = ref('')
 const password = ref('')
 const error = ref(null)
 
-const accounts = [{ email: 'admin@vue.com', password: 'admin123' }]
-
-const login = () => {
-  if (email.value && password.value) {
-    accounts.forEach(account => {
-      if (account.email == email.value && account.password == password.value) {
-        emit('checklog', true)
-        router.push('/')
-      } else {
-        error.value = 'No such accounts exist'
-      }
+const login = async () => {
+  try {
+    await store.dispatch('logIn', {
+      email: email.value,
+      password: password.value,
     })
-  } else {
-    error.value = 'Invalid Input'
+    router.push('/')
+  } catch (err) {
+    error.value = err.message
+    setTimeout(() => {
+      error.value = null
+    }, 2000)
+  }
+}
+
+const signUp = async () => {
+  try {
+    await store.dispatch('signUp', {
+      email: email.value,
+      password: password.value,
+    })
+    router.push('/')
+  } catch (err) {
+    error.value = err.message
+    setTimeout(() => {
+      error.value = null
+    }, 2000)
   }
 }
 </script>
@@ -34,7 +47,49 @@ const login = () => {
     class="container d-flex justify-content-center align-items-center poppins-regular"
     style="height: 100vh"
   >
-    <div style="width: 45%">
+    <!-- <div style="width: 40%">
+      <div class="alert alert-danger" role="alert" v-if="error">
+        {{ error }}
+      </div>
+
+      <form @submit.prevent="signUp" class="p-5 blue">
+        <div
+          class="d-flex align-items-center justify-content-center gap-2 mb-3"
+        >
+          <h2 class="m-0">Sign Up</h2>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            class="form-control"
+            type="email"
+            id="email"
+            placeholder="Enter you email"
+            v-model="email"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="password" id="password" class="form-label"
+            >Password</label
+          >
+          <input
+            class="form-control"
+            type="password"
+            placeholder="Enter you password"
+            id="password"
+            v-model="password"
+          />
+        </div>
+
+        <div class="mb-3 d-flex justify-content-center green">
+          <button class="btn w-100" type="submit">Sign Up</button>
+        </div>
+      </form>
+    </div> -->
+
+    <div style="width: 40%">
       <div class="alert alert-danger" role="alert" v-if="error">
         {{ error }}
       </div>
