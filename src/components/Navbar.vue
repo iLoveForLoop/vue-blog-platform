@@ -5,7 +5,6 @@ import { computed } from 'vue'
 
 const store = useStore()
 
-// Safely access user email with a fallback value
 const userEmail = computed(() => store.state.user?.email || 'Guest')
 </script>
 
@@ -26,8 +25,7 @@ const userEmail = computed(() => store.state.user?.email || 'Guest')
     </div>
 
     <div class="d-flex align-items-center">
-      <!-- Use conditional rendering for user email -->
-      <h6>{{ userEmail }}</h6>
+      <h6>{{ store.state.user?.email || 'guest' }}</h6>
     </div>
 
     <div class="col-3 d-flex justify-content-end align-items-center me-5 my-2">
