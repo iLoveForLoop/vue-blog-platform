@@ -92,7 +92,7 @@ const manageRoute = data => {
     </div>
   </div>
 
-  <div v-else class="fs-2 d-flex align-items-center ms-5">
+  <div v-show="!isShow" class="fs-2 d-flex align-items-center ms-5">
     <i class="bi bi-list pointer" @click="toggleBar"></i>
   </div>
 </template>

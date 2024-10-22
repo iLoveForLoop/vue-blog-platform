@@ -1,11 +1,10 @@
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 const router = useRouter()
 const store = useStore()
-const emit = defineEmits(['checklog'])
 
 const email = ref('')
 const password = ref('')
