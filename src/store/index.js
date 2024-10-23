@@ -48,11 +48,11 @@ const store = createStore({
   },
 })
 
-const unsub = onAuthStateChanged(auth, user => {
+const kill = onAuthStateChanged(auth, user => {
   store.commit('updateUser', user)
   store.commit('setIsAuthReady', true)
 
-  unsub()
+  kill()
 })
 
 export default store

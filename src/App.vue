@@ -1,19 +1,13 @@
 <script setup>
 import Navbar from './components/Navbar.vue'
 import { ref } from 'vue'
-
-const isLoggedIn = ref(false)
-
-const logchecker = data => {
-  isLoggedIn.value = data
-}
 </script>
 
 <template>
-  <div class="bg-secondary" style="height: 100vh">
+  <div class="bg-secondary" style="height: ">
     <Navbar />
     <div class="d-flex justify-content-center">
-      <RouterView @checklog="logchecker" />
+      <RouterView />
     </div>
   </div>
 </template>

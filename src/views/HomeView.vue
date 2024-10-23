@@ -1,9 +1,13 @@
 <script setup>
-import { getCollection, getSnapCollection } from '@/composables/getCollections'
+import {
+  getCollection,
+  getSnapCollection,
+  getSnapCollectionWithUser,
+} from '@/composables/getCollections'
 import { deletePost } from '@/composables/deletePost'
 import Post from '@/components/Post.vue'
 
-const { posts } = getSnapCollection()
+const { posts } = getSnapCollectionWithUser()
 
 const handleDelete = id => {
   deletePost(id)
@@ -14,10 +18,10 @@ const handleDelete = id => {
 
 <template>
   <div
-    class="container bg-dark p-5 overflow-scroll hidebar"
+    class="container bg-dark px-5 overflow-scroll hidebar poppins-regular b-pad"
     style="height: 100vh"
   >
-    <h2 class="text-light">Home Rants</h2>
+    <!-- <h2 class="text-light text-center">Welcome To Rants</h2> -->
     <div v-for="post in posts" :key="post.id">
       <Post :post="post" />
       <button class="btn btn-danger" @click="handleDelete(post.id)">
@@ -34,5 +38,9 @@ const handleDelete = id => {
 
 .hidebar {
   scrollbar-width: none;
+}
+
+.b-pad {
+  padding-bottom: 10%;
 }
 </style>

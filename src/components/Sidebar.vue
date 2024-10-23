@@ -46,49 +46,61 @@ const manageRoute = data => {
 
 <template>
   <div
-    class="w-25 bg-primary d-flex flex-column poppins-regular text-size position-absolute"
+    class="side-w bg-light d-flex flex-column poppins-regular text-size position-absolute"
     style="height: 100vh"
     v-if="isShow"
   >
-    <div class="w-100 p-3 text-end">
-      <i class="bi bi-x-lg pointer" @click="toggleBar"></i>
+    <div
+      class="w-100 p-3 ps-4 d-flex align-items-center justify-content-between"
+    >
+      <div class="fs-4">
+        <i class="bi bi-bootstrap-fill"></i>
+        Rants
+      </div>
+
+      <i class="bi bi-x-lg pointer fs-5" @click="toggleBar"></i>
     </div>
     <router-link
       to="/"
-      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none"
+      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('rants')"
     >
       Rants
+      <i class="bi bi-house-door"></i>
     </router-link>
     <router-link
       to="/create"
-      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none"
+      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('create')"
     >
       Create
+      <i class="bi bi-pencil-square"></i>
     </router-link>
 
     <router-link
       to="/profile"
-      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none"
+      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('profile')"
     >
       Profile
+      <i class="bi bi-person"></i>
     </router-link>
 
     <router-link
       to="/"
-      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none"
+      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('settings')"
     >
       Settings
+      <i class="bi bi-gear"></i>
     </router-link>
 
     <div
-      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none"
+      class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="logout"
     >
       Logout
+      <i class="bi bi-box-arrow-left"></i>
     </div>
   </div>
 
@@ -111,6 +123,10 @@ const manageRoute = data => {
 }
 
 .sideHover:hover {
-  background: #fff;
+  background: #a7a6a6;
+}
+
+.side-w {
+  width: 15%;
 }
 </style>

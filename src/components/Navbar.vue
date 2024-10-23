@@ -28,7 +28,8 @@ const userEmail = computed(() => store.state.user?.email || 'Guest')
         </div>
 
         <div class="d-flex align-items-center">
-          <h6>{{ store.state.user?.uid || 'guest' }}</h6>
+          <h6>{{ store.state.user?.uid || 'guest' }} -</h6>
+          <h6>{{ store.state.user?.email || 'guest' }}</h6>
         </div>
 
         <div

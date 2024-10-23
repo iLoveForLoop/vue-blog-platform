@@ -46,7 +46,7 @@ const signUp = async () => {
     class="container d-flex justify-content-center align-items-center poppins-regular"
     style="height: 100vh"
   >
-    <!-- <div style="width: 40%">
+    <div style="width: 40%">
       <div class="alert alert-danger" role="alert" v-if="error">
         {{ error }}
       </div>
@@ -86,7 +86,7 @@ const signUp = async () => {
           <button class="btn w-100" type="submit">Sign Up</button>
         </div>
       </form>
-    </div> -->
+    </div>
 
     <div style="width: 40%">
       <div class="alert alert-danger" role="alert" v-if="error">
