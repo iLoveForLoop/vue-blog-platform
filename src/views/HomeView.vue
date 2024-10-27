@@ -24,9 +24,9 @@ const handleDelete = id => {
     <!-- <h2 class="text-light text-center">Welcome To Rants</h2> -->
     <div v-for="post in posts" :key="post.id">
       <Post :post="post" />
-      <button class="btn btn-danger" @click="handleDelete(post.id)">
+      <!-- <button class="btn btn-danger" @click="handleDelete(post.id)">
         Delete
-      </button>
+      </button> -->
     </div>
   </div>
 </template>

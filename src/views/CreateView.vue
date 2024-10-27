@@ -27,12 +27,12 @@ const handleSubmit = async () => {
 
 
 <template>
-  <div class="container p-5 bg-dark" style="height: 100vh">
-    <h2 class="text-light text-center">Create Rants</h2>
+  <div class="container p-5 bg-dark poppins-regular" style="height: 100vh">
+    <h2 class="text-light">Post a rant</h2>
 
     <form
       @submit.prevent="handleSubmit"
-      class="d-flex justify-content-center flex-column p-5 mt-5"
+      class="d-flex justify-content-center flex-column p-5"
     >
       <div>
         <textarea

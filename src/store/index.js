@@ -16,7 +16,6 @@ const store = createStore({
     updateUser(state, payload) {
       console.log('up')
       state.user = payload
-      console.log(state.user)
     },
     setIsAuthReady(state, payload) {
       state.isAuthReady = payload

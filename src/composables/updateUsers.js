@@ -7,7 +7,6 @@ export const updateUsers = () => {
 
   auth.onAuthStateChanged(async user => {
     if (user) {
-      // User is signed in, store user info in Firestore
       const userRef = doc(db, 'users', user.uid)
 
       await setDoc(

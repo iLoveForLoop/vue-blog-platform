@@ -10,7 +10,7 @@ const props = defineProps({
     class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-5 pb-0"
   >
     <div
-      class="w-75 d-flex flex-column justify-content-start p-2 gap-3"
+      class="w-75 d-flex flex-column justify-content-start p-2 bg-light rounded"
       style="height: auto"
     >
       <div
@@ -22,6 +22,8 @@ const props = defineProps({
         </p>
       </div>
 
+      <div class="bg-light line"></div>
+
       <div
         class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between content-based"
       >
@@ -30,8 +32,10 @@ const props = defineProps({
         </p>
       </div>
 
+      <div class="bg-light line"></div>
+
       <div
-        class="bg-light rounded-pill py-3 px-5 d-flex align-items-center justify-content-start"
+        class="bg-light rounded-5 py-3 px-3 d-flex align-items-center justify-content-start"
       >
         <p class="p-0 m-0">
           {{ props.post.content }}
@@ -57,5 +61,11 @@ const props = defineProps({
 
 .date-size {
   font-size: 0.7em;
+}
+
+.line {
+  width: 2px;
+  height: 1vh;
+  margin-left: 10%;
 }
 </style>

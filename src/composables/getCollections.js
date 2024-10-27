@@ -7,6 +7,7 @@ import {
   doc,
 } from 'firebase/firestore'
 import { ref } from 'vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 export const getCollection = () => {
   let posts = ref([])
@@ -75,4 +76,45 @@ export const getSnapCollectionWithUser = () => {
   )
 
   return { posts }
+}
+
+export const getCurrentUserInfo = async id => {
+  const user = ref(null)
+
+  try {
+    const userRef = doc(db, 'users', id)
+    const snapshot = await getDoc(userRef)
+
+    if (snapshot.exists()) {
+      user.value = snapshot.data()
+    } else {
+      throw new Error('User does not exist')
+    }
+  } catch (err) {
+    console.log(err.message)
+  }
+
+  return { user }
+}
+
+export const getUserPost = id => {
+  const postRef = collection(db, 'posts')
+  const userPost = ref([])
+
+  onSnapshot(postRef, async snapshot => {
+    userPost.value = []
+
+    snapshot.docs.forEach(data => {
+      const tmp = data.data()
+
+      if (tmp.user_id === id) {
+        userPost.value.push({ ...data.data(), id: data.id })
+      }
+    })
+
+    console.log('in', userPost.value)
+  })
+
+  console.log('Out', userPost.value)
+  return { userPost }
 }

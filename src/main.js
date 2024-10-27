@@ -13,6 +13,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 const app = createApp(App)
 
 updateUsers()
+
 app.use(router)
 app.use(store)
 

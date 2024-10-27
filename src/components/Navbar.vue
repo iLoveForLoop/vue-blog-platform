@@ -27,14 +27,7 @@ const userEmail = computed(() => store.state.user?.email || 'Guest')
           </a>
         </div>
 
-        <div class="d-flex align-items-center">
-          <h6>{{ store.state.user?.uid || 'guest' }} -</h6>
-          <h6>{{ store.state.user?.email || 'guest' }}</h6>
-        </div>
-
-        <div
-          class="col-3 d-flex justify-content-end align-items-center me-5 my-2"
-        >
+        <div class="col-3 d-flex justify-content-end align-items-center my-2">
           <div class="container">
             <form class="d-flex" role="search">
               <input
@@ -48,6 +41,10 @@ const userEmail = computed(() => store.state.user?.email || 'Guest')
               </button>
             </form>
           </div>
+        </div>
+
+        <div class="d-flex align-items-center me-5 my-2">
+          <h6 class="m-0">{{ store.state.user?.email || 'guest' }}</h6>
         </div>
       </div>
     </div>
