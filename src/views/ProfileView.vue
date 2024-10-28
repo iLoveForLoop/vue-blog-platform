@@ -1,20 +1,22 @@
 <script setup>
 import { useStore } from 'vuex'
 import { ref, computed, onMounted, watch, watchEffect } from 'vue'
-import { getCurrentUserInfo, getUserPost } from '@/composables/getCollections'
+import {
+  getCurrentUserInfo,
+  getSnapCollectionWithUser,
+} from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
 
 const store = useStore()
 const user = ref(null)
-const userPost = ref([])
+
 const isReady = computed(() => store.state.isAuthReady)
+const { posts } = getSnapCollectionWithUser()
 
 const loadUserData = async () => {
   if (store.state.user?.uid) {
     const { user: fetchedUser } = await getCurrentUserInfo(store.state.user.uid)
     user.value = fetchedUser
-    const { userPost: fetchedPost } = await getUserPost(store.state.user.uid)
-    userPost.value = fetchedPost
   }
 }
 
@@ -45,11 +47,13 @@ watch(isReady, ready => {
               </div>
             </div>
 
-            <div class="col-8 text-center pt-5 bg-warning">
+            <div
+              class="col-8 text-center pt-5 bg-warning p-b overflow-scroll hidebar"
+              style="height: 100vh"
+            >
               <h1>Your Rants</h1>
-              <div v-for="post in userPost" :key="post.id">
-                <h1 class="text-light">Hey</h1>
-                <Post :post="post" />
+              <div v-for="post in posts" :key="post.id">
+                <Post :post="post" v-if="post.user_id == user.value.id" />
               </div>
             </div>
           </div>
@@ -66,5 +70,9 @@ watch(isReady, ready => {
 
 .p-size {
   font-size: 10em;
+}
+
+.p-b {
+  padding-bottom: 5.5em;
 }
 </style>

@@ -96,25 +96,3 @@ export const getCurrentUserInfo = async id => {
 
   return { user }
 }
-
-export const getUserPost = id => {
-  const postRef = collection(db, 'posts')
-  const userPost = ref([])
-
-  onSnapshot(postRef, async snapshot => {
-    userPost.value = []
-
-    snapshot.docs.forEach(data => {
-      const tmp = data.data()
-
-      if (tmp.user_id === id) {
-        userPost.value.push({ ...data.data(), id: data.id })
-      }
-    })
-
-    console.log('in', userPost.value)
-  })
-
-  console.log('Out', userPost.value)
-  return { userPost }
-}

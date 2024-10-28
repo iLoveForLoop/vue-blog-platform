@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   post: [{}],
+  isFromProfile: { type: Boolean, default: false },
 })
 </script>
 
