@@ -38,7 +38,7 @@ watch(isReady, ready => {
       >
         <div class="container" v-if="user">
           <div class="row">
-            <div class="col-4 text-center text-center bg-info">
+            <div class="col-4 text-center text-center">
               <i class="bi bi-person-circle p-size" style="color: white"></i>
 
               <div class="text-light">
@@ -48,12 +48,16 @@ watch(isReady, ready => {
             </div>
 
             <div
-              class="col-8 text-center pt-5 bg-warning p-b overflow-scroll hidebar"
+              class="col-8 text-center pt-5 bg-info p-b overflow-scroll hidebar"
               style="height: 100vh"
             >
               <h1>Your Rants</h1>
               <div v-for="post in posts" :key="post.id">
-                <Post :post="post" v-if="post.user_id == user.value.id" />
+                <Post
+                  :post="post"
+                  v-if="post.user_id == user.value.id"
+                  :isFromProfile="true"
+                />
               </div>
             </div>
           </div>
