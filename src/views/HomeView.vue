@@ -3,6 +3,7 @@ import {
   getCollection,
   getSnapCollection,
   getSnapCollectionWithUser,
+  userPosts,
 } from '@/composables/getCollections'
 import { deletePost } from '@/composables/deletePost'
 import Post from '@/components/Post.vue'

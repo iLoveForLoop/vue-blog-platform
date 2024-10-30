@@ -1,6 +1,6 @@
 <script setup>
 import { useStore } from 'vuex'
-import { ref, computed, onMounted, watch, watchEffect } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import {
   getCurrentUserInfo,
   getSnapCollectionWithUser,
@@ -20,7 +20,9 @@ const loadUserData = async () => {
   }
 }
 
-onMounted(loadUserData)
+onMounted(async () => {
+  await loadUserData()
+})
 
 watch(isReady, ready => {
   if (ready && store.state.user) {
@@ -30,7 +32,7 @@ watch(isReady, ready => {
 </script>
 
 <template>
-  <div v-if="isReady" class="w-100" style="height: 100vh">
+  <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
       <div
         class="container d-flex bg-dark w-100 overflow-scroll hidebar"
@@ -48,10 +50,10 @@ watch(isReady, ready => {
             </div>
 
             <div
-              class="col-8 text-center pt-5 bg-info p-b overflow-scroll hidebar"
+              class="col-8 text-center pt-5 p-b overflow-scroll hidebar"
               style="height: 100vh"
             >
-              <h1>Your Rants</h1>
+              <h1 class="text-light">Your Rants</h1>
               <div v-for="post in posts" :key="post.id">
                 <Post
                   :post="post"

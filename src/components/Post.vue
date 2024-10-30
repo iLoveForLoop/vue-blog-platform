@@ -1,8 +1,23 @@
 <script setup>
+import Popover from './Popover.vue'
+import { ref, defineEmits } from 'vue'
+
 const props = defineProps({
   post: [{}],
   isFromProfile: { type: Boolean, default: false },
 })
+
+const showPopover = ref(props.closePopover)
+const emit = defineEmits(['sendTrigger'])
+
+const togglePopover = () => {
+  showPopover.value = !showPopover.value
+  emit('sendTrigger', showPopover.value)
+}
+
+const closePopover = () => {
+  showPopover.value = false
+}
 </script>
 
 
@@ -24,8 +39,25 @@ const props = defineProps({
           </p>
         </div>
 
-        <div class="p-2 px-3 d-flex align-items-center justify-content-between">
-          <i class="bi bi-three-dots" v-if="props.isFromProfile"></i>
+        <div
+          class="p-2 px-3 d-flex align-items-center justify-content-between position-relative"
+        >
+          <div
+            class="backdrop"
+            v-if="showPopover"
+            @click.self="closePopover"
+          ></div>
+          <Popover
+            class="position-absolute pos z-3"
+            v-if="showPopover"
+            :id="props.post.id"
+          />
+
+          <i
+            class="bi bi-three-dots"
+            v-if="props.isFromProfile"
+            @click="togglePopover"
+          ></i>
         </div>
       </div>
 
@@ -74,5 +106,23 @@ const props = defineProps({
   width: 2px;
   height: 1vh;
   margin-left: 10%;
+}
+
+.par {
+  position: relative;
+}
+
+.pos {
+  top: -220%;
+  right: -210%;
+}
+
+.backdrop {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0);
+  top: 0;
+  left: 0;
 }
 </style>

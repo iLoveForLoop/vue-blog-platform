@@ -5,6 +5,8 @@ import {
   onSnapshot,
   getDoc,
   doc,
+  query,
+  where,
 } from 'firebase/firestore'
 import { ref } from 'vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -95,4 +97,23 @@ export const getCurrentUserInfo = async id => {
   }
 
   return { user }
+}
+
+export const userPosts = id => {
+  let userpost = ref([])
+  const postsRef = collection(db, 'posts')
+
+  const qpost = query(postsRef, where('user_id', '==', id))
+
+  onSnapshot(
+    qpost,
+    snapshot => {
+      userpost.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    },
+    err => {
+      console.log(err.message)
+    },
+  )
+
+  return { userpost }
 }
