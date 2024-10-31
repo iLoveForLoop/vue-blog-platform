@@ -43,90 +43,77 @@ const signUp = async () => {
 
 <template>
   <div
-    class="container d-flex justify-content-center align-items-center poppins-regular"
+    class="container poppins-regular bg-dark d-flex align-items-center justify-content-center"
     style="height: 100vh"
   >
-    <div style="width: 40%">
-      <div class="alert alert-danger" role="alert" v-if="error">
-        {{ error }}
-      </div>
-
-      <form @submit.prevent="signUp" class="p-5 blue">
-        <div
-          class="d-flex align-items-center justify-content-center gap-2 mb-3"
-        >
-          <h2 class="m-0">Sign Up</h2>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input
-            class="form-control"
-            type="email"
-            id="email"
-            placeholder="Enter you email"
-            v-model="email"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label for="password" id="password" class="form-label"
-            >Password</label
+    <div class="row bg-dark w-100 p-3">
+      <div class="col-7 bg-dark">
+        <div class="row h-100">
+          <div
+            class="col-6 d-flex flex-column justify-content-center align-items-center text-light"
           >
-          <input
-            class="form-control"
-            type="password"
-            placeholder="Enter you password"
-            id="password"
-            v-model="password"
-          />
-        </div>
-
-        <div class="mb-3 d-flex justify-content-center green">
-          <button class="btn w-100" type="submit">Sign Up</button>
-        </div>
-      </form>
-    </div>
-
-    <div style="width: 40%">
-      <div class="alert alert-danger" role="alert" v-if="error">
-        {{ error }}
-      </div>
-      <form @submit.prevent="login" class="p-5 blue">
-        <div
-          class="d-flex align-items-center justify-content-center gap-2 mb-3"
-        >
-          <h2 class="m-0">Log in</h2>
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input
-            class="form-control"
-            type="email"
-            id="email"
-            placeholder="Enter you email"
-            v-model="email"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label for="password" id="password" class="form-label"
-            >Password</label
+            <i class="bi bi-bootstrap-fill big-fs"></i>
+            <div class="text center">No account yet?</div>
+            <div class="w-75 d-flex justify-content-center">
+              <button
+                class="btn btn-light py-3 rounded-pill w-75"
+                type="submit"
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+          <div
+            class="col-6 p-0 bg-light border-bl d-flex flex-column align-items-center"
           >
-          <input
-            class="form-control"
-            type="password"
-            placeholder="Enter you password"
-            id="password"
-            v-model="password"
-          />
+            <div class="mt-5">
+              <div class="fs-2 text center">Welcome back</div>
+              <div class="fs-2 text-center">to the rants</div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-5 bg-warning p-0">
+        <form
+          @submit.prevent="login"
+          class="p-5 bg-light d-flex flex-column gap-3 justify-content-between"
+          style="height: 60vh"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class="m-0">Log in</h2>
+          </div>
 
-        <div class="mb-3 d-flex justify-content-center green">
-          <button class="btn w-100" type="submit">Log in</button>
-        </div>
-      </form>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              class="form-control i-style p-0"
+              type="email"
+              id="email"
+              v-model="email"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" id="password" class="form-label"
+              >Password</label
+            >
+            <input
+              class="form-control i-style p-0"
+              type="password"
+              id="password"
+              v-model="password"
+              required
+            />
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button class="btn btn-dark w-50 py-3 rounded-pill" type="submit">
+              Log in
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -138,5 +125,26 @@ const signUp = async () => {
 
 .blue {
   background: rgb(100, 100, 135);
+}
+
+.i-style {
+  border: none;
+  border-bottom: 3px solid black;
+  border-radius: 0;
+  background: transparent;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.border-bl {
+  border-bottom-left-radius: 100%;
+  border-right: solid 2px black;
+}
+
+.big-fs {
+  font-size: 10em;
 }
 </style>

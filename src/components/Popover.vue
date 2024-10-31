@@ -18,7 +18,10 @@ const handleDelete = () => [deletePost(id)]
       <i class="bi bi-pencil"></i>
     </div>
 
-    <div class="m-0 box px-3 py-2 rounded w-100 d-flex" @click="handleDelete">
+    <div
+      class="m-0 box px-3 py-2 rounded w-100 d-flex justify-content-between"
+      @click="handleDelete"
+    >
       <p class="m-0">Delete</p>
       <i class="bi bi-trash3"></i>
     </div>
@@ -42,14 +45,5 @@ const handleDelete = () => [deletePost(id)]
 
 .box:hover {
   background: rgb(197, 187, 187);
-}
-
-.backdrop {
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-  background: rgba(0, 0, 0, 0);
-  top: 0;
-  left: 0;
 }
 </style>

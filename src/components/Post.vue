@@ -1,14 +1,13 @@
 <script setup>
 import Popover from './Popover.vue'
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   post: [{}],
   isFromProfile: { type: Boolean, default: false },
 })
 
-const showPopover = ref(props.closePopover)
-const emit = defineEmits(['sendTrigger'])
+const showPopover = ref(false)
 
 const togglePopover = () => {
   showPopover.value = !showPopover.value
