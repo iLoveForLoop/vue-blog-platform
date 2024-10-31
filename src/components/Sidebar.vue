@@ -61,7 +61,7 @@ const manageRoute = data => {
       <i class="bi bi-x-lg pointer fs-5" @click="toggleBar"></i>
     </div>
     <router-link
-      to="/"
+      to="/home"
       class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('rants')"
     >
@@ -87,7 +87,7 @@ const manageRoute = data => {
     </router-link>
 
     <router-link
-      to="/"
+      to="/home"
       class="w-100 p-3 ps-4 sideHover pointer text-dark text-decoration-none d-flex align-items-center justify-content-between"
       @click="manageRoute('settings')"
     >

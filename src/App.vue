@@ -4,7 +4,7 @@ import { ref } from 'vue'
 </script>
 
 <template>
-  <div class="bg-dark" style="height: ">
+  <div class="bg-secondary" style="height: ">
     <Navbar />
     <div class="d-flex justify-content-center">
       <RouterView />

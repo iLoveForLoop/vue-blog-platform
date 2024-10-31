@@ -11,7 +11,6 @@ const showPopover = ref(false)
 
 const togglePopover = () => {
   showPopover.value = !showPopover.value
-  emit('sendTrigger', showPopover.value)
 }
 
 const closePopover = () => {
