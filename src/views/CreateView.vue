@@ -18,7 +18,7 @@ const handleSubmit = async () => {
     await addPost(data)
     console.log('added')
     content.value = ''
-    router.push('/')
+    router.push('/home')
   } catch (err) {
     console.log(err.message)
   }

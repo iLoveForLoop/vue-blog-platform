@@ -117,3 +117,17 @@ export const userPosts = id => {
 
   return { userpost }
 }
+
+export const getSinglePost = async id => {
+  const singlePost = ref(null)
+
+  try {
+    const postRef = doc(db, 'posts', id)
+    const post = await getDoc(postRef)
+    singlePost.value = { ...post.data(), id: post.id }
+  } catch (error) {
+    console.log(error.message)
+  }
+
+  return { singlePost }
+}

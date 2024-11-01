@@ -1,6 +1,11 @@
 <script setup>
 import Popover from './Popover.vue'
+import Actions from './Actions.vue'
+
 import { ref } from 'vue'
+import EditPost from './EditPost.vue'
+
+const isEdit = ref(false)
 
 const props = defineProps({
   post: [{}],
@@ -16,6 +21,14 @@ const togglePopover = () => {
 const closePopover = () => {
   showPopover.value = false
 }
+
+const closeEdit = data => {
+  isEdit.value = data
+}
+
+const openEdit = data => {
+  isEdit.value = data
+}
 </script>
 
 
@@ -24,7 +37,7 @@ const closePopover = () => {
     class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-5 pb-0"
   >
     <div
-      class="w-75 d-flex flex-column justify-content-start p-2 rounded bg-light"
+      class="w-75 d-flex flex-column justify-content-start p-3 rounded bg-light"
       style="height: auto"
     >
       <div class="d-flex justify-content-between">
@@ -45,10 +58,12 @@ const closePopover = () => {
             v-if="showPopover"
             @click.self="closePopover"
           ></div>
+          <EditPost v-if="isEdit" :post="props.post" @closeEdit="closeEdit" />
           <Popover
             class="position-absolute pos z-3"
             v-if="showPopover"
             :id="props.post.id"
+            @openEdit="openEdit"
           />
 
           <i
@@ -70,13 +85,17 @@ const closePopover = () => {
       </div>
 
       <div class="bg-light line"></div>
-
+      <hr />
       <div
         class="bg-light rounded-5 py-3 px-3 d-flex align-items-center justify-content-start"
       >
         <p class="p-0 m-0">
           {{ props.post.content }}
         </p>
+      </div>
+      <hr />
+      <div class="px-3 d-flex justify-content-left align-items-center">
+        <Actions />
       </div>
     </div>
   </div>

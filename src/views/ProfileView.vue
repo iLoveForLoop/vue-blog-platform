@@ -6,6 +6,7 @@ import {
   getSnapCollectionWithUser,
 } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
+import EditPost from '@/components/EditPost.vue'
 
 const store = useStore()
 const user = ref(null)
@@ -60,6 +61,7 @@ watch(isReady, ready => {
                   v-if="post.user_id == user.value.id"
                   :isFromProfile="true"
                 />
+                <!-- <EditPost :post="post" v-if="store.state.toggleEdit" /> -->
               </div>
             </div>
           </div>

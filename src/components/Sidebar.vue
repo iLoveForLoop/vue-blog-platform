@@ -21,7 +21,7 @@ const manageRoute = data => {
     case 'rants':
       console.log('rants')
       toggleBar()
-      router.push('/')
+      router.push('/home')
       break
     case 'profile':
       console.log('create')
@@ -34,7 +34,7 @@ const manageRoute = data => {
       break
     case 'settings':
       toggleBar()
-      router.push('/')
+      router.push('/home')
       break
     // case 'logout':
     //   await store.dispatch('logout')
