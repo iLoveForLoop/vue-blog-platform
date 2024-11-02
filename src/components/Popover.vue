@@ -1,6 +1,5 @@
 <script setup>
 import { deletePost } from '@/composables/deletePost'
-import { getSinglePost } from '@/composables/getCollections'
 import { defineEmits } from 'vue'
 
 const props = defineProps({
@@ -11,7 +10,6 @@ const emit = defineEmits(['openEdit'])
 
 const { id } = props
 
-const { singlePost } = getSinglePost(id)
 const handleDelete = () => [deletePost(id)]
 
 const openEdit = () => {

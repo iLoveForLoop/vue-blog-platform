@@ -95,7 +95,7 @@ const openEdit = data => {
       </div>
       <hr />
       <div class="px-3 d-flex justify-content-left align-items-center">
-        <Actions />
+        <Actions :id="props.post.id" />
       </div>
     </div>
   </div>

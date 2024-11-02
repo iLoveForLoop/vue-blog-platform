@@ -131,3 +131,25 @@ export const getSinglePost = async id => {
 
   return { singlePost }
 }
+
+export const getPostLikes = id => {
+  const likes = ref(0)
+  const likesRef = collection(db, 'likes')
+  const postlikes = query(likesRef, where('post_id', '==', id))
+
+  return new Promise((resolve, reject) => {
+    onSnapshot(
+      postlikes,
+      snapshot => {
+        const tmp = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+        likes.value = tmp.length
+        console.log('Likes count:', likes.value) // This will now log the correct count
+        resolve(likes.value) // Resolve the promise with the likes count
+      },
+      err => {
+        console.error('Error fetching likes:', err.message)
+        reject(err) // Reject the promise in case of an error
+      },
+    )
+  })
+}
