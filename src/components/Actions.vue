@@ -1,17 +1,49 @@
 <script setup>
-import { ref, defineProps, watch, onMounted } from 'vue'
-import { getPostLikes } from '@/composables/getCollections'
+import { ref, watch, onMounted, onUnmounted, defineProps } from 'vue'
+import { addLike } from '@/composables/addLike'
+import { checkLike } from '@/composables/checkLike'
+import { db } from '@/firebase/config'
+import {
+  onSnapshot,
+  getDocs,
+  query,
+  where,
+  collection,
+  Timestamp,
+} from 'firebase/firestore'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+console.log('From actions: ', store.state.user.uid)
 
 const props = defineProps({
   id: String,
+  userId: String,
 })
-const { id } = props
+const { id, userId } = props
 
 const likes = ref(0)
+const alreadyLiked = ref(false)
 
 onMounted(async () => {
-  likes.value = await getPostLikes(id)
-  console.log(likes)
+  const likesRef = collection(db, 'likes')
+  const postLikes = query(likesRef, where('post_id', '==', id))
+
+  const kill = onSnapshot(postLikes, snapshot => {
+    likes.value = snapshot.size
+  })
+
+  onUnmounted(() => {
+    kill()
+  })
+
+  alreadyLiked.value = await checkLike(store.state.user.uid, id)
+  console.log(alreadyLiked.value)
+})
+
+watch(alreadyLiked, like => {
+  if (alreadyLiked.value != like) alreadyLiked.value = like
 })
 
 const heart = ref('bi bi-heart')
@@ -21,23 +53,32 @@ const heartClick = ref(false)
 const heartBreakClick = ref(false)
 const commentClick = ref(false)
 
-const toggle = data => {
+const toggle = async data => {
   switch (data) {
     case 1:
-      heartClick.value = !heartClick.value
-      console.log('toggle heart', heartClick.value)
-      if (heartClick.value) {
+      if (!heartClick.value) {
+        try {
+          const likeData = {
+            post_id: id,
+            user_id: userId,
+            created_at: Timestamp.now(),
+          }
+          await addLike(likeData)
+          // likes.value++
+        } catch (err) {
+          console.log(err.message)
+        }
+
         heart.value = 'bi bi-heart-fill text-danger'
         heartBreak.value = 'bi bi-heartbreak'
         heartBreakClick.value = !heartClick.value
       } else {
         heart.value = 'bi bi-heart'
       }
-      console.log('toggle heart is down here')
+      heartClick.value = !heartClick.value
       break
     case 2:
-      heartBreakClick.value = !heartBreakClick.value
-      if (heartBreakClick.value) {
+      if (!heartBreakClick.value) {
         heartBreak.value = 'bi bi-heartbreak-fill text-danger'
         heart.value = 'bi bi-heart'
         heartClick.value = !heartClick.value
@@ -52,6 +93,7 @@ const toggle = data => {
       } else {
         comment.value = 'bi bi-chat-left'
       }
+      heartBreakClick.value = !heartBreakClick.value
       break
   }
 }
@@ -65,7 +107,7 @@ const toggle = data => {
       <i :class="comment" @mouseenter="toggle(3)" @mouseleave="toggle(3)"></i>
     </div>
     <div class="d-flex gap-2 fw-light">
-      <p class="small-text">{{ likes }} likes</p>
+      <p class="small-text">{{ likes }} {{ likes > 1 ? 'likes' : 'like' }}</p>
       <p class="small-text">0 replies</p>
     </div>
   </div>

@@ -6,7 +6,6 @@ import {
   getSnapCollectionWithUser,
 } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
-import EditPost from '@/components/EditPost.vue'
 
 const store = useStore()
 const user = ref(null)

@@ -143,12 +143,11 @@ export const getPostLikes = id => {
       snapshot => {
         const tmp = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
         likes.value = tmp.length
-        console.log('Likes count:', likes.value) // This will now log the correct count
-        resolve(likes.value) // Resolve the promise with the likes count
+        resolve(likes.value)
       },
       err => {
         console.error('Error fetching likes:', err.message)
-        reject(err) // Reject the promise in case of an error
+        reject(err)
       },
     )
   })
