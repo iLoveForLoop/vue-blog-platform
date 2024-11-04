@@ -1,11 +1,12 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted, defineProps } from 'vue'
 import { addLike } from '@/composables/addLike'
-import { checkLike } from '@/composables/checkLike'
+
 import { db } from '@/firebase/config'
+
+import { deleteLike } from '@/composables/deleteLike'
 import {
   onSnapshot,
-  getDocs,
   query,
   where,
   collection,
@@ -18,33 +19,16 @@ const store = useStore()
 console.log('From actions: ', store.state.user.uid)
 
 const props = defineProps({
+  post: [{}],
   id: String,
   userId: String,
 })
-const { id, userId } = props
+const { post } = props
 
 const likes = ref(0)
+const like_id = ref(null)
 const alreadyLiked = ref(false)
-
-onMounted(async () => {
-  const likesRef = collection(db, 'likes')
-  const postLikes = query(likesRef, where('post_id', '==', id))
-
-  const kill = onSnapshot(postLikes, snapshot => {
-    likes.value = snapshot.size
-  })
-
-  onUnmounted(() => {
-    kill()
-  })
-
-  alreadyLiked.value = await checkLike(store.state.user.uid, id)
-  console.log(alreadyLiked.value)
-})
-
-watch(alreadyLiked, like => {
-  if (alreadyLiked.value != like) alreadyLiked.value = like
-})
+const allLikes = ref([])
 
 const heart = ref('bi bi-heart')
 const heartBreak = ref('bi bi-heartbreak')
@@ -53,39 +37,75 @@ const heartClick = ref(false)
 const heartBreakClick = ref(false)
 const commentClick = ref(false)
 
+onMounted(async () => {
+  const likesRef = collection(db, 'likes')
+  const postLikes = query(likesRef, where('post_id', '==', post.id))
+  const userLikes = query(
+    likesRef,
+    where('user_id', '==', store.state.user.uid),
+    where('post_id', '==', post.id)
+  )
+
+  const killPostLikes = onSnapshot(postLikes, snapshot => {
+    likes.value = snapshot.size
+  })
+
+  const killUserLikes = onSnapshot(userLikes, snapshot => {
+    if (!snapshot.empty) {
+      like_id.value = snapshot.docs[0].id
+      alreadyLiked.value = true
+    } else {
+      like_id.value = null
+      alreadyLiked.value = false
+    }
+  })
+
+  onUnmounted(() => {
+    killPostLikes()
+    killUserLikes()
+  })
+})
+
+watch(alreadyLiked, newVal => {
+  if (newVal) {
+    heart.value = 'bi bi-heart-fill text-danger'
+  } else {
+    heart.value = 'bi bi-heart'
+  }
+})
+
 const toggle = async data => {
   switch (data) {
     case 1:
-      if (!heartClick.value) {
+      if (!alreadyLiked.value) {
         try {
           const likeData = {
-            post_id: id,
-            user_id: userId,
+            post_id: post.id,
+            user_id: store.state.user.uid,
             created_at: Timestamp.now(),
           }
           await addLike(likeData)
-          // likes.value++
+          alreadyLiked.value = true
         } catch (err) {
           console.log(err.message)
         }
+      } else {
+        console.log('from if case 1: ', like_id.value)
+        if (like_id.value) {
+          try {
+            await deleteLike(like_id.value)
+            alreadyLiked.value = false
+          } catch (err) {
+            console.log(err.message)
+          }
+        }
+      }
+      break
 
-        heart.value = 'bi bi-heart-fill text-danger'
-        heartBreak.value = 'bi bi-heartbreak'
-        heartBreakClick.value = !heartClick.value
-      } else {
-        heart.value = 'bi bi-heart'
-      }
-      heartClick.value = !heartClick.value
-      break
     case 2:
-      if (!heartBreakClick.value) {
-        heartBreak.value = 'bi bi-heartbreak-fill text-danger'
-        heart.value = 'bi bi-heart'
-        heartClick.value = !heartClick.value
-      } else {
-        heartBreak.value = 'bi bi-heartbreak'
-      }
+      // Handle heartBreak click if needed
       break
+
     case 3:
       commentClick.value = !commentClick.value
       if (commentClick.value) {
@@ -115,7 +135,7 @@ const toggle = async data => {
 
 
 <style scoped>
-i {
+.c {
   cursor: pointer;
 }
 

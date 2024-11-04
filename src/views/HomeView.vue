@@ -5,14 +5,9 @@ import {
   getSnapCollectionWithUser,
   userPosts,
 } from '@/composables/getCollections'
-import { deletePost } from '@/composables/deletePost'
 import Post from '@/components/Post.vue'
 
 const { posts } = getSnapCollectionWithUser()
-
-const handleDelete = id => {
-  deletePost(id)
-}
 </script>
 
 

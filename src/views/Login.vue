@@ -37,6 +37,9 @@ const signUp = async () => {
       email: email.value,
       password: password.value,
     })
+    email.value = ''
+    password.value = ''
+    confirmPassword.value = ''
     router.push('/home')
   } catch (err) {
     email.value = ''
