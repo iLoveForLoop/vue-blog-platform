@@ -28,7 +28,6 @@ const { post } = props
 const likes = ref(0)
 const like_id = ref(null)
 const alreadyLiked = ref(false)
-const allLikes = ref([])
 
 const heart = ref('bi bi-heart')
 const heartBreak = ref('bi bi-heartbreak')

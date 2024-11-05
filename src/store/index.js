@@ -11,7 +11,6 @@ const store = createStore({
   state: {
     user: null,
     isAuthReady: false,
-    toggleEdit: false,
   },
   mutations: {
     updateUser(state, payload) {

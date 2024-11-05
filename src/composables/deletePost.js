@@ -16,10 +16,9 @@ export const deletePost = async id => {
 
     const snapshot = await getDocs(likesquery)
 
-    const deleteLikes = snapshot.docs.map(doc => deleteDoc(doc.ref))
-
-    await Promise.all(deleteLikes)
     await deleteDoc(postRef)
+    const deleteLikes = snapshot.docs.map(doc => deleteDoc(doc.ref))
+    await Promise.all(deleteLikes)
   } catch (err) {
     console.log(err.message)
   }

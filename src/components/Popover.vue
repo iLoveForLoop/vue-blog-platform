@@ -1,6 +1,6 @@
 <script setup>
 import { deletePost } from '@/composables/deletePost'
-import { defineEmits } from 'vue'
+import {} from 'vue'
 
 const props = defineProps({
   id: {},
@@ -55,7 +55,7 @@ const openEdit = () => {
 }
 
 .box:hover {
-  background: rgb(197, 187, 187);
+  background: rgb(172, 172, 172);
 }
 
 .pointer {

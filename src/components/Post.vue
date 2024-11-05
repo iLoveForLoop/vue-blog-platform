@@ -28,6 +28,7 @@ const closeEdit = data => {
 
 const openEdit = data => {
   isEdit.value = data
+  showPopover.value = false
 }
 </script>
 

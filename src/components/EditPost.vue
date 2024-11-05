@@ -32,8 +32,11 @@ const closeBackdrop = () => {
     class="backdrop d-flex justify-content-center align-items-center z-3"
     @click.self="closeBackdrop"
   >
-    <div class="w-50 bg-secondary p-5" style="height: 60vh">
-      <h1 class="m-0">Edit Post</h1>
+    <div class="w-50 bg-dark p-5 rounded" style="height: 60vh">
+      <div class="text-start mb-3">
+        <h1 class="m-0 text-light">Edit your post</h1>
+      </div>
+
       <form
         @submit.prevent="editPost"
         class="d-flex justify-content-center flex-column p-3"
@@ -46,7 +49,7 @@ const closeBackdrop = () => {
           ></textarea>
         </div>
         <div>
-          <button class="btn btn-warning my-5 px-5 py-2">Update</button>
+          <button class="btn btn-warning my-5 px-5 py-2">Update Post</button>
         </div>
       </form>
     </div>
@@ -58,9 +61,9 @@ const closeBackdrop = () => {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(114, 114, 114, 0.5);
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 90;
 }
 </style>

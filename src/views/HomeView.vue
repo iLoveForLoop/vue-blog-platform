@@ -28,10 +28,6 @@ const { posts } = getSnapCollectionWithUser()
 </template>
 
 <style scoped>
-.mr {
-  margin-right: 8em;
-}
-
 .hidebar {
   scrollbar-width: none;
 }
