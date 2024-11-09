@@ -14,6 +14,12 @@ import {
 } from 'firebase/firestore'
 import { useStore } from 'vuex'
 
+import { useRouter } from 'vue-router'
+import { usePostStore } from '@/store/piniaStore'
+
+const piniaStore = usePostStore()
+const router = useRouter()
+
 const store = useStore()
 
 console.log('From actions: ', store.state.user.uid)
@@ -26,6 +32,7 @@ const props = defineProps({
 const { post } = props
 
 const likes = ref(0)
+const comments = ref(0)
 const like_id = ref(null)
 const alreadyLiked = ref(false)
 
@@ -38,6 +45,8 @@ const commentClick = ref(false)
 
 onMounted(async () => {
   const likesRef = collection(db, 'likes')
+  const commentsRef = collection(db, 'comments')
+  const postComments = query(commentsRef, where('post_id', '==', post.id))
   const postLikes = query(likesRef, where('post_id', '==', post.id))
   const userLikes = query(
     likesRef,
@@ -47,6 +56,10 @@ onMounted(async () => {
 
   const killPostLikes = onSnapshot(postLikes, snapshot => {
     likes.value = snapshot.size
+  })
+
+  const killPostComments = onSnapshot(postComments, snapshot => {
+    comments.value = snapshot.size
   })
 
   const killUserLikes = onSnapshot(userLikes, snapshot => {
@@ -62,6 +75,7 @@ onMounted(async () => {
   onUnmounted(() => {
     killPostLikes()
     killUserLikes()
+    killPostComments()
   })
 })
 
@@ -102,7 +116,6 @@ const toggle = async data => {
       break
 
     case 2:
-      // Handle heartBreak click if needed
       break
 
     case 3:
@@ -116,6 +129,11 @@ const toggle = async data => {
       break
   }
 }
+
+const viewPost = () => {
+  piniaStore.setPost(post)
+  router.push({ name: 'post', params: { id: post.id } })
+}
 </script>
 
 <template>
@@ -123,11 +141,18 @@ const toggle = async data => {
     <div class="d-flex align-items-center gap-4 fs-5">
       <i :class="heart" @click="toggle(1)"></i>
       <!-- <i :class="heartBreak" @click="toggle(2)"></i> -->
-      <i :class="comment" @mouseenter="toggle(3)" @mouseleave="toggle(3)"></i>
+      <i
+        :class="comment"
+        @mouseenter="toggle(3)"
+        @mouseleave="toggle(3)"
+        @click="viewPost"
+      ></i>
     </div>
     <div class="d-flex gap-2 fw-light">
       <p class="small-text">{{ likes }} {{ likes > 1 ? 'likes' : 'like' }}</p>
-      <p class="small-text">0 replies</p>
+      <p class="small-text">
+        {{ comments }} {{ comments > 1 ? 'replies' : 'reply' }}
+      </p>
     </div>
   </div>
 </template>

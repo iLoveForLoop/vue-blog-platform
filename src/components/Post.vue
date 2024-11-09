@@ -35,7 +35,7 @@ const openEdit = data => {
 
 <template>
   <div
-    class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-5 pb-0"
+    class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-3 pb-0"
   >
     <div
       class="w-75 d-flex flex-column justify-content-start p-3 rounded bg-light"

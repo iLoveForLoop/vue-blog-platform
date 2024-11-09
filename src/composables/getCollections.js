@@ -11,7 +11,7 @@ import {
 import { ref } from 'vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
-export const getCollection = () => {
+export const getCollection = async () => {
   let posts = ref([])
 
   const load = async () => {
@@ -132,23 +132,20 @@ export const getSinglePost = async id => {
   return { singlePost }
 }
 
-export const getPostLikes = id => {
-  const likes = ref(0)
-  const likesRef = collection(db, 'likes')
-  const postlikes = query(likesRef, where('post_id', '==', id))
+export const getCommentInPost = id => {
+  const comments = ref(null)
+  const commentsRef = collection(db, 'comments')
+  const postComments = query(commentsRef, where('post_id', '==', id))
 
-  return new Promise((resolve, reject) => {
-    onSnapshot(
-      postlikes,
-      snapshot => {
-        const tmp = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-        likes.value = tmp.length
-        resolve(likes.value)
-      },
-      err => {
-        console.error('Error fetching likes:', err.message)
-        reject(err)
-      },
-    )
-  })
+  onSnapshot(
+    postComments,
+    snapshot => {
+      comments.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    },
+    err => {
+      console.log(err.message)
+    },
+  )
+
+  return { comments }
 }

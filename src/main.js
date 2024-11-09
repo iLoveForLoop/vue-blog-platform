@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import { updateUsers } from './composables/updateUsers'
+import { createPinia } from 'pinia'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
@@ -14,6 +15,7 @@ const app = createApp(App)
 
 updateUsers()
 
+app.use(createPinia())
 app.use(router)
 app.use(store)
 
