@@ -46,7 +46,7 @@ const manageRoute = data => {
 
 <template>
   <div
-    class="side-w bg-light d-flex flex-column poppins-regular text-size position-absolute"
+    class="side-w bg-light d-flex flex-column poppins-regular text-size position-absolute zindex"
     style="height: 100vh"
     v-if="isShow"
   >
@@ -128,5 +128,9 @@ const manageRoute = data => {
 
 .side-w {
   width: 15%;
+}
+
+.zindex {
+  z-index: 10;
 }
 </style>

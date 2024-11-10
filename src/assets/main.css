@@ -22,5 +22,5 @@ body {
   font-style: normal;
 }
 i {
-  cursor: pointer;
+  cursor: pointer !important;
 }

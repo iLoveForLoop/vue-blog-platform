@@ -58,7 +58,7 @@ const openEdit = data => {
           <i class="bi bi-person-circle fs-5"></i>
           <p class="p-0 m-0 name-size emailFSize">
             <!--username-->
-            jefbay110@gmail.com
+            {{ props.comment.user_email }}
           </p>
         </div>
         <div class="ps-4">

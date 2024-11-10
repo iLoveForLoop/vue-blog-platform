@@ -60,6 +60,7 @@ const saveComment = () => {
       user_id: store.state.user.uid,
       post_id: post.id,
       content: comment.value,
+      user_email: store.state.user.email,
       created_at: Timestamp.now(),
     }
     addComment(data)

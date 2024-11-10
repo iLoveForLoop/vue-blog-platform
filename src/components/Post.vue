@@ -46,8 +46,8 @@ const openEdit = data => {
           class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based"
         >
           <i class="bi bi-person-circle fs-5"></i>
-          <p class="p-0 m-0 name-size">
-            {{ props.post.user?.email }}
+          <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
+            {{ props.post.user.email }}
           </p>
         </div>
 
