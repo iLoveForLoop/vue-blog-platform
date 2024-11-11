@@ -2,7 +2,7 @@
 import Post from '@/components/Post.vue'
 import { usePostStore } from '@/store/piniaStore'
 import { useRouter } from 'vue-router'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import Comment from '@/components/Comment.vue'
 import { addComment } from '@/composables/addComment'
@@ -39,6 +39,7 @@ import {
   doc,
 } from 'firebase/firestore'
 
+//kill switch
 let killComments
 
 onMounted(async () => {
@@ -86,22 +87,23 @@ onUnmounted(() => {
 //add comment
 const comment = ref('')
 const saveComment = () => {
-  try {
-    const data = {
-      user_id: store.state.user.uid,
-      post_id: id,
-      content: comment.value,
-      user_email: store.state.user.email,
-      created_at: Timestamp.now(),
+  if (comment.value != '') {
+    try {
+      const data = {
+        user_id: store.state.user.uid,
+        post_id: id,
+        content: comment.value,
+        user_email: store.state.user.email,
+        created_at: Timestamp.now(),
+      }
+      addComment(data)
+    } catch (error) {
+      console.log(error.message)
     }
-    addComment(data)
-  } catch (error) {
-    console.log(error.message)
   }
 
   comment.value = ''
 }
-console.log(comments.value)
 </script>
 
 <template>
@@ -123,7 +125,10 @@ console.log(comments.value)
     <div class="container overflow-scroll hidebar" style="height: 70vh">
       <Post :post="post" />
       <div v-for="comment in comments" :key="comment.id">
-        <Comment :comment="comment" />
+        <Comment
+          :comment="comment"
+          :isMyComment="comment.user_id == store.state.user.uid"
+        />
       </div>
     </div>
     <div class="pos d-flex align-items-center gap-3">

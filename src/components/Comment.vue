@@ -3,6 +3,7 @@ import Popover from './Popover.vue'
 import Actions from './Actions.vue'
 import { ref, onMounted } from 'vue'
 import EditPost from './EditPost.vue'
+import CommentAction from './CommentAction.vue'
 
 const isEdit = ref(false)
 
@@ -67,18 +68,21 @@ const openEdit = data => {
           </div>
         </div>
 
-        <div class="ps-4">
+        <div
+          class="ps-4 d-flex align-items-center justify-content-between gap-4"
+        >
           <p class="p-0 m-0 fw-light">
             <!--comment content-->
 
             {{ props.comment.content }}
           </p>
+          <CommentAction :comment="props.comment" />
         </div>
       </div>
 
-      <div class="px-3 d-flex justify-content-left align-items-center">
-        <!-- <Actions :post="props.comment" /> -->
-      </div>
+      <div
+        class="px-3 bg-light d-flex justify-content-left align-items-center content-based"
+      ></div>
     </div>
   </div>
 </template>
