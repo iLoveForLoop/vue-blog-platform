@@ -7,6 +7,7 @@ import {
   query,
   getDocs,
 } from 'firebase/firestore'
+import { deleteComment } from './deleteComment'
 
 export const deletePost = async id => {
   try {
@@ -20,7 +21,9 @@ export const deletePost = async id => {
     const commentsSnapshot = await getDocs(commentsQuery)
 
     await deleteDoc(postRef)
-    const deleteComments = commentsSnapshot.docs.map(doc => deleteDoc(doc.ref))
+    const deleteComments = commentsSnapshot.docs.map(doc =>
+      deleteComment(doc.id),
+    )
     const deleteLikes = snapshot.docs.map(doc => deleteDoc(doc.ref))
     await Promise.all(deleteLikes)
     await Promise.all(deleteComments)
