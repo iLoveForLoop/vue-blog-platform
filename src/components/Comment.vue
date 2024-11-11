@@ -1,14 +1,14 @@
 <script setup>
 import Popover from './Popover.vue'
 import Actions from './Actions.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import EditPost from './EditPost.vue'
 
 const isEdit = ref(false)
 
 const props = defineProps({
   comment: [{}],
-  isFromProfile: { type: Boolean, default: false },
+  isMyComment: { type: Boolean, default: false },
 })
 
 const showPopover = ref(false)
@@ -54,13 +54,19 @@ const openEdit = data => {
       <div
         class="bg-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based"
       >
-        <div class="d-flex align-items-center gap-2">
-          <i class="bi bi-person-circle fs-5"></i>
-          <p class="p-0 m-0 name-size emailFSize">
-            <!--username-->
-            {{ props.comment.user_email }}
-          </p>
+        <div class="d-flex align-items-center justify-content-between gap-5">
+          <div class="d-flex gap-2 align-items-center">
+            <i class="bi bi-person-circle fs-5"></i>
+            <p class="p-0 m-0 name-size emailFSize">
+              <!--username-->
+              {{ props.comment.user_email }}
+            </p>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <i class="bi bi-three-dots" v-show="props.isMyComment"></i>
+          </div>
         </div>
+
         <div class="ps-4">
           <p class="p-0 m-0 fw-light">
             <!--comment content-->

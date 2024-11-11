@@ -80,7 +80,7 @@ const openEdit = data => {
       <div
         class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between content-based"
       >
-        <p class="p-0 m-0 name-size">
+        <p v-if="props.post && props.post.created_at" class="p-0 m-0 name-size">
           {{ props.post.created_at.toDate().toLocaleString() }}
         </p>
       </div>
@@ -90,12 +90,15 @@ const openEdit = data => {
       <div
         class="bg-light rounded-5 py-3 px-3 d-flex align-items-center justify-content-start"
       >
-        <p class="p-0 m-0">
+        <p v-if="props.post && props.post.content" class="p-0 m-0">
           {{ props.post.content }}
         </p>
       </div>
       <hr />
-      <div class="px-3 d-flex justify-content-left align-items-center">
+      <div
+        v-if="props.post && props.post.user"
+        class="px-3 d-flex justify-content-left align-items-center"
+      >
         <Actions :post="props.post" />
       </div>
     </div>

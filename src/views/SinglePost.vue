@@ -6,6 +6,11 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import Comment from '@/components/Comment.vue'
 import { addComment } from '@/composables/addComment'
+import { useRoute } from 'vue-router'
+
+//route params
+const route = useRoute()
+const id = route.params.id
 
 //stores
 const store = useStore()
@@ -13,7 +18,8 @@ const router = useRouter()
 const piniaStore = usePostStore()
 
 //post
-const post = piniaStore.post
+// const post = piniaStore.post
+const post = ref([])
 
 //comments
 const comments = ref([])
@@ -29,13 +35,38 @@ import {
   query,
   onSnapshot,
   Timestamp,
+  getDoc,
+  doc,
 } from 'firebase/firestore'
 
 let killComments
 
 onMounted(async () => {
   const commentsRef = collection(db, 'comments')
-  const postComments = query(commentsRef, where('post_id', '==', post.id))
+  const postComments = query(commentsRef, where('post_id', '==', id))
+  try {
+    const postRef = doc(db, 'posts', id)
+    const postSnapshot = await getDoc(postRef)
+
+    if (postSnapshot.exists()) {
+      post.value = { ...postSnapshot.data(), id: postSnapshot.id }
+
+      const userId = post.value.user_id
+
+      const userRef = doc(db, 'users', userId)
+      const userSnapshot = await getDoc(userRef)
+
+      if (userSnapshot.exists()) {
+        post.value.user = { ...userSnapshot.data(), id: userSnapshot.id }
+      } else {
+        console.log('no such user exists')
+      }
+    } else {
+      console.log("Post document doesn't exist")
+    }
+  } catch (error) {
+    console.log('Error fetching post or user:', error.message)
+  }
 
   killComments = onSnapshot(
     postComments,
@@ -58,7 +89,7 @@ const saveComment = () => {
   try {
     const data = {
       user_id: store.state.user.uid,
-      post_id: post.id,
+      post_id: id,
       content: comment.value,
       user_email: store.state.user.email,
       created_at: Timestamp.now(),

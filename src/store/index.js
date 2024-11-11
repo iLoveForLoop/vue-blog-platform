@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import { auth } from '@/firebase/config'
 import {
   createUserWithEmailAndPassword,
@@ -47,6 +48,8 @@ const store = createStore({
       context.commit('updateUser', null)
     },
   },
+
+  plugins: [createPersistedState()],
 })
 
 const kill = onAuthStateChanged(auth, user => {

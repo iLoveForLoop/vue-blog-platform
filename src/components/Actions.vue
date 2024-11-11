@@ -15,6 +15,7 @@ import {
 import { useStore } from 'vuex'
 
 import { useRouter } from 'vue-router'
+
 import { usePostStore } from '@/store/piniaStore'
 
 const piniaStore = usePostStore()
@@ -22,7 +23,7 @@ const router = useRouter()
 
 const store = useStore()
 
-console.log('From actions: ', store.state.user.uid)
+// console.log('From actions: ', store.state.user.uid)
 
 const props = defineProps({
   post: [{}],
@@ -131,8 +132,12 @@ const toggle = async data => {
 }
 
 const viewPost = () => {
-  piniaStore.setPost(post)
-  router.push({ name: 'post', params: { id: post.id } })
+  console.log('Actions view post', post.id)
+  try {
+    router.push({ name: 'post', params: { id: post.id } })
+  } catch (error) {
+    console.log(error.message)
+  }
 }
 </script>
 
