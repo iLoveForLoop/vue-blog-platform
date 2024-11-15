@@ -50,7 +50,7 @@ const openEdit = data => {
             {{ props.post.user.email }}
           </p>
         </div>
-
+        <!--3 dots-->
         <div
           class="p-2 px-3 d-flex align-items-center justify-content-between position-relative"
         >
@@ -64,6 +64,7 @@ const openEdit = data => {
             class="position-absolute pos z-3"
             v-if="showPopover"
             :id="props.post.id"
+            from="post"
             @openEdit="openEdit"
           />
 

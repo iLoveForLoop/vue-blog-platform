@@ -36,7 +36,6 @@ const openEdit = data => {
   <div
     class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-3 pb-0 pt-0"
   >
-    <div class="backdrop" v-if="showPopover" @click.self="closePopover"></div>
     <div
       class="w-75 d-flex flex-column justify-content-start py-0 rounded"
       style="height: auto"
@@ -63,8 +62,31 @@ const openEdit = data => {
               {{ props.comment.user_email }}
             </p>
           </div>
-          <div class="d-flex align-items-center justify-content-center">
-            <i class="bi bi-three-dots" v-show="props.isMyComment"></i>
+          <!--3 dots is paking here-->
+          <div
+            class="d-flex align-items-center justify-content-between position-relative"
+          >
+            <div
+              class="backdrop"
+              v-if="showPopover"
+              @click.self="closePopover"
+            ></div>
+            <!-- <EditPost
+                v-if="isEdit"
+                :post="props.post"
+                @closeEdit="closeEdit"
+              /> -->
+            <Popover
+              class="position-absolute z-3 pos"
+              v-if="showPopover"
+              :id="props.comment.id"
+              from="comment"
+            />
+            <i
+              class="bi bi-three-dots"
+              @click="togglePopover"
+              v-show="props.isMyComment"
+            ></i>
           </div>
         </div>
 
@@ -111,5 +133,10 @@ const openEdit = data => {
 .emailFSize {
   font-size: 0.8em;
   font-weight: 450;
+}
+
+.pos {
+  top: -460%;
+  right: -780%;
 }
 </style>

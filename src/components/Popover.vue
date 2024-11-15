@@ -1,16 +1,27 @@
 <script setup>
 import { deletePost } from '@/composables/deletePost'
+import { deleteComment } from '@/composables/deleteComment'
 import {} from 'vue'
 
 const props = defineProps({
   id: {},
+  from: String,
 })
 
 const emit = defineEmits(['openEdit'])
 
-const { id } = props
+const { id, from } = props
 
-const handleDelete = () => [deletePost(id)]
+const handleDelete = async () => {
+  if (from == 'post') {
+    await deletePost(id)
+  }
+
+  if (from == 'comment') {
+    await deleteComment(id)
+    console.log('Delete comment')
+  }
+}
 
 const openEdit = () => {
   emit('openEdit', true)
