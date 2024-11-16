@@ -135,8 +135,8 @@ const openEdit = data => {
 }
 
 .pos {
-  top: -220%;
-  right: -210%;
+  top: -180%;
+  right: -175%;
 }
 
 .backdrop {

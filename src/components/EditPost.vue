@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits, ref } from 'vue'
+import { ref } from 'vue'
 import { updatePost } from '@/composables/updatePost'
 
 const emit = defineEmits(['closeEdit'])
@@ -61,7 +61,7 @@ const closeBackdrop = () => {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(114, 114, 114, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
   z-index: 90;

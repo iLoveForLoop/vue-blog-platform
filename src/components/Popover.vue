@@ -30,22 +30,22 @@ const openEdit = () => {
 
 <template>
   <div
-    class="bg-light content-based d-flex flex-column justify-content-center align-items-center text-dark p-3 fw-light ts rounded gap-3 shadow-lg z-3"
+    class="bg-light content-based d-flex flex-column justify-content-start align-items-start text-dark fw-light ts rounded gap-1 shadow-lg z-3 p-2"
   >
     <div
-      class="m-0 box px-3 py-2 rounded w-100 d-flex justify-content-center pointer"
+      class="m-0 box rounded d-flex w-100 justify-content-start pointer gap-2 p-2"
       @click="openEdit"
     >
-      <p class="m-0">Edit</p>
       <i class="bi bi-pencil"></i>
+      <p class="m-0">Edit</p>
     </div>
 
     <div
-      class="m-0 box px-3 py-2 rounded w-100 d-flex justify-content-between pointer"
+      class="m-0 box rounded d-flex w-100 justify-content-start pointer gap-2 p-2"
       @click="handleDelete"
     >
-      <p class="m-0">Delete</p>
       <i class="bi bi-trash3"></i>
+      <p class="m-0">Delete</p>
     </div>
   </div>
 </template>

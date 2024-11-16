@@ -2,10 +2,10 @@
 import Popover from './Popover.vue'
 import Actions from './Actions.vue'
 import { ref, onMounted } from 'vue'
-import EditPost from './EditPost.vue'
+import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
 
-const isEdit = ref(false)
+const isEditing = ref(false)
 
 const props = defineProps({
   comment: [{}],
@@ -23,11 +23,12 @@ const closePopover = () => {
 }
 
 const closeEdit = data => {
-  isEdit.value = data
+  isEditing.value = data
 }
 
 const openEdit = data => {
-  isEdit.value = data
+  console.log(data)
+  isEditing.value = data
   showPopover.value = false
 }
 </script>
@@ -71,17 +72,22 @@ const openEdit = data => {
               v-if="showPopover"
               @click.self="closePopover"
             ></div>
-            <!-- <EditPost
-                v-if="isEdit"
-                :post="props.post"
-                @closeEdit="closeEdit"
-              /> -->
+
             <Popover
               class="position-absolute z-3 pos"
               v-if="showPopover"
               :id="props.comment.id"
               from="comment"
+              @openEdit="openEdit"
             />
+
+            <EditComment
+              v-if="isEditing"
+              :content="props.comment.content"
+              :id="props.comment.id"
+              @closeEdit="closeEdit"
+            />
+
             <i
               class="bi bi-three-dots"
               @click="togglePopover"
@@ -136,7 +142,11 @@ const openEdit = data => {
 }
 
 .pos {
-  top: -460%;
-  right: -780%;
+  top: -370%;
+  right: -620%;
+}
+
+.box {
+  transition: 0.3s ease-in-out;
 }
 </style>
