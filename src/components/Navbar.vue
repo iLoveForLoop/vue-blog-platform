@@ -6,7 +6,6 @@ import { computed } from 'vue'
 const store = useStore()
 
 const isReady = computed(() => store.state.isAuthReady)
-const userEmail = computed(() => store.state.user?.email || 'Guest')
 </script>
 
 <template>

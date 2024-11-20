@@ -2,7 +2,7 @@
 import Popover from './Popover.vue'
 import Actions from './Actions.vue'
 
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import EditPost from './EditPost.vue'
 
 const isEdit = ref(false)
@@ -10,6 +10,7 @@ const isEdit = ref(false)
 const props = defineProps({
   post: [{}],
   isFromProfile: { type: Boolean, default: false },
+  isFromSinglePost: { type: Boolean, default: false },
 })
 
 const showPopover = ref(false)
@@ -29,6 +30,35 @@ const closeEdit = data => {
 const openEdit = data => {
   isEdit.value = data
   showPopover.value = false
+}
+
+// trimming post content
+const postContent = ref(props.post.content)
+
+watch(
+  () => props.post,
+  newPost => {
+    postContent.value = newPost?.content || ''
+  },
+  { immediate: true }
+)
+
+console.log('from postContent')
+console.log('from postContent', postContent.value)
+
+const isExpanded = ref(false)
+const canBeToggle = computed(() => postContent.value.length > 400)
+
+const isNeedsToBeTrimmed = computed(
+  () => canBeToggle.value && !isExpanded.value
+)
+
+const trimmedText = computed(() =>
+  isNeedsToBeTrimmed.value ? postContent.value.slice(0, 415) : postContent.value
+)
+
+const toggleExpand = () => {
+  isExpanded.value = !isExpanded.value
 }
 </script>
 
@@ -91,9 +121,25 @@ const openEdit = data => {
       <div
         class="bg-light rounded-5 py-3 px-3 d-flex align-items-center justify-content-start"
       >
-        <p v-if="props.post && props.post.content" class="p-0 m-0">
-          {{ props.post.content }}
+        <!--CONTENT-->
+        <!-- <div v-if="isFromSinglePost"> -->
+        <!-- <p v-if="props.post && props.post.content" class="p-0 m-0">
+            {{ props.post.content }}
+          </p> -->
+        <!-- </div> -->
+        <!-- <div v-else> -->
+        <p
+          @click="toggleExpand"
+          v-if="props.post && props.post.content"
+          class="p-0 m-0"
+          style="cursor: pointer"
+        >
+          {{ trimmedText }}
+          <span v-if="canBeToggle" class="text-secondary">{{
+            isExpanded ? '' : '...See more'
+          }}</span>
         </p>
+        <!-- </div> -->
       </div>
       <hr />
       <div

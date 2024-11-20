@@ -84,6 +84,10 @@ onUnmounted(() => {
   killComments()
 })
 
+watch(post, newVal => {
+  post.value = newVal
+})
+
 //add comment
 const comment = ref('')
 const saveComment = () => {

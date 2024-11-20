@@ -31,3 +31,13 @@ i:hover {
   filter: brightness(0.8);
   transform: translateY(-2px);
 }
+
+.main-bg {
+  background-color: #032f30;
+}
+
+.logo-font {
+  font-family: 'Style Script', cursive;
+  font-weight: 400;
+  font-style: normal;
+}

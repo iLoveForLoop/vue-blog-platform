@@ -1,7 +1,6 @@
 <script setup>
 import Popover from './Popover.vue'
-import Actions from './Actions.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
 
@@ -30,6 +29,34 @@ const openEdit = data => {
   console.log(data)
   isEditing.value = data
   showPopover.value = false
+}
+
+// trimming post content
+const commentContent = ref(props.comment.content)
+
+watch(
+  () => props.comment,
+  newComment => {
+    commentContent.value = newComment?.content || ''
+  },
+  { immediate: true }
+)
+
+const isExpanded = ref(false)
+const canBeToggle = computed(() => commentContent.value.length > 400)
+
+const isNeedsToBeTrimmed = computed(
+  () => canBeToggle.value && !isExpanded.value
+)
+
+const trimmedText = computed(() =>
+  isNeedsToBeTrimmed.value
+    ? commentContent.value.slice(0, 280)
+    : commentContent.value
+)
+
+const toggleExpand = () => {
+  isExpanded.value = !isExpanded.value
 }
 </script>
 
@@ -99,10 +126,12 @@ const openEdit = data => {
         <div
           class="ps-4 d-flex align-items-center justify-content-between gap-4"
         >
-          <p class="p-0 m-0 fw-light">
-            <!--comment content-->
-
-            {{ props.comment.content }}
+          <!--COMMENT CONTENT-->
+          <p @click="toggleExpand" class="p-0 m-0 fw-light">
+            {{ trimmedText }}
+            <span v-if="canBeToggle" class="text-secondary"
+              >{{ isExpanded ? '' : '...See more' }}
+            </span>
           </p>
           <CommentAction :comment="props.comment" />
         </div>
