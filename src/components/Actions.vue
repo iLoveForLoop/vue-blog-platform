@@ -122,7 +122,7 @@ const toggle = async data => {
     case 3:
       commentClick.value = !commentClick.value
       if (commentClick.value) {
-        comment.value = 'bi bi-chat-left-fill text-dark'
+        comment.value = 'bi bi-chat-left-fill text-light'
       } else {
         comment.value = 'bi bi-chat-left'
       }

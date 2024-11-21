@@ -49,7 +49,7 @@ const isReady = computed(() => store.state.isAuthReady)
 <template>
   <template v-if="isReady">
     <div
-      class="side-w main-bg d-flex flex-column poppins-regular text-size position-absolute zindex text-light r-border pe-3 gap-3"
+      class="w-25 main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border pe-3 gap-3"
       style="height: 100vh"
       v-if="store.state.user"
     >
@@ -125,7 +125,7 @@ const isReady = computed(() => store.state.isAuthReady)
 }
 
 .side-w {
-  width: 15%;
+  width: 25vw;
 }
 
 .zindex {

@@ -4,6 +4,13 @@ import Actions from './Actions.vue'
 
 import { ref, computed, watch } from 'vue'
 import EditPost from './EditPost.vue'
+import {
+  differenceInSeconds,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+  formatDistanceToNow,
+} from 'date-fns'
 
 const isEdit = ref(false)
 
@@ -60,24 +67,53 @@ const trimmedText = computed(() =>
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
 }
+
+//converting the date to time ago
+const postDate = computed(() => props.post.created_at.toDate())
+
+// const timeAgo = computed(() =>
+//   formatDistanceToNow(postDate.value, { addSuffix: true })
+// )
+
+const timeAgo = computed(() => {
+  const now = new Date()
+  const seconds = differenceInSeconds(now, postDate.value)
+
+  if (seconds < 60) {
+    return `${seconds}s`
+  }
+
+  const minutes = differenceInMinutes(now, postDate.value)
+  if (minutes < 60) {
+    return `${minutes}m`
+  }
+
+  const hours = differenceInHours(now, postDate.value)
+  if (hours < 24) {
+    return `${hours}h`
+  }
+
+  const days = differenceInDays(now, postDate.value)
+  return `${days}d`
+})
 </script>
 
 
 <template>
   <div
-    class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-3 pb-0"
+    class="poppins-regular d-flex flex-column align-items-center justify-content-center text-light p-3 pb-0 bg-dark"
   >
     <div
-      class="w-75 d-flex flex-column justify-content-start p-3 rounded bg-light"
+      class="w-75 d-flex flex-column justify-content-start p-3 rounded main-bg border"
       style="height: auto"
     >
       <div class="d-flex justify-content-between">
         <div
-          class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based"
+          class="p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based"
         >
           <i class="bi bi-person-circle fs-5"></i>
           <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
-            {{ props.post.user.email }}
+            {{ props.post.user.email }} · {{ timeAgo }}
           </p>
         </div>
         <!--3 dots-->
@@ -106,21 +142,17 @@ const toggleExpand = () => {
         </div>
       </div>
 
-      <div class="bg-light line"></div>
-
-      <div
-        class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between content-based"
+      <!-- <div
+        class="p-2 px-3 d-flex align-items-center justify-content-between content-based"
       >
         <p v-if="props.post && props.post.created_at" class="p-0 m-0 name-size">
-          {{ props.post.created_at.toDate().toLocaleString() }}
-        </p>
-      </div>
 
-      <div class="bg-light line"></div>
+          {{ timeAgo }}
+        </p>
+      </div> -->
+
       <hr />
-      <div
-        class="bg-light rounded-5 py-3 px-3 d-flex align-items-center justify-content-start"
-      >
+      <div class="py-3 px-3 d-flex align-items-center justify-content-start">
         <!--CONTENT-->
         <!-- <div v-if="isFromSinglePost"> -->
         <!-- <p v-if="props.post && props.post.content" class="p-0 m-0">

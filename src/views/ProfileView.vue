@@ -50,7 +50,7 @@ watch(isReady, ready => {
             </div>
 
             <div
-              class="col-8 text-center pt-5 p-b overflow-scroll hidebar"
+              class="col-8 text-center pt-5 p-b px-3 overflow-scroll hidebar"
               style="height: 100vh"
             >
               <h1 class="text-light">Your Rants</h1>
