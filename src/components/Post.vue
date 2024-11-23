@@ -101,10 +101,10 @@ const timeAgo = computed(() => {
 
 <template>
   <div
-    class="poppins-regular d-flex flex-column align-items-center justify-content-center text-light p-3 pb-0 bg-dark"
+    class="poppins-regular d-flex flex-column align-items-center justify-content-center text-light p-3 pb-0 main-bg"
   >
     <div
-      class="w-75 d-flex flex-column justify-content-start p-3 rounded main-bg border"
+      class="w-75 d-flex flex-column justify-content-start p-3 rounded main-bg my-border"
       style="height: auto"
     >
       <div class="d-flex justify-content-between">

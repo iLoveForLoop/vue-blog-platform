@@ -8,7 +8,7 @@ import { ref } from 'vue'
 <template>
   <div class="main-bg" style="height: ">
     <!-- <Navbar /> -->
-    <div class="d-flex">
+    <div class="d-flex justify-content-center">
       <Sidebar />
       <RouterView />
       <Searchbar />

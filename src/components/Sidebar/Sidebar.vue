@@ -49,7 +49,7 @@ const isReady = computed(() => store.state.isAuthReady)
 <template>
   <template v-if="isReady">
     <div
-      class="w-25 main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border pe-3 gap-3"
+      class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border pe-3 gap-3"
       style="height: 100vh"
       v-if="store.state.user"
     >
@@ -96,13 +96,13 @@ const isReady = computed(() => store.state.isAuthReady)
         Settings
       </router-link>
 
-      <div
+      <!-- <div
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="logout"
       >
         <i class="bi bi-box-arrow-left"></i>
         Logout
-      </div>
+      </div> -->
     </div>
   </template>
 </template>
@@ -125,7 +125,7 @@ const isReady = computed(() => store.state.isAuthReady)
 }
 
 .side-w {
-  width: 25vw;
+  width: 30vw;
 }
 
 .zindex {
@@ -133,7 +133,7 @@ const isReady = computed(() => store.state.isAuthReady)
 }
 
 .r-border {
-  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sideBarText {
