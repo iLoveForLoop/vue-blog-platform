@@ -105,6 +105,9 @@ const logout = async () => {
           </div>
         </div>
       </div>
+      <div>
+        <p class="text-center">&copy;Jeferson Bayking</p>
+      </div>
     </div>
   </template>
 </template>
