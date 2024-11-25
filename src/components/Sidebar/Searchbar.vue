@@ -56,43 +56,12 @@ const logout = async () => {
       <!--Suggested Accounts-->
       <div class="rounded-4 text-light d-flex flex-column gap-2 my-border p-3">
         <p>Suggested for you</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="d-flex justify-content-start align-items-center gap-2">
-            <i class="bi bi-person-circle fs-1"></i>
-            <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ store.state.user.email }}
-            </p>
-          </div>
 
-          <div>
-            <a @click="logout" class="text-decoration-none">Follow</a>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="d-flex justify-content-start align-items-center gap-2">
-            <i class="bi bi-person-circle fs-1"></i>
-            <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ store.state.user.email }}
-            </p>
-          </div>
-
-          <div>
-            <a @click="logout" class="text-decoration-none">Follow</a>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="d-flex justify-content-start align-items-center gap-2">
-            <i class="bi bi-person-circle fs-1"></i>
-            <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ store.state.user.email }}
-            </p>
-          </div>
-
-          <div>
-            <a @click="logout" class="text-decoration-none">Follow</a>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
+        <div
+          class="d-flex justify-content-between align-items-center"
+          v-for="n in 5"
+          :key="n"
+        >
           <div class="d-flex justify-content-start align-items-center gap-2">
             <i class="bi bi-person-circle fs-1"></i>
             <p v-if="store.state.user.email" class="m-0 name-size">
@@ -150,5 +119,9 @@ input[type='search']::-webkit-search-cancel-button {
 
 a {
   cursor: pointer;
+}
+
+.sm-font {
+  font-size: 0.9em;
 }
 </style>

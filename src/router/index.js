@@ -38,6 +38,11 @@ const router = createRouter({
       component: () => import('../views/SinglePost.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/tester',
+      name: 'tester',
+      component: () => import('../views/Tester.vue'),
+    },
   ],
 })
 
