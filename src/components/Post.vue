@@ -50,9 +50,6 @@ watch(
   { immediate: true }
 )
 
-console.log('from postContent')
-console.log('from postContent', postContent.value)
-
 const isExpanded = ref(false)
 const canBeToggle = computed(() => postContent.value.length > 400)
 

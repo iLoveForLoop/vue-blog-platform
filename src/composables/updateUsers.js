@@ -15,7 +15,7 @@ export const updateUsers = () => {
           id: user.uid,
           email: user.email,
           displayName: user.displayName || 'Anonymous',
-          photoURL: user.photoURL || null,
+          photoURL: user.photoURL || 'https://placehold.co/200',
         },
         { merge: true },
       )

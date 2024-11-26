@@ -29,40 +29,60 @@ watch(isReady, ready => {
     loadUserData()
   }
 })
+
+const profile = ref(null)
+const selectedFile = ref(null)
+const url = ref('https://placehold.co/200')
+const toggleProfileChange = () => {
+  profile.value.click()
+}
+
+const onProfileChange = e => {
+  const file = e.target.files[0]
+  selectedFile.value = file
+  url.value = URL.createObjectURL(file)
+}
+
+// URL.revokeObjectURL(imageURL);
 </script>
 
 <template>
   <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
       <div
-        class="container d-flex bg-dark w-100 overflow-scroll hidebar"
+        class="container d-flex flex-column bg-dark w-100 overflow-scroll hidebar"
         style="height: 100vh"
+        v-if="user"
       >
-        <div class="container" v-if="user">
-          <div class="row">
-            <div class="col-4 text-center text-center">
-              <i class="bi bi-person-circle p-size" style="color: white"></i>
+        <div class="text-center text-center mt-3">
+          {{ console.log(url) }}
+          <img
+            class="circle"
+            :src="url"
+            alt="user"
+            @click="toggleProfileChange"
+          />
+          <input
+            class="d-none"
+            type="file"
+            @change="onProfileChange"
+            ref="profile"
+          />
 
-              <div class="text-light">
-                <h2>{{ user.value.displayName }}</h2>
-                <p>{{ user.value.email }}</p>
-              </div>
-            </div>
+          <div class="text-light">
+            <h2>{{ user.value.displayName }}</h2>
+            <p>{{ user.value.email }}</p>
+          </div>
+        </div>
 
-            <div
-              class="col-8 text-center pt-5 p-b px-3 overflow-scroll hidebar"
-              style="height: 100vh"
-            >
-              <h1 class="text-light">Your Rants</h1>
-              <div v-for="post in posts" :key="post.id">
-                <Post
-                  :post="post"
-                  v-if="post.user_id == user.value.id"
-                  :isFromProfile="true"
-                />
-                <!-- <EditPost :post="post" v-if="store.state.toggleEdit" /> -->
-              </div>
-            </div>
+        <div class="text-center overflow-scroll hidebar" style="height: 100vh">
+          <div v-for="post in posts" :key="post.id">
+            <Post
+              :post="post"
+              v-if="post.user_id == user.value.id"
+              :isFromProfile="true"
+            />
+            <!-- <EditPost :post="post" v-if="store.state.toggleEdit" /> -->
           </div>
         </div>
       </div>
@@ -81,5 +101,13 @@ watch(isReady, ready => {
 
 .p-b {
   padding-bottom: 5.5em;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 200px; /* Desired width */
+  height: 200px; /* Desired height */
+  object-fit: cover; /* Ensures the image is cropped */
+  object-position: center;
 }
 </style>
