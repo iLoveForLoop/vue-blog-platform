@@ -7,10 +7,19 @@ import { useStore } from 'vuex'
 import Comment from '@/components/Comment.vue'
 import { addComment } from '@/composables/addComment'
 import { useRoute } from 'vue-router'
+import { getSinglePostWithUser } from '@/composables/getCollections'
 
 //route params
 const route = useRoute()
 const id = route.params.id
+
+//post with user
+const newUser = ref(null)
+const { spost } = getSinglePostWithUser(id)
+
+onMounted(() => {
+  console.log('Single post', spost)
+})
 
 //stores
 const store = useStore()
@@ -127,7 +136,7 @@ const saveComment = () => {
     </div>
 
     <div class="container overflow-scroll hidebar" style="height: 70vh">
-      <Post :post="post" />
+      <Post :post="spost" />
       <div v-for="comment in comments" :key="comment.id">
         <Comment
           :comment="comment"

@@ -80,18 +80,63 @@ export const getSnapCollectionWithUser = () => {
   return { posts }
 }
 
+//Get Single Post with user
+
+export const getSinglePostWithUser = id => {
+  let spost = ref(null)
+
+  const postRef = doc(db, 'posts', id)
+  onSnapshot(
+    postRef,
+    async snapshot => {
+      if (snapshot.exists()) {
+        const postData = { ...snapshot.data(), id: snapshot.id }
+
+        if (postData.user_id) {
+          try {
+            const userRef = doc(db, 'users', postData.user_id)
+            const userSnapshot = await getDoc(userRef)
+
+            if (userSnapshot.exists()) {
+              postData.user = userSnapshot.data()
+            } else {
+              console.log('No user exists')
+              postData.user = null // Or set a placeholder value
+            }
+          } catch (error) {
+            console.error('Error fetching user:', error)
+            postData.user = 'Error fetching user'
+          }
+        }
+
+        spost.value = postData
+      } else {
+        console.log('Post does not exist')
+        spost.value = null
+      }
+    },
+    err => {
+      console.error('Snapshot error:', err.message)
+    },
+  )
+
+  return { spost }
+}
+
+//end of Get single post with user
+
 export const getCurrentUserInfo = async id => {
   const user = ref(null)
 
   try {
     const userRef = doc(db, 'users', id)
-    const snapshot = await getDoc(userRef)
-
-    if (snapshot.exists()) {
-      user.value = snapshot.data()
-    } else {
-      throw new Error('User does not exist')
-    }
+    onSnapshot(userRef, snapshot => {
+      if (snapshot.exists()) {
+        user.value = snapshot.data()
+      } else {
+        throw new Error('User does not exist')
+      }
+    })
   } catch (err) {
     console.log(err.message)
   }

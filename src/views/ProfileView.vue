@@ -7,8 +7,15 @@ import {
 } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
 
+import { uploadPicture } from '@/composables/uploadPicture'
+import { cloudinaryConfig } from '@/cloudinary/cloudinaryConfig'
+import { db } from '@/firebase/config'
+import { doc, updateDoc } from 'firebase/firestore'
+import axios from 'axios'
+
 const store = useStore()
 const user = ref(null)
+const currentUser = ref(null)
 
 const isReady = computed(() => store.state.isAuthReady)
 const { posts } = getSnapCollectionWithUser()
@@ -28,19 +35,48 @@ watch(isReady, ready => {
   if (ready && store.state.user) {
     loadUserData()
   }
+
+  if (posts) {
+    currentUser.value = posts.find(obj => obj.user == store.state.user.uid)
+    console.log(currentUser)
+  }
 })
 
 const profile = ref(null)
 const selectedFile = ref(null)
-const url = ref('https://placehold.co/200')
+const url = ref(user.photoURL)
+
 const toggleProfileChange = () => {
   profile.value.click()
 }
 
-const onProfileChange = e => {
+const onProfileChange = async e => {
   const file = e.target.files[0]
   selectedFile.value = file
   url.value = URL.createObjectURL(file)
+
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
+  formData.append('upload_preset', cloudinaryConfig.uploadPreset)
+
+  let newUrl = null
+
+  try {
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+      formData
+    )
+    newUrl = res.data.secure_url
+    const userRef = doc(db, 'users', store.state.user.uid)
+    await updateDoc(userRef, {
+      photoURL: newUrl,
+    })
+
+    console.log('upload pic success!')
+    url.value = newUrl
+  } catch (e) {
+    console.error(e.message)
+  }
 }
 
 // URL.revokeObjectURL(imageURL);
@@ -55,10 +91,13 @@ const onProfileChange = e => {
         v-if="user"
       >
         <div class="text-center text-center mt-3">
-          {{ console.log(url) }}
           <img
             class="circle"
-            :src="url"
+            :src="
+              user.value.photoURL
+                ? user.value.photoURL
+                : 'https://placehold.co/200'
+            "
             alt="user"
             @click="toggleProfileChange"
           />

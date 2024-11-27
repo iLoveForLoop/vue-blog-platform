@@ -108,7 +108,15 @@ const timeAgo = computed(() => {
         <div
           class="p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based"
         >
-          <i class="bi bi-person-circle fs-5"></i>
+          <img
+            class="circle"
+            :src="
+              props.post.user.photoURL
+                ? props.post.user.photoURL
+                : 'https://placehold.co/200'
+            "
+            alt="pic"
+          />
           <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
             {{ props.post.user.email }} · {{ timeAgo }}
           </p>
@@ -221,5 +229,13 @@ const timeAgo = computed(() => {
   background: rgba(0, 0, 0, 0);
   top: 0;
   left: 0;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
+  object-fit: cover;
+  object-position: center;
 }
 </style>
