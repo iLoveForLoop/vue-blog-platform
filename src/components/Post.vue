@@ -40,7 +40,7 @@ const openEdit = data => {
 }
 
 // trimming post content
-const postContent = ref(props.post.content)
+const postContent = ref(null)
 
 watch(
   () => props.post,
@@ -111,8 +111,8 @@ const timeAgo = computed(() => {
           <img
             class="circle"
             :src="
-              props.post.user.photoURL
-                ? props.post.user.photoURL
+              props.post?.user.photoURL
+                ? props.post?.user.photoURL
                 : 'https://placehold.co/200'
             "
             alt="pic"
@@ -229,13 +229,5 @@ const timeAgo = computed(() => {
   background: rgba(0, 0, 0, 0);
   top: 0;
   left: 0;
-}
-
-.circle {
-  border-radius: 50%;
-  width: 47px;
-  height: 47px;
-  object-fit: cover;
-  object-position: center;
 }
 </style>

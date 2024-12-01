@@ -38,7 +38,6 @@ watch(isReady, ready => {
 
   if (posts) {
     currentUser.value = posts.find(obj => obj.user == store.state.user.uid)
-    console.log(currentUser)
   }
 })
 

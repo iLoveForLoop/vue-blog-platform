@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { getCurrentUserInfo } from '@/composables/getCollections'
+import { ref, onMounted, watch } from 'vue'
 
 const router = useRouter()
 const store = useStore()
@@ -12,10 +14,41 @@ const logout = async () => {
   await store.dispatch('logout')
   router.push('/login')
 }
+
+const user = ref(null)
+
+const loadUserData = async () => {
+  try {
+    if (store.state.user?.uid) {
+      const { user: fetchedUser } = await getCurrentUserInfo(
+        store.state.user.uid
+      )
+      user.value = fetchedUser || {} // Default to empty object if null
+    }
+  } catch (error) {
+    console.error('Failed to load user data:', error)
+  }
+}
+
+onMounted(() => {
+  loadUserData()
+})
+
+watch(
+  () => store.state.user,
+  async newUser => {
+    if (newUser?.uid) {
+      await loadUserData()
+    } else {
+      user.value = null // Clear data if no user
+    }
+  },
+  { immediate: true }
+)
 </script>
 
-<template>
-  <template v-if="isReady">
+<template >
+  <template v-if="isReady && user?.value">
     <div
       class="main-bg d-flex flex-column w-50 gap-5 l-border poppins-regular px-5"
       v-if="store.state.user"
@@ -39,7 +72,15 @@ const logout = async () => {
       <div class="rounded-4 text-light">
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex justify-content-start align-items-center gap-2">
-            <i class="bi bi-person-circle fs-1"></i>
+            <img
+              class="circle"
+              :src="
+                user.value?.photoURL
+                  ? user.value?.photoURL
+                  : 'https://placehold.co/200'
+              "
+              alt="pic"
+            />
             <p v-if="store.state.user.email" class="m-0 name-size">
               {{ store.state.user.email }}
             </p>
@@ -54,7 +95,7 @@ const logout = async () => {
       </div>
 
       <!--Suggested Accounts-->
-      <div class="rounded-4 text-light d-flex flex-column gap-2 my-border p-3">
+      <div class="rounded-4 text-light d-flex flex-column gap-4 my-border p-3">
         <p>Suggested for you</p>
 
         <div
@@ -63,9 +104,17 @@ const logout = async () => {
           :key="n"
         >
           <div class="d-flex justify-content-start align-items-center gap-2">
-            <i class="bi bi-person-circle fs-1"></i>
+            <img
+              class="circle"
+              :src="
+                user.value?.photoURL
+                  ? user.value?.photoURL
+                  : 'https://placehold.co/200'
+              "
+              alt="pic"
+            />
             <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ store.state.user.email }}
+              {{ user.value.email }}
             </p>
           </div>
 

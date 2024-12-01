@@ -84,7 +84,15 @@ const toggleExpand = () => {
       >
         <div class="d-flex align-items-center justify-content-between gap-5">
           <div class="d-flex gap-2 align-items-center">
-            <i class="bi bi-person-circle fs-5"></i>
+            <img
+              class="comment-circle"
+              :src="
+                props.comment?.user.photoURL
+                  ? props.comment?.user.photoURL
+                  : 'https://placehold.co/200'
+              "
+              alt="pic"
+            />
             <p class="p-0 m-0 name-size emailFSize">
               <!--username-->
               {{ props.comment.user_email }}
@@ -177,5 +185,13 @@ const toggleExpand = () => {
 
 .box {
   transition: 0.3s ease-in-out;
+}
+
+.comment-circle {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  object-position: center;
 }
 </style>

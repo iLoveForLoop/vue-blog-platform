@@ -26,10 +26,6 @@ const store = useStore()
 const router = useRouter()
 const piniaStore = usePostStore()
 
-//post
-// const post = piniaStore.post
-const post = ref([])
-
 //comments
 const comments = ref([])
 
@@ -44,57 +40,60 @@ import {
   query,
   onSnapshot,
   Timestamp,
-  getDoc,
   doc,
+  getDoc,
 } from 'firebase/firestore'
 
 //kill switch
 let killComments
+let killCommentsWithUser
 
 onMounted(async () => {
   const commentsRef = collection(db, 'comments')
   const postComments = query(commentsRef, where('post_id', '==', id))
-  try {
-    const postRef = doc(db, 'posts', id)
-    const postSnapshot = await getDoc(postRef)
 
-    if (postSnapshot.exists()) {
-      post.value = { ...postSnapshot.data(), id: postSnapshot.id }
+  // killComments = onSnapshot(
+  //   postComments,
+  //   snapshot => {
+  //     comments.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+  //   },
+  //   err => {
+  //     console.log(err.message)
+  //   }
+  // )
 
-      const userId = post.value.user_id
-
-      const userRef = doc(db, 'users', userId)
-      const userSnapshot = await getDoc(userRef)
-
-      if (userSnapshot.exists()) {
-        post.value.user = { ...userSnapshot.data(), id: userSnapshot.id }
-      } else {
-        console.log('no such user exists')
-      }
-    } else {
-      console.log("Post document doesn't exist")
-    }
-  } catch (error) {
-    console.log('Error fetching post or user:', error.message)
-  }
-
-  killComments = onSnapshot(
+  killCommentsWithUser = onSnapshot(
     postComments,
-    snapshot => {
-      comments.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    async snapshot => {
+      const commentData = snapshot.docs.map(async data => {
+        const comment = { ...data.data(), id: data.id }
+
+        if (comment.user_id) {
+          const userRef = doc(db, 'users', comment.user_id)
+          const userData = await getDoc(userRef)
+
+          if (userData.exists()) {
+            comment.user = userData.data()
+          } else {
+            comment.user = 'no user'
+          }
+        }
+
+        return comment
+      })
+
+      comments.value = await Promise.all(commentData)
     },
     err => {
       console.log(err.message)
     }
   )
+
+  ///
 })
 
 onUnmounted(() => {
-  killComments()
-})
-
-watch(post, newVal => {
-  post.value = newVal
+  killCommentsWithUser()
 })
 
 //add comment

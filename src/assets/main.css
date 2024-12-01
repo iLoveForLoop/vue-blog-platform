@@ -45,3 +45,11 @@ i:hover {
 .my-border {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+.circle {
+  border-radius: 50%;
+  width: 47px;
+  height: 47px;
+  object-fit: cover;
+  object-position: center;
+}
