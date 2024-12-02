@@ -7,6 +7,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth'
+import { updateUsers } from '@/composables/updateUsers'
 
 const store = createStore({
   state: {
@@ -32,6 +33,8 @@ const store = createStore({
       } else {
         throw new Error('Failed to signup')
       }
+
+      updateUsers()
     },
     async logIn(context, { email, password }) {
       console.log('hey')

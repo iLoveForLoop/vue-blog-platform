@@ -14,7 +14,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const app = createApp(App)
 
-updateUsers()
+// updateUsers()
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedState)
