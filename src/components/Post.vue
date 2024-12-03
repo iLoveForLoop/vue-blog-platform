@@ -93,6 +93,9 @@ const timeAgo = computed(() => {
   const days = differenceInDays(now, postDate.value)
   return `${days}d`
 })
+
+
+import TestPopoverVue from './TestPopover.vue'
 </script>
 
 
@@ -111,11 +114,11 @@ const timeAgo = computed(() => {
           <img
             class="circle"
             :src="
-              props.post?.user.photoURL
-                ? props.post?.user.photoURL
+              props.post.user.photoURL
+                ? props.post.user.photoURL
                 : 'https://placehold.co/200'
             "
-            alt="pic"
+            alt="profile pic"
           />
           <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
             {{ props.post.user.email }} · {{ timeAgo }}

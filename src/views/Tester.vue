@@ -1,9 +1,9 @@
 <script setup>
-import UploadPicture from '@/components/UploadPicture.vue'
+import TestPopover from '@/components/TestPopover.vue';
 </script>
 
 <template>
-  <UploadPicture />
+  <TestPopover/>
 </template>
 
 <style>

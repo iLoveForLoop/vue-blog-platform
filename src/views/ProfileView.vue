@@ -79,9 +79,11 @@ const onProfileChange = async e => {
 }
 
 // URL.revokeObjectURL(imageURL);
+import TestPopover from '@/components/TestPopover.vue'
 </script>
 
 <template>
+  <TestPopover/>
   <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
       <div

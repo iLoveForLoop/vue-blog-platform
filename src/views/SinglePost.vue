@@ -116,9 +116,13 @@ const saveComment = () => {
 
   comment.value = ''
 }
+
+
+
 </script>
 
 <template>
+  
   <div
     class="container bg-dark px-5 hidebar poppins-regular b-pad parent"
     style="height: 100vh"
