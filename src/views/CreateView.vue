@@ -27,7 +27,7 @@ const handleSubmit = async () => {
 
 
 <template>
-  <div class="container p-5 bg-dark poppins-regular" style="height: 100vh">
+  <div class="container p-5 main-bg poppins-regular" style="height: 100vh">
     <h2 class="text-light">Post a rant</h2>
 
     <form
