@@ -40,7 +40,6 @@ const openEdit = data => {
   showPopover.value = false
 }
 
-
 // trimming post content
 const postContent = ref(null)
 
@@ -95,9 +94,6 @@ const timeAgo = computed(() => {
   const days = differenceInDays(now, postDate.value)
   return `${days}d`
 })
-
-
-
 </script>
 
 
@@ -116,8 +112,8 @@ const timeAgo = computed(() => {
           <img
             class="circle"
             :src="
-              props.post.user.photoURL
-                ? props.post.user.photoURL
+              props.post?.user.photoURL
+                ? props.post?.user.photoURL
                 : 'https://placehold.co/200'
             "
             alt="profile pic"
@@ -144,7 +140,7 @@ const timeAgo = computed(() => {
             @openEdit="openEdit"
           /> -->
           <TestPopover
-          v-if="showPopover"
+            v-if="showPopover"
             :id="props.post.id"
             from="post"
             @openEdit="openEdit"
