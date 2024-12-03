@@ -11,6 +11,7 @@ import {
   differenceInDays,
   formatDistanceToNow,
 } from 'date-fns'
+import TestPopover from './TestPopover.vue'
 
 const isEdit = ref(false)
 
@@ -38,6 +39,7 @@ const openEdit = data => {
   isEdit.value = data
   showPopover.value = false
 }
+
 
 // trimming post content
 const postContent = ref(null)
@@ -95,7 +97,7 @@ const timeAgo = computed(() => {
 })
 
 
-import TestPopoverVue from './TestPopover.vue'
+
 </script>
 
 
@@ -128,18 +130,25 @@ import TestPopoverVue from './TestPopover.vue'
         <div
           class="p-2 px-3 d-flex align-items-center justify-content-between position-relative"
         >
-          <div
+          <!-- <div
             class="backdrop"
             v-if="showPopover"
             @click.self="closePopover"
-          ></div>
+          ></div> -->
           <EditPost v-if="isEdit" :post="props.post" @closeEdit="closeEdit" />
-          <Popover
+          <!-- <Popover
             class="position-absolute pos z-3"
             v-if="showPopover"
             :id="props.post.id"
             from="post"
             @openEdit="openEdit"
+          /> -->
+          <TestPopover
+          v-if="showPopover"
+            :id="props.post.id"
+            from="post"
+            @openEdit="openEdit"
+            @closePopover="closePopover"
           />
 
           <i

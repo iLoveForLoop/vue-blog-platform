@@ -104,7 +104,7 @@ watch(isClicked, newVal => {
 
 <template>
   <div
-    class="bg-light d-flex flex-column justify-content-between align-items-center mt-1"
+    class="text-light d-flex flex-column justify-content-between align-items-center mt-1"
   >
     <div class="d-flex flex-column align-items-center">
       <i :class="heart" @click="toggleReact"></i>

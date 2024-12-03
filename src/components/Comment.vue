@@ -3,6 +3,7 @@ import Popover from './Popover.vue'
 import { ref, onMounted, computed, watch } from 'vue'
 import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
+import TestPopover from './TestPopover.vue'
 
 const isEditing = ref(false)
 
@@ -68,7 +69,7 @@ const toggleExpand = () => {
       class="w-75 d-flex flex-column justify-content-start py-0 rounded"
       style="height: auto"
     >
-      <div class="bg-light line" style="height: 3vh"></div>
+      <div class=" line" style="height: 3vh"></div>
 
       <!-- <div
         class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between content-based"
@@ -80,7 +81,7 @@ const toggleExpand = () => {
       </div> -->
 
       <div
-        class="bg-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based"
+        class="my-border text-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based"
       >
         <div class="d-flex align-items-center justify-content-between gap-5">
           <div class="d-flex gap-2 align-items-center">
@@ -102,18 +103,27 @@ const toggleExpand = () => {
           <div
             class="d-flex align-items-center justify-content-between position-relative"
           >
-            <div
+            <!-- <div
               class="backdrop"
               v-if="showPopover"
               @click.self="closePopover"
-            ></div>
+            ></div> -->
 
-            <Popover
+            <!-- <Popover
               class="position-absolute z-3 pos"
               v-if="showPopover"
               :id="props.comment.id"
               from="comment"
               @openEdit="openEdit"
+              @closePopover="closePopover"
+            /> -->
+
+            <TestPopover
+              v-if="showPopover"
+              :id="props.comment.id"
+              from="comment"
+              @openEdit="openEdit"
+              @closePopover="closePopover"
             />
 
             <EditComment
@@ -157,6 +167,7 @@ const toggleExpand = () => {
   width: 2px;
   height: 1vh;
   margin-left: 10%;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .backdrop {

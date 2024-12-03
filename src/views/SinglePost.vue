@@ -124,7 +124,7 @@ const saveComment = () => {
 <template>
   
   <div
-    class="container bg-dark px-5 hidebar poppins-regular b-pad parent"
+    class="container main-bg px-5 hidebar poppins-regular b-pad parent"
     style="height: 100vh"
   >
     <div class="d-flex justify-content-start align-items-center gap-2 mt-3">
@@ -138,7 +138,7 @@ const saveComment = () => {
       <!-- <h1 class="text-light">Post</h1> -->
     </div>
 
-    <div class="container overflow-scroll hidebar" style="height: 70vh">
+    <div class="container overflow-scroll hidebar" style="height: 80vh">
       <Post :post="spost" />
       <div v-for="comment in comments" :key="comment.id">
         <Comment
@@ -172,7 +172,7 @@ const saveComment = () => {
 }
 
 .b-pad {
-  padding-bottom: 10%;
+  padding-bottom: 1%;
 }
 
 .parent {
@@ -182,7 +182,7 @@ const saveComment = () => {
 .pos {
   position: absolute;
   width: 100%;
-  top: 79vh;
+  top: 88vh;
   left: 0;
   height: 13vh;
   align-items: center;
