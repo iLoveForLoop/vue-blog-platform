@@ -33,7 +33,7 @@ i:hover {
 }
 
 .main-bg {
-  background-color: #121212;
+  background-color: #121212 !important;
 }
 
 .logo-font {

@@ -116,13 +116,9 @@ const saveComment = () => {
 
   comment.value = ''
 }
-
-
-
 </script>
 
 <template>
-  
   <div
     class="container main-bg px-5 hidebar poppins-regular b-pad parent"
     style="height: 100vh"
@@ -148,17 +144,17 @@ const saveComment = () => {
       </div>
     </div>
     <div class="pos d-flex align-items-center gap-3">
-      <div class="d-flex bg-light py-3 px-3 w-75 rounded-pill gap-3">
-        <i class="bi bi-person-circle p-size fs-3 text-dark"></i>
+      <div class="d-flex main-bg py-3 px-3 w-100 gap-3 my-border">
+        <i class="bi bi-person-circle p-size fs-3 text-light"></i>
         <form class="d-flex w-100" @submit.prevent="saveComment">
           <input
-            class="form-control me-2 rounded-pill border border-2 border-dark custom-input"
+            class="my-border w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
             type="text"
             :placeholder="tmp"
             v-model="comment"
           />
-          <button class="border-0 bg-transparent fs-5" type="submit">
-            <i class="bi bi-send fs-4"></i>
+          <button class="border-0 bg-transparent text-light" type="submit">
+            Post
           </button>
         </form>
       </div>
@@ -182,16 +178,24 @@ const saveComment = () => {
 .pos {
   position: absolute;
   width: 100%;
-  top: 88vh;
+  top: 88.3vh;
   left: 0;
   height: 13vh;
   align-items: center;
   justify-content: center;
 }
 
-.custom-input:focus {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  background-color: #f9fdf9;
-  outline: none;
+.custom-input::placeholder {
+  color: rgb(224, 224, 224);
+}
+
+.no-focus-effect {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.no-focus-effect:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 </style>

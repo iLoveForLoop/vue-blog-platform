@@ -119,7 +119,7 @@ watch(
           </div>
 
           <div>
-            <a @click="logout" class="text-decoration-none">Follow</a>
+            <a class="text-decoration-none">Follow</a>
           </div>
         </div>
       </div>

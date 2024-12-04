@@ -79,7 +79,6 @@ const onProfileChange = async e => {
 }
 
 // URL.revokeObjectURL(imageURL);
-
 </script>
 
 <template>
@@ -94,8 +93,8 @@ const onProfileChange = async e => {
           <img
             class="circle"
             :src="
-              user.value.photoURL
-                ? user.value.photoURL
+              user.value?.photoURL
+                ? user.value?.photoURL
                 : 'https://placehold.co/200'
             "
             alt="user"
@@ -109,8 +108,8 @@ const onProfileChange = async e => {
           />
 
           <div class="text-light">
-            <h2>{{ user.value.displayName }}</h2>
-            <p>{{ user.value.email }}</p>
+            <h2>{{ user.value?.displayName }}</h2>
+            <p>{{ user.value?.email }}</p>
           </div>
         </div>
 

@@ -34,23 +34,32 @@ const closePopover = () => {
 
 <template>
   <div @click.self="closePopover" class="backdrop poppins-regular">
-    <div class="main-bg w-25 z-3 d-flex justify-content-center rounded-3 p-3">
+    <div
+      class="modal-color w-25 z-3 d-flex justify-content-center rounded-3 p-0"
+    >
       <ul
-        class="d-flex flex-column align-items-center justify-content-center gap-2 p-3 pb-0"
+        class="d-flex flex-column align-items-center justify-content-evenly m-0 p-0 w-100"
       >
-        <li @click="handleDelete" class="text-danger">Delete</li>
-        <li @click="openEdit" class="text-light">Edit</li>
+        <li
+          @click="handleDelete"
+          class="text-danger w-100 text-center py-2 border-bt"
+        >
+          Delete
+        </li>
+        <li @click="openEdit" class="text-light w-100 text-center py-2">
+          Edit
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .backdrop {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(32, 32, 32, 0.6) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
   top: 0;
   left: 0;
   display: flex;
@@ -66,5 +75,13 @@ ul {
 
 li {
   cursor: pointer;
+}
+
+.border-bt {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-color {
+  background-color: #2d2c2c;
 }
 </style>

@@ -197,7 +197,7 @@ const timeAgo = computed(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .inline-d {
   display: inline-block;
 }
