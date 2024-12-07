@@ -8,7 +8,7 @@ const props = defineProps({
   from: String,
 })
 
-const emit = defineEmits(['openEdit'])
+const emit = defineEmits(['openEdit', 'closePopover'])
 
 const { id, from } = props
 
@@ -26,50 +26,68 @@ const handleDelete = async () => {
 const openEdit = () => {
   emit('openEdit', true)
 }
+
+const closePopover = () => {
+  emit('closePopover', false)
+}
 </script>
 
 <template>
-  <div
-    class="bg-light content-based d-flex flex-column justify-content-start align-items-start text-dark fw-light ts rounded gap-1 shadow-lg z-3 p-2"
-  >
+  <div @click.self="closePopover" class="backdrop poppins-regular">
     <div
-      class="m-0 box rounded d-flex w-100 justify-content-start pointer gap-2 p-2"
-      @click="openEdit"
+      class="modal-color w-25 z-3 d-flex justify-content-center rounded-3 p-0"
     >
-      <i class="bi bi-pencil"></i>
-      <p class="m-0">Edit</p>
-    </div>
-
-    <div
-      class="m-0 box rounded d-flex w-100 justify-content-start pointer gap-2 p-2"
-      @click="handleDelete"
-    >
-      <i class="bi bi-trash3"></i>
-      <p class="m-0">Delete</p>
+      <ul
+        class="d-flex flex-column align-items-center justify-content-evenly m-0 p-0 w-100"
+      >
+        <li
+          @click="handleDelete"
+          class="text-danger w-100 text-center py-2 border-bt"
+        >
+          Delete
+        </li>
+        <li
+          @click="openEdit"
+          class="text-light w-100 text-center py-2 border-bt"
+        >
+          Edit
+        </li>
+        <li @click="closePopover" class="text-light w-100 text-center py-2">
+          Cancel
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
-
-<style>
-.content-based {
-  width: fit-content;
-  height: fit-content;
+<style scoped>
+.backdrop {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5) !important;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
 }
 
-.ts {
-  font-size: 0.8em;
+ul {
+  list-style: none;
+  padding: 0;
 }
 
-.box {
-  transition: 0.2s ease-in-out;
-}
-
-.box:hover {
-  background: rgb(172, 172, 172);
-}
-
-.pointer {
+li {
   cursor: pointer;
+}
+
+.border-bt {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-color {
+  background-color: #2d2c2c;
 }
 </style>

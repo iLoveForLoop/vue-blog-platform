@@ -1,10 +1,8 @@
 <script setup>
-import TestPopover from '@/components/TestPopover.vue';
+import TestPopover from '@/components/Popover.vue'
 </script>
 
-<template>
-
-</template>
+<template></template>
 
 <style>
 </style>

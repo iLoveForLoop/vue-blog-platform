@@ -3,7 +3,7 @@ import Popover from './Popover.vue'
 import { ref, onMounted, computed, watch } from 'vue'
 import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
-import TestPopover from './TestPopover.vue'
+import TestPopover from './Popover.vue'
 
 const isEditing = ref(false)
 
@@ -69,7 +69,7 @@ const toggleExpand = () => {
       class="w-75 d-flex flex-column justify-content-start py-0 rounded"
       style="height: auto"
     >
-      <div class=" line" style="height: 3vh"></div>
+      <div class="line" style="height: 3vh"></div>
 
       <!-- <div
         class="bg-light rounded-pill p-2 px-3 d-flex align-items-center justify-content-between content-based"
@@ -90,7 +90,7 @@ const toggleExpand = () => {
               :src="
                 props.comment?.user.photoURL
                   ? props.comment?.user.photoURL
-                  : 'https://placehold.co/200'
+                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               "
               alt="pic"
             />

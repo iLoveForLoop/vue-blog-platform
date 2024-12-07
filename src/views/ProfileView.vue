@@ -89,31 +89,46 @@ const onProfileChange = async e => {
         style="height: 100vh"
         v-if="user"
       >
-        <div class="text-center text-center mt-3">
-          <img
-            class="circle"
-            :src="
-              user.value?.photoURL
-                ? user.value?.photoURL
-                : 'https://placehold.co/200'
-            "
-            alt="user"
-            @click="toggleProfileChange"
-          />
-          <input
-            class="d-none"
-            type="file"
-            @change="onProfileChange"
-            ref="profile"
-          />
-
-          <div class="text-light">
-            <h2>{{ user.value?.displayName }}</h2>
-            <p>{{ user.value?.email }}</p>
-          </div>
-        </div>
-
         <div class="text-center overflow-scroll hidebar" style="height: 100vh">
+          <div
+            class="text-center text-center mt-3 d-flex justify-content-between align-items-center p-5 rounded border-bt mb-3"
+          >
+            <img
+              class="circle"
+              :src="
+                user.value?.photoURL
+                  ? user.value?.photoURL
+                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              "
+              alt="user"
+              @click="toggleProfileChange"
+            />
+            <input
+              class="d-none"
+              type="file"
+              @change="onProfileChange"
+              ref="profile"
+            />
+
+            <div class="text-light fw-lighter">
+              <p>Just be yourself!</p>
+            </div>
+
+            <div
+              class="text-light d-flex flex-column justify-content-center align-items-center gap-1"
+            >
+              <p class="fs-5 m-0">{{ user.value?.displayName }}</p>
+              <p class="mb-4">{{ user.value?.email }}</p>
+              <button class="btn my-border text-light rounded-pill box">
+                Edit Profile
+              </button>
+            </div>
+
+            <!-- <div class="">
+
+            </div> -->
+          </div>
+
           <div v-for="post in posts" :key="post.id">
             <Post
               :post="post"
@@ -143,9 +158,23 @@ const onProfileChange = async e => {
 
 .circle {
   border-radius: 50%;
-  width: 200px; /* Desired width */
-  height: 200px; /* Desired height */
+  /* width: 200px;  */
+  height: 150px;
+  width: 150px;
   object-fit: cover; /* Ensures the image is cropped */
   object-position: center;
+}
+
+.border-bt {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.box {
+  transition: 0.2s ease-in-out;
+}
+
+.box:hover {
+  background-color: rgb(202, 202, 202);
+  color: black !important;
 }
 </style>

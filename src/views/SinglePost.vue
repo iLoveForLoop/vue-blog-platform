@@ -120,10 +120,12 @@ const saveComment = () => {
 
 <template>
   <div
-    class="container main-bg px-5 hidebar poppins-regular b-pad parent"
+    class="container main-bg hidebar poppins-regular d-flex flex-column p-0"
     style="height: 100vh"
   >
-    <div class="d-flex justify-content-start align-items-center gap-2 mt-3">
+    <div
+      class="d-flex justify-content-start align-items-center gap-2 mt-3 ps-5"
+    >
       <h2>
         <i
           class="bi bi-arrow-left text-light"
@@ -134,7 +136,7 @@ const saveComment = () => {
       <!-- <h1 class="text-light">Post</h1> -->
     </div>
 
-    <div class="container overflow-scroll hidebar" style="height: 80vh">
+    <div class="overflow-scroll hidebar flex-grow-1">
       <Post :post="spost" />
       <div v-for="comment in comments" :key="comment.id">
         <Comment
@@ -143,12 +145,12 @@ const saveComment = () => {
         />
       </div>
     </div>
-    <div class="pos d-flex align-items-center gap-3">
-      <div class="d-flex main-bg py-3 px-3 w-100 gap-3 my-border">
+    <div class="d-flex align-items-center gap-3">
+      <div class="d-flex main-bg py-3 px-3 w-100 gap-3 top-bor">
         <i class="bi bi-person-circle p-size fs-3 text-light"></i>
         <form class="d-flex w-100" @submit.prevent="saveComment">
           <input
-            class="my-border w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
+            class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
             type="text"
             :placeholder="tmp"
             v-model="comment"
@@ -192,10 +194,15 @@ const saveComment = () => {
 .no-focus-effect {
   outline: none !important;
   box-shadow: none !important;
+  border: none;
 }
 
 .no-focus-effect:focus {
   outline: none !important;
   box-shadow: none !important;
+}
+
+.top-bor {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 </style>

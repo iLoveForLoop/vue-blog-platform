@@ -11,7 +11,7 @@ import {
   differenceInDays,
   formatDistanceToNow,
 } from 'date-fns'
-import TestPopover from './TestPopover.vue'
+import TestPopover from './Popover.vue'
 
 const isEdit = ref(false)
 
@@ -114,7 +114,7 @@ const timeAgo = computed(() => {
             :src="
               props.post?.user.photoURL
                 ? props.post?.user.photoURL
-                : 'https://placehold.co/200'
+                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
             "
             alt="profile pic"
           />

@@ -77,7 +77,7 @@ watch(
               :src="
                 user.value?.photoURL
                   ? user.value?.photoURL
-                  : 'https://placehold.co/200'
+                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               "
               alt="pic"
             />
@@ -109,7 +109,7 @@ watch(
               :src="
                 user.value?.photoURL
                   ? user.value?.photoURL
-                  : 'https://placehold.co/200'
+                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               "
               alt="pic"
             />
