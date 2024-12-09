@@ -103,8 +103,7 @@ const verifyEmail = async () => {
             emailData,
             {
               headers: {
-                'api-key':
-                  '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',
+                'api-key': '',
                 'Content-Type': 'application/json',
               },
             }
