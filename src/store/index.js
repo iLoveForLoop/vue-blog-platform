@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from 'firebase/auth'
 import { updateUsers } from '@/composables/updateUsers'
 
@@ -13,6 +14,7 @@ const store = createStore({
   state: {
     user: null,
     isAuthReady: false,
+    isNewUser: false,
   },
   mutations: {
     updateUser(state, payload) {
@@ -26,9 +28,10 @@ const store = createStore({
     },
   },
   actions: {
-    async signUp(context, { email, password }) {
+    async signUp(context, { email, password, displayName }) {
       const res = await createUserWithEmailAndPassword(auth, email, password)
       if (res) {
+        await updateProfile(res.user, { displayName })
         context.commit('updateUser', res.user)
       } else {
         throw new Error('Failed to signup')

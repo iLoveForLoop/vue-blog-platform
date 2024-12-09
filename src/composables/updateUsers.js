@@ -14,7 +14,7 @@ export const updateUsers = () => {
         {
           id: user.uid,
           email: user.email,
-          displayName: user.displayName || 'Username not set',
+          displayName: user.displayName,
         },
         { merge: true },
       )

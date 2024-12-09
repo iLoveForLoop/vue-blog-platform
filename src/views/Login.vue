@@ -2,6 +2,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import axios from 'axios'
+import VerificationModal from '@/components/VerificationModal.vue'
+import VerifySuccessModal from '@/components/animations/VerifySuccessModal.vue'
+import {
+  isUsernameTaken,
+  isEmailTaken,
+} from '@/composables/emailAndUsernameChecker'
 
 const router = useRouter()
 const store = useStore()
@@ -13,6 +20,10 @@ const confirmPassword = ref('')
 const error = ref(null)
 const toggleLogin = ref(true)
 const toggleSignup = ref(false)
+
+const verificationCode = ref('')
+const isVerifying = ref(false)
+const showingSuccess = ref(false)
 
 const login = async () => {
   try {
@@ -31,12 +42,10 @@ const login = async () => {
 
 const signUp = async () => {
   try {
-    if (password.value != confirmPassword.value) {
-      throw new Error("Password doesn't match")
-    }
     await store.dispatch('signUp', {
       email: email.value,
       password: password.value,
+      displayName: username.value,
     })
     email.value = ''
     password.value = ''
@@ -53,6 +62,88 @@ const signUp = async () => {
   }
 }
 
+const isPasswordValid = password => {
+  const isLongEnough = password.length > 8
+  const hasValidCombination =
+    /[a-zA-Z].*[0-9]|[0-9].*[a-zA-Z]|[a-zA-Z].*[\W_]|[\W_].*[a-zA-Z]/.test(
+      password
+    )
+  return isLongEnough && hasValidCombination
+}
+
+const verifyEmail = async () => {
+  try {
+    if (!isPasswordValid(password.value)) {
+      throw new Error('Password way too weak!')
+    }
+
+    if (password.value != confirmPassword.value) {
+      throw new Error("Password doesn't match!")
+    }
+
+    if (!(await isEmailTaken(email.value))) {
+      console.log('email good')
+      //check if the user name is taken
+      if (!(await isUsernameTaken(username.value))) {
+        console.log('username good')
+
+        // email verification
+        verificationCode.value = Math.floor(
+          100000 + Math.random() * 900000
+        ).toString()
+        const emailData = {
+          sender: { email: 'jefbay110@gmail.com', name: 'Rants' },
+          to: [{ email: email.value }],
+          subject: 'Your verification code',
+          htmlContent: `<p>Your verification code is: <strong>${verificationCode.value}</strong></p>`,
+        }
+        try {
+          const res = await axios.post(
+            'https://api.brevo.com/v3/smtp/email',
+            emailData,
+            {
+              headers: {
+                'api-key':
+                  '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',
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          console.log(res.data)
+          showVerificationCodeModal(true)
+        } catch (error) {
+          error.value = error.message
+        }
+      } else {
+        throw new Error('Username already taken!')
+      }
+    } else {
+      throw new Error('Email already taken!')
+    }
+  } catch (err) {
+    error.value = err.message
+    setTimeout(() => {
+      error.value = null
+    }, 2000)
+  }
+}
+
+const isEmailVerified = data => {
+  if (data) {
+    showingSuccess.value = true
+    isVerifying.value = false
+    setTimeout(() => {
+      showingSuccess.value = false
+    }, 1800)
+    signUp()
+  }
+}
+
+const showVerificationCodeModal = data => {
+  //Toggle the veriffication code modal
+  isVerifying.value = data
+}
+
 const switchToggle = () => {
   toggleSignup.value = !toggleSignup.value
 
@@ -63,6 +154,15 @@ const switchToggle = () => {
 </script>
 
 <template>
+  <VerificationModal
+    v-if="isVerifying"
+    :email="email"
+    :code="verificationCode"
+    @closePopover="showVerificationCodeModal"
+    @isEmailVerified="isEmailVerified"
+  />
+  <VerifySuccessModal v-if="showingSuccess" />
+
   <div class="w-100 main-bg poppins-regular" style="height: 100vh">
     <transition name="slide">
       <div class="alert alert-danger errpos" role="alert" v-if="error">
@@ -88,7 +188,7 @@ const switchToggle = () => {
             </div>
 
             <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
+              <label for="email" class="form-label small-fs">Email</label>
               <input
                 class="form-control i-style p-0 text-light"
                 type="email"
@@ -99,7 +199,7 @@ const switchToggle = () => {
             </div>
 
             <div class="mb-3">
-              <label for="password" id="password" class="form-label"
+              <label for="password" id="password" class="form-label small-fs"
                 >Password</label
               >
               <input
@@ -113,7 +213,7 @@ const switchToggle = () => {
 
             <div class="d-flex justify-content-center">
               <button
-                class="btn color-btn rounded form-control text-light"
+                class="btn color-btn rounded form-control text-light small-fs fw-light"
                 type="submit"
               >
                 Log in
@@ -123,9 +223,9 @@ const switchToggle = () => {
         </div>
 
         <div
-          class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-1"
+          class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-2"
         >
-          <p class="m-0">Do not have an account?</p>
+          <p class="m-0 small-fs fw-light">Doesn't have an account?</p>
           <a @click="switchToggle" class="blue">Sign up</a>
         </div>
       </div>
@@ -140,7 +240,7 @@ const switchToggle = () => {
         <!--Sign Up-->
         <div class="b-size my-border text-light">
           <form
-            @submit.prevent="signUp"
+            @submit.prevent="verifyEmail"
             class="p-5 d-flex flex-column gap-3 justify-content-between h-auto"
             style="height: 60vh"
           >
@@ -149,9 +249,9 @@ const switchToggle = () => {
             </div>
 
             <div class="mb-1">
-              <label for="email" class="form-label">Email</label>
+              <label for="email" class="form-label small-fs">Email</label>
               <input
-                class="form-control i-style text-light p-0"
+                class="form-control i-style text-light p-0 small-fs"
                 type="email"
                 id="email"
                 v-model="email"
@@ -159,23 +259,23 @@ const switchToggle = () => {
               />
             </div>
 
-            <!-- <div class="mb-1">
-              <label for="username" class="form-label">Username</label>
+            <div class="mb-1">
+              <label for="username" class="form-label small-fs">Username</label>
               <input
-                class="form-control i-style text-light p-0"
+                class="form-control i-style text-light p-0 small-fs"
                 type="text"
                 id="username"
                 v-model="username"
                 required
               />
-            </div> -->
+            </div>
 
             <div class="mb-1">
-              <label for="password" id="password" class="form-label"
+              <label for="password" id="password" class="form-label small-fs"
                 >Password</label
               >
               <input
-                class="form-control i-style text-light p-0"
+                class="form-control i-style text-light p-0 small-fs"
                 type="password"
                 id="password"
                 v-model="password"
@@ -184,11 +284,11 @@ const switchToggle = () => {
             </div>
 
             <div class="mb-1">
-              <label for="password" id="password" class="form-label"
+              <label for="password" id="password" class="form-label small-fs"
                 >Confirm Password</label
               >
               <input
-                class="form-control i-style text-light p-0"
+                class="form-control i-style text-light p-0 small-fs"
                 type="password"
                 id="password"
                 v-model="confirmPassword"
@@ -198,7 +298,7 @@ const switchToggle = () => {
 
             <div class="d-flex justify-content-center">
               <button
-                class="btn color-btn rounded form-control text-light"
+                class="btn color-btn rounded form-control text-light small-fs fw-light"
                 type="submit"
               >
                 Sign up
@@ -209,7 +309,7 @@ const switchToggle = () => {
         <div
           class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-1"
         >
-          <p class="m-0">Already have an account?</p>
+          <p class="m-0 small-fs fw-light">Already have an account?</p>
           <a @click="switchToggle" class="blue">Log in</a>
         </div>
       </div>
@@ -296,10 +396,14 @@ input:focus {
 }
 
 .b-size {
-  width: 410px;
+  width: 363px;
 }
 
 label {
   font-weight: 100;
+}
+
+.small-fs {
+  font-size: 0.9em;
 }
 </style>
