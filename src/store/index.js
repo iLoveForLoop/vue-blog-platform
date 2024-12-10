@@ -26,6 +26,9 @@ const store = createStore({
     setToggleEdit(state, payload) {
       state.toggleEdit = payload
     },
+    setIsNewUser(state, payload) {
+      state.isNewUser = payload
+    },
   },
   actions: {
     async signUp(context, { email, password, displayName }) {
@@ -33,6 +36,7 @@ const store = createStore({
       if (res) {
         await updateProfile(res.user, { displayName })
         context.commit('updateUser', res.user)
+        context.commit('setIsNewUser', true)
       } else {
         throw new Error('Failed to signup')
       }

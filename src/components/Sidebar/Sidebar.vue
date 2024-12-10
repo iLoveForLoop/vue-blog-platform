@@ -34,7 +34,8 @@ const manageRoute = data => {
       break
     case 'settings':
       toggleBar()
-      router.push('/home')
+      // logout()
+      router.push('/')
       break
     // case 'logout':
     //   await store.dispatch('logout')
@@ -44,10 +45,11 @@ const manageRoute = data => {
 }
 
 const isReady = computed(() => store.state.isAuthReady)
+const isNewUser = computed(() => store.state.isNewUser)
 </script>
 
 <template>
-  <template v-if="isReady">
+  <template v-if="isReady && !isNewUser">
     <div
       class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border pe-3 gap-3"
       style="height: 100vh"

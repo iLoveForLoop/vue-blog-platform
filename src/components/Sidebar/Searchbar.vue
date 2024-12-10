@@ -11,6 +11,7 @@ const store = useStore()
 const isReady = computed(() => store.state.isAuthReady)
 
 const logout = async () => {
+  store.commit('setIsNewUser', false)
   await store.dispatch('logout')
   router.push('/login')
 }
@@ -45,10 +46,12 @@ watch(
   },
   { immediate: true }
 )
+
+const isNewUser = computed(() => store.state.isNewUser)
 </script>
 
 <template >
-  <template v-if="isReady && user?.value">
+  <template v-if="isReady && user?.value && !isNewUser">
     <div
       class="main-bg d-flex flex-column w-50 gap-5 l-border poppins-regular px-5"
       v-if="store.state.user"

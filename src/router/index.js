@@ -43,39 +43,44 @@ const router = createRouter({
       name: 'tester',
       component: () => import('../views/Tester.vue'),
     },
+    {
+      path: '/setup',
+      name: 'setupProfile',
+      component: () => import('../views/SetupProfile.vue'),
+    },
   ],
 })
 
-// Add a global navigation guard
 router.beforeEach((to, from, next) => {
-  const loggedIn = store.state.user // Check if a user is logged in
-  const isAuthReady = store.state.isAuthReady // Check if authentication status is ready
-
+  const { user, isAuthReady, isNewUser } = store.state
+  console.log('is new user: ', isNewUser)
   if (!isAuthReady) {
-    // Wait for authentication status to be ready before routing
     const unwatch = store.watch(
       state => state.isAuthReady,
       ready => {
         if (ready) {
-          unwatch() // Stop watching once ready
-          if (to.meta.requiresAuth && !store.state.user) {
-            next({ name: 'login' })
-          } else if (to.name === 'login' && store.state.user) {
-            next({ name: 'home' })
-          } else {
-            next()
-          }
+          unwatch()
+          router.push(to.fullPath) // Retry the navigation
         }
       },
     )
-  } else if (to.meta.requiresAuth && !loggedIn) {
-    // Redirect to login if the user is not authenticated
+    return // Wait for isAuthReady
+  }
+
+  // Requires authentication but no user
+  if (to.meta.requiresAuth && !user) {
     next({ name: 'login' })
-  } else if (to.name === 'login' && loggedIn) {
-    // Redirect to home if the user is already logged in
+  }
+  // Prevent non-new users from accessing setup profile
+  else if (to.name === 'setupProfile' && !isNewUser) {
     next({ name: 'home' })
-  } else {
-    // Allow access
+  }
+  // Prevent logged-in users from accessing login page
+  else if (to.name === 'login' && user) {
+    next({ name: 'home' })
+  }
+  // Allow navigation
+  else {
     next()
   }
 })
