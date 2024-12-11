@@ -48,6 +48,7 @@ const store = createStore({
       const res = await signInWithEmailAndPassword(auth, email, password)
       if (res) {
         context.commit('updateUser', res.user)
+        context.commit('setIsNewUser', false)
       } else {
         throw new Error('Failed to login')
       }
