@@ -176,4 +176,8 @@ a {
 .sm-font {
   font-size: 0.9em;
 }
+
+.name-size {
+  font-size: 0.9em;
+}
 </style>

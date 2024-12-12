@@ -111,7 +111,7 @@ const onProfileChange = async e => {
             />
 
             <div class="text-light fw-lighter">
-              <p>Just be yourself!</p>
+              <p>{{ user.value?.bio ? user.value?.bio : 'No bio yet' }}</p>
             </div>
 
             <div
