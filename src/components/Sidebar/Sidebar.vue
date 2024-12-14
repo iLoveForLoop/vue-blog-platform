@@ -3,9 +3,15 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
+const emit = defineEmits(['openCreatePost'])
+
 const isShow = ref(false)
 const router = useRouter()
 const store = useStore()
+
+const openCreatePost = () => {
+  emit('openCreatePost')
+}
 
 const toggleBar = () => {
   isShow.value = !isShow.value
@@ -24,13 +30,13 @@ const manageRoute = data => {
       router.push('/home')
       break
     case 'profile':
-      console.log('create')
       toggleBar('profile')
       router.push('/profile')
       break
     case 'create':
+      console.log('create')
       toggleBar()
-      router.push('/create')
+      openCreatePost()
       break
     case 'settings':
       toggleBar()
@@ -71,14 +77,13 @@ const isNewUser = computed(() => store.state.isNewUser)
         <i class="bi bi-house-door"></i>
         Home
       </router-link>
-      <router-link
-        to="/create"
+      <a
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="manageRoute('create')"
       >
         <i class="bi bi-pencil-square"></i>
         Create
-      </router-link>
+      </a>
 
       <router-link
         to="/profile"

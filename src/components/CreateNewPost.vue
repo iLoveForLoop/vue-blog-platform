@@ -2,11 +2,17 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { getCurrentUserInfo } from '@/composables/getCollections'
+import { Timestamp } from 'firebase/firestore'
+import { addPost } from '@/composables/addPost'
+
+const emit = defineEmits(['closeCreatePost'])
 
 const store = useStore()
 const email = computed(() => store.state.user.email)
 const isReady = computed(() => store.state.isAuthReady)
+const id = computed(() => store.state.user.uid)
 const user = ref(null)
+const post = ref('')
 
 const loadUserData = async () => {
   if (store.state.user?.uid) {
@@ -24,14 +30,36 @@ watch(isReady, ready => {
     loadUserData()
   }
 })
+
+const handleSubmit = async () => {
+  try {
+    const data = {
+      content: post.value,
+      user_id: id.value,
+      created_at: Timestamp.now(),
+    }
+
+    await addPost(data)
+    post.value = ''
+    closeCreatePost()
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+const closeCreatePost = () => {
+  console.log('hrere')
+  emit('closeCreatePost')
+}
 </script>
 
 <template>
   <div
     class="backdrop d-flex flex-column justify-content-center align-items-center poppins-regular"
+    @click.self="closeCreatePost"
   >
     <div
-      class="text-light text-center p-3 rounded-top main-bg"
+      class="text-light text-center p-3 bg-gray border-b rounded-top"
       style="width: 40%"
     >
       <p class="m-0">Create a new post</p>
@@ -43,7 +71,7 @@ watch(isReady, ready => {
     >
       <form
         @submit.prevent="handleSubmit"
-        class="d-flex flex-column justify-content-between gap-5 w-100 p-3 pb-4"
+        class="d-flex flex-column justify-content-between w-100 p-3 pb-4"
       >
         <div class="d-flex flex-column flex-grow-1 w-100">
           <div class="d-flex justify-content-start align-items-center gap-3">
@@ -61,11 +89,18 @@ watch(isReady, ready => {
           </div>
 
           <textarea
-            class="form-control w-100 bg-transparent no-border text-light px-3 mt-3 flex-grow-1"
+            class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
+            v-model="post"
           ></textarea>
         </div>
 
-        <p class="text-info m-0 text-end">Share</p>
+        <!-- <p class="text-info m-0 text-end">Share</p> -->
+        <button
+          type="submit"
+          class="btn my-border rounded-pill mt-4 text-light w-100 btn-u"
+        >
+          Post
+        </button>
       </form>
     </div>
   </div>
@@ -107,5 +142,24 @@ watch(isReady, ready => {
   border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
   border-radius: 0 !important;
+}
+
+.border-t {
+  border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0 !important;
+}
+
+.border-b {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  /* border-radius: 0 !important; */
+}
+
+.btn-u {
+  transition: 0.2s ease-in-out;
+}
+
+.btn-u:hover {
+  background-color: rgb(231, 231, 231);
+  color: black !important;
 }
 </style>
