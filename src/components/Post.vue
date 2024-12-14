@@ -177,12 +177,15 @@ const timeAgo = computed(() => {
           @click="toggleExpand"
           v-if="props.post && props.post.content"
           class="p-0 m-0"
-          style="cursor: pointer"
+          style="cursor: default"
         >
           {{ trimmedText }}
-          <span v-if="canBeToggle" class="text-secondary">{{
-            isExpanded ? '' : '...See more'
-          }}</span>
+          <span
+            v-if="canBeToggle"
+            class="text-secondary"
+            style="cursor: pointer !important"
+            >{{ isExpanded ? '' : '...See more' }}</span
+          >
         </p>
         <!-- </div> -->
       </div>

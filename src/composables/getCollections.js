@@ -138,7 +138,7 @@ export const getCurrentUserInfo = async id => {
       }
     })
   } catch (err) {
-    console.log(err.message)
+    // console.log(err.message)
   }
 
   return { user }

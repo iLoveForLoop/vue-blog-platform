@@ -143,11 +143,15 @@ const toggleExpand = () => {
 
         <div
           class="ps-4 d-flex align-items-center justify-content-between gap-4"
+          style="cursor: default"
         >
           <!--COMMENT CONTENT-->
           <p @click="toggleExpand" class="p-0 m-0 fw-light">
             {{ trimmedText }}
-            <span v-if="canBeToggle" class="text-secondary"
+            <span
+              v-if="canBeToggle"
+              class="text-secondary"
+              style="cursor: pointer !important"
               >{{ isExpanded ? '' : '...See more' }}
             </span>
           </p>

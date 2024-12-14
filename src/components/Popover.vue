@@ -42,17 +42,17 @@ const closePopover = () => {
       >
         <li
           @click="handleDelete"
-          class="text-danger w-100 text-center py-2 border-bt"
+          class="text-danger w-100 text-center py-3 border-bt"
         >
           Delete
         </li>
         <li
           @click="openEdit"
-          class="text-light w-100 text-center py-2 border-bt"
+          class="text-light w-100 text-center py-3 border-bt"
         >
           Edit
         </li>
-        <li @click="closePopover" class="text-light w-100 text-center py-2">
+        <li @click="closePopover" class="text-light w-100 text-center py-3">
           Cancel
         </li>
       </ul>
