@@ -62,6 +62,10 @@ const toggleExpand = () => {
 </script>
 
 <template>
+  <!-- For Styling purposes only -->
+  <div class="backdrop" v-if="showPopover" @click.self="closePopover"></div>
+  <!-- For Styling purposes only -->
+
   <div
     class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-3 pb-0 pt-0"
   >
@@ -103,28 +107,15 @@ const toggleExpand = () => {
           <div
             class="d-flex align-items-center justify-content-between position-relative"
           >
-            <!-- <div
-              class="backdrop"
-              v-if="showPopover"
-              @click.self="closePopover"
-            ></div> -->
-
-            <!-- <Popover
-              class="position-absolute z-3 pos"
-              v-if="showPopover"
-              :id="props.comment.id"
-              from="comment"
-              @openEdit="openEdit"
-              @closePopover="closePopover"
-            /> -->
-
-            <TestPopover
-              v-if="showPopover"
-              :id="props.comment.id"
-              from="comment"
-              @openEdit="openEdit"
-              @closePopover="closePopover"
-            />
+            <transition name="pop">
+              <TestPopover
+                v-if="showPopover"
+                :id="props.comment.id"
+                from="comment"
+                @openEdit="openEdit"
+                @closePopover="closePopover"
+              />
+            </transition>
 
             <EditComment
               v-if="isEditing"
@@ -178,9 +169,10 @@ const toggleExpand = () => {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .content-based {
@@ -208,5 +200,22 @@ const toggleExpand = () => {
   height: 40px;
   object-fit: cover;
   object-position: center;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.pop-enter-to,
+.pop-leave-from {
+  transform: scale(1);
+  opacity: 1;
 }
 </style>

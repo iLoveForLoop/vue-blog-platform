@@ -136,7 +136,7 @@ const isNewUser = computed(() => store.state.isNewUser)
 }
 
 .zindex {
-  z-index: 10;
+  z-index: 2;
 }
 
 .r-border {

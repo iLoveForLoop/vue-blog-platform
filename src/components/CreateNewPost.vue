@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { getCurrentUserInfo } from '@/composables/getCollections'
 import { Timestamp } from 'firebase/firestore'
@@ -13,6 +13,7 @@ const isReady = computed(() => store.state.isAuthReady)
 const id = computed(() => store.state.user.uid)
 const user = ref(null)
 const post = ref('')
+const myTextArea = ref(null)
 
 const loadUserData = async () => {
   if (store.state.user?.uid) {
@@ -23,6 +24,9 @@ const loadUserData = async () => {
 
 onMounted(async () => {
   await loadUserData()
+  nextTick(() => {
+    myTextArea.value.focus()
+  })
 })
 
 watch(isReady, ready => {
@@ -89,8 +93,9 @@ const closeCreatePost = () => {
           </div>
 
           <textarea
-            class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
+            class="form-control w-100 bg-transparent no-border text-light px-3 mt-3 flex-grow-1"
             v-model="post"
+            ref="myTextArea"
           ></textarea>
         </div>
 

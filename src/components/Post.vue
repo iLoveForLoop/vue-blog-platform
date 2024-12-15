@@ -1,5 +1,4 @@
 <script setup>
-import Popover from './Popover.vue'
 import Actions from './Actions.vue'
 
 import { ref, computed, watch } from 'vue'
@@ -126,26 +125,25 @@ const timeAgo = computed(() => {
         <div
           class="p-2 px-3 d-flex align-items-center justify-content-between position-relative"
         >
-          <!-- <div
+          <!-- For Styling purposes only -->
+          <div
             class="backdrop"
             v-if="showPopover"
             @click.self="closePopover"
-          ></div> -->
+          ></div>
+          <!-- For Styling purposes only -->
+
           <EditPost v-if="isEdit" :post="props.post" @closeEdit="closeEdit" />
-          <!-- <Popover
-            class="position-absolute pos z-3"
-            v-if="showPopover"
-            :id="props.post.id"
-            from="post"
-            @openEdit="openEdit"
-          /> -->
-          <TestPopover
-            v-if="showPopover"
-            :id="props.post.id"
-            from="post"
-            @openEdit="openEdit"
-            @closePopover="closePopover"
-          />
+
+          <transition name="pop">
+            <TestPopover
+              v-if="showPopover"
+              :id="props.post.id"
+              from="post"
+              @openEdit="openEdit"
+              @closePopover="closePopover"
+            />
+          </transition>
 
           <i
             class="bi bi-three-dots"
@@ -237,8 +235,29 @@ const timeAgo = computed(() => {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
+  z-index: 20;
+}
+
+.pop-enter-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pop-leave-active {
+  transition: none;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.pop-enter-to,
+.pop-leave-from {
+  transform: scale(1);
+  opacity: 1;
 }
 </style>

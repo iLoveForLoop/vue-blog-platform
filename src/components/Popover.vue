@@ -65,7 +65,7 @@ const closePopover = () => {
   position: fixed;
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0.5) !important;
+  background: rgba(0, 0, 0, 0) !important;
   top: 0;
   left: 0;
   display: flex;
