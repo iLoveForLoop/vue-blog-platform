@@ -59,7 +59,7 @@ const closeCreatePost = () => {
 
 <template>
   <div
-    class="backdrop d-flex flex-column justify-content-center align-items-center poppins-regular"
+    class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
     @click.self="closeCreatePost"
   >
     <div
@@ -93,9 +93,10 @@ const closeCreatePost = () => {
           </div>
 
           <textarea
-            class="form-control w-100 bg-transparent no-border text-light px-3 mt-3 flex-grow-1"
+            class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
             v-model="post"
             ref="myTextArea"
+            placeholder="What's up"
           ></textarea>
         </div>
 
@@ -104,7 +105,7 @@ const closeCreatePost = () => {
           type="submit"
           class="btn my-border rounded-pill mt-4 text-light w-100 btn-u"
         >
-          Post
+          <a class="text-decoration-none">Share</a>
         </button>
       </form>
     </div>
@@ -112,14 +113,14 @@ const closeCreatePost = () => {
 </template>
 
 <style scoped>
-.backdrop {
+.back {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 30;
+  z-index: 11;
+  background: rgba(0, 0, 0, 0) !important;
 }
 
 .bg-gray {
@@ -166,5 +167,10 @@ const closeCreatePost = () => {
 .btn-u:hover {
   background-color: rgb(231, 231, 231);
   color: black !important;
+}
+
+textarea::placeholder {
+  color: white;
+  font-weight: 100;
 }
 </style>

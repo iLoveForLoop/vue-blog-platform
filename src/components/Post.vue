@@ -65,12 +65,9 @@ const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
 }
 
-//converting the date to time ago
-const postDate = computed(() => props.post.created_at.toDate())
+//converting Date to time ago
 
-// const timeAgo = computed(() =>
-//   formatDistanceToNow(postDate.value, { addSuffix: true })
-// )
+const postDate = computed(() => props.post.created_at.toDate())
 
 const timeAgo = computed(() => {
   const now = new Date()
@@ -238,7 +235,7 @@ const timeAgo = computed(() => {
   background: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 5;
 }
 
 .pop-enter-active {

@@ -1,9 +1,14 @@
 <script setup>
-import Popover from './Popover.vue'
 import { ref, onMounted, computed, watch } from 'vue'
 import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
 import TestPopover from './Popover.vue'
+import {
+  differenceInSeconds,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+} from 'date-fns'
 
 const isEditing = ref(false)
 
@@ -59,6 +64,33 @@ const trimmedText = computed(() =>
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
 }
+
+//Converting date to time ago
+
+const commentDate = computed(() => props.comment.created_at.toDate())
+console.log('comment date: ', commentDate.value)
+
+const timeAgo = computed(() => {
+  const now = new Date()
+
+  const seconds = differenceInSeconds(now, commentDate.value)
+  if (seconds < 60) {
+    return `${seconds}s`
+  }
+
+  const minutes = differenceInMinutes(now, commentDate.value)
+  if (minutes < 60) {
+    return `${minutes}m`
+  }
+
+  const hours = differenceInHours(now, commentDate.value)
+  if (hours < 24) {
+    return `${hours}h`
+  }
+
+  const days = differenceInDays(now, commentDate.value)
+  return `${days}d`
+})
 </script>
 
 <template>
@@ -100,7 +132,7 @@ const toggleExpand = () => {
             />
             <p class="p-0 m-0 name-size emailFSize">
               <!--username-->
-              {{ props.comment.user_email }}
+              {{ props.comment.user_email }} · {{ timeAgo }}
             </p>
           </div>
           <!--3 dots is paking here-->
