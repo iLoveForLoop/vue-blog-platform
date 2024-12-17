@@ -1,20 +1,10 @@
 <script setup>
 import { getSnapCollectionWithUser } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
+import ViewPost from '@/components/ViewPost.vue'
+import { ref } from 'vue'
 
 const { posts } = getSnapCollectionWithUser()
-
-// import { useRouter } from 'vue-router'
-// import { useStore } from 'vuex'
-
-// const router = useRouter()
-// const store = useStore()
-// const logout = async () => {
-//   await store.dispatch('logout')
-//   router.push('/login')
-// }
-
-// logout()
 </script>
 
 

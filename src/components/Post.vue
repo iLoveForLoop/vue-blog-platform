@@ -30,8 +30,8 @@ const closePopover = () => {
   showPopover.value = false
 }
 
-const closeEdit = data => {
-  isEdit.value = data
+const closeEditPost = () => {
+  isEdit.value = false
 }
 
 const openEdit = data => {
@@ -125,12 +125,18 @@ const timeAgo = computed(() => {
           <!-- For Styling purposes only -->
           <div
             class="backdrop"
-            v-if="showPopover"
+            v-if="showPopover || isEdit"
             @click.self="closePopover"
           ></div>
           <!-- For Styling purposes only -->
 
-          <EditPost v-if="isEdit" :post="props.post" @closeEdit="closeEdit" />
+          <transition name="pop">
+            <EditPost
+              v-if="isEdit"
+              :post="props.post"
+              @closeEditPost="closeEditPost"
+            />
+          </transition>
 
           <transition name="pop">
             <TestPopover

@@ -52,7 +52,6 @@ const handleSubmit = async () => {
 }
 
 const closeCreatePost = () => {
-  console.log('hrere')
   emit('closeCreatePost')
 }
 </script>
@@ -96,7 +95,7 @@ const closeCreatePost = () => {
             class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
             v-model="post"
             ref="myTextArea"
-            placeholder="What's up"
+            placeholder="What's new today?"
           ></textarea>
         </div>
 

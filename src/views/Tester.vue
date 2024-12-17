@@ -1,8 +1,10 @@
 <script setup>
-import TestPopover from '@/components/Popover.vue'
+import ViewPost from '@/components/ViewPost.vue'
 </script>
 
-<template></template>
+<template>
+  <ViewPost />
+</template>
 
 <style>
 </style>

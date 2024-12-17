@@ -7,11 +7,28 @@ import { useStore } from 'vuex'
 import Comment from '@/components/Comment.vue'
 import { addComment } from '@/composables/addComment'
 import { useRoute } from 'vue-router'
-import { getSinglePostWithUser } from '@/composables/getCollections'
+import {
+  getSinglePostWithUser,
+  getCurrentUserInfo,
+} from '@/composables/getCollections'
+import { db } from '@/firebase/config'
+import {
+  collection,
+  where,
+  query,
+  onSnapshot,
+  Timestamp,
+  doc,
+  getDoc,
+} from 'firebase/firestore'
 
-//route params
-const route = useRoute()
-const id = route.params.id
+const props = defineProps({
+  id: String,
+})
+
+const emit = defineEmits(['closePost'])
+
+const id = props.id
 
 //post with user
 const newUser = ref(null)
@@ -33,34 +50,22 @@ const comments = ref([])
 const tmp = ref(`Reply as ${store.state.user?.email}`)
 
 //fetch comments
-import { db } from '@/firebase/config'
-import {
-  collection,
-  where,
-  query,
-  onSnapshot,
-  Timestamp,
-  doc,
-  getDoc,
-} from 'firebase/firestore'
 
 //kill switch
-let killComments
 let killCommentsWithUser
 
+const currentUser = ref(null)
+const loadUserData = async () => {
+  if (store.state.user?.uid) {
+    const { user: fetchedUser } = await getCurrentUserInfo(store.state.user.uid)
+    currentUser.value = fetchedUser
+  }
+}
+
 onMounted(async () => {
+  await loadUserData()
   const commentsRef = collection(db, 'comments')
   const postComments = query(commentsRef, where('post_id', '==', id))
-
-  // killComments = onSnapshot(
-  //   postComments,
-  //   snapshot => {
-  //     comments.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-  //   },
-  //   err => {
-  //     console.log(err.message)
-  //   }
-  // )
 
   killCommentsWithUser = onSnapshot(
     postComments,
@@ -120,51 +125,72 @@ const saveComment = () => {
 
 <template>
   <div
-    class="container main-bg hidebar poppins-regular d-flex flex-column p-0"
-    style="height: 100vh"
+    class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
+    @click.self="emit('closePost')"
   >
     <div
-      class="d-flex justify-content-start align-items-center gap-2 mt-3 ps-5"
+      class="container w-75 main-bg hidebar poppins-regular d-flex flex-column p-0"
+      style="height: 90vh; z-index: 10"
     >
-      <h2>
-        <i
-          class="bi bi-arrow-left text-light"
-          @click="router.push('/home')"
-        ></i>
-      </h2>
-    </div>
-
-    <div class="overflow-scroll hidebar flex-grow-1 mb-5">
-      <Post :post="spost" />
-      <div v-for="comment in comments" :key="comment.id">
-        <Comment
-          :comment="comment"
-          :isMyComment="comment.user_id == store.state.user.uid"
-        />
+      <div
+        class="d-flex justify-content-end align-items-center gap-2 mt-3 pe-3"
+      >
+        <h2>
+          <i class="bi bi-x text-light" @click="emit('closePost')"></i>
+        </h2>
       </div>
-    </div>
-    <div class="d-flex align-items-center gap-3">
-      <div class="d-flex main-bg py-3 px-3 w-100 gap-3 top-bor">
-        <i class="bi bi-person-circle p-size fs-3 text-light"></i>
-        <form class="d-flex w-100" @submit.prevent="saveComment">
-          <input
-            class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
-            type="text"
-            :placeholder="tmp"
-            v-model="comment"
+
+      <div class="overflow-scroll hidebar flex-grow-1 pb-5">
+        <Post :post="spost" />
+        <div v-for="comment in comments" :key="comment.id">
+          <Comment
+            :comment="comment"
+            :isMyComment="comment.user_id == store.state.user.uid"
           />
-          <button class="border-0 bg-transparent text-light" type="submit">
-            Post
-          </button>
-        </form>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3" v-if="currentUser">
+        <div class="d-flex main-bg py-3 px-3 w-100 gap-3 top-bor">
+          <img
+            class="my-circle"
+            :src="
+              currentUser.value?.photoURL
+                ? currentUser.value?.photoURL
+                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+            "
+            alt="pic"
+          />
+          <form class="d-flex w-100" @submit.prevent="saveComment">
+            <input
+              class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
+              type="text"
+              :placeholder="tmp"
+              v-model="comment"
+            />
+            <button class="border-0 bg-transparent text-light" type="submit">
+              Post
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 10;
+  background: rgba(36, 35, 35, 0) !important;
+}
+
 .hidebar {
   scrollbar-width: none;
+  overflow: scroll;
 }
 
 .b-pad {
@@ -202,5 +228,13 @@ const saveComment = () => {
 
 .top-bor {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.my-circle {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  object-position: center;
 }
 </style>

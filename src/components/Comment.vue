@@ -151,8 +151,7 @@ const timeAgo = computed(() => {
 
             <EditComment
               v-if="isEditing"
-              :content="props.comment.content"
-              :id="props.comment.id"
+              :comment="props.comment"
               @closeEdit="closeEdit"
             />
 

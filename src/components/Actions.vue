@@ -17,6 +17,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 import { usePostStore } from '@/store/piniaStore'
+import ViewPost from './ViewPost.vue'
 
 const piniaStore = usePostStore()
 const router = useRouter()
@@ -38,11 +39,13 @@ const like_id = ref(null)
 const alreadyLiked = ref(false)
 
 const heart = ref('bi bi-heart')
-const heartBreak = ref('bi bi-heartbreak')
+
 const comment = ref('bi bi-chat-left')
-const heartClick = ref(false)
+
 const heartBreakClick = ref(false)
 const commentClick = ref(false)
+
+const isViewingPost = ref(false)
 
 onMounted(async () => {
   const likesRef = collection(db, 'likes')
@@ -133,15 +136,23 @@ const toggle = async data => {
 
 const viewPost = () => {
   console.log('Actions view post', post.id)
-  try {
-    router.push({ name: 'post', params: { id: post.id } })
-  } catch (error) {
-    console.log(error.message)
-  }
+  isViewingPost.value = true
+}
+
+const closePost = () => {
+  isViewingPost.value = false
 }
 </script>
 
 <template>
+  <!-- For Styling purposes only -->
+  <div class="backdrop" v-if="isViewingPost"></div>
+  <!-- For Styling purposes only -->
+
+  <transition name="pop">
+    <ViewPost v-if="isViewingPost" :id="post.id" @closePost="closePost" />
+  </transition>
+
   <div class="d-flex flex-column gap-1">
     <div class="d-flex align-items-center gap-4 fs-5">
       <i :class="heart" @click="toggle(1)"></i>
@@ -170,5 +181,35 @@ const viewPost = () => {
 
 .small-text {
   font-size: 15px;
+}
+
+.backdrop {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  background: rgba(36, 35, 35, 0.5) !important;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.pop-enter-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pop-leave-active {
+  transition: none;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.pop-enter-to,
+.pop-leave-from {
+  transform: scale(1);
+  opacity: 1;
 }
 </style>

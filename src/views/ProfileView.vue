@@ -6,7 +6,6 @@ import {
   getSnapCollectionWithUser,
 } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
-
 import { uploadPicture } from '@/composables/uploadPicture'
 import { cloudinaryConfig } from '@/cloudinary/cloudinaryConfig'
 import { db } from '@/firebase/config'
@@ -123,10 +122,6 @@ const onProfileChange = async e => {
                 Edit Profile
               </button>
             </div>
-
-            <!-- <div class="">
-
-            </div> -->
           </div>
 
           <div v-for="post in posts" :key="post.id">
@@ -135,7 +130,6 @@ const onProfileChange = async e => {
               v-if="post.user_id == user.value.id"
               :isFromProfile="true"
             />
-            <!-- <EditPost :post="post" v-if="store.state.toggleEdit" /> -->
           </div>
         </div>
       </div>

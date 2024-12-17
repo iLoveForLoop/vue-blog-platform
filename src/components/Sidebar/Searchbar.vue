@@ -2,8 +2,12 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { getCurrentUserInfo } from '@/composables/getCollections'
+import {
+  getCurrentUserInfo,
+  getRandomUsers,
+} from '@/composables/getCollections'
 import { ref, onMounted, watch } from 'vue'
+import ProfileAndEmail from '../ProfileAndEmail.vue'
 
 const router = useRouter()
 const store = useStore()
@@ -17,8 +21,10 @@ const logout = async () => {
 }
 
 const user = ref(null)
+const randomUsers = ref(null)
 
 const loadUserData = async () => {
+  randomUsers.value = await getRandomUsers()
   try {
     if (store.state.user?.uid) {
       const { user: fetchedUser } = await getCurrentUserInfo(
@@ -74,7 +80,7 @@ const isNewUser = computed(() => store.state.isNewUser)
       <!--Log out-->
       <div class="rounded-4 text-light">
         <div class="d-flex justify-content-between align-items-center">
-          <div class="d-flex justify-content-start align-items-center gap-2">
+          <!-- <div class="d-flex justify-content-start align-items-center gap-2">
             <img
               class="circle"
               :src="
@@ -87,10 +93,22 @@ const isNewUser = computed(() => store.state.isNewUser)
             <p v-if="store.state.user.email" class="m-0 name-size">
               {{ store.state.user.email }}
             </p>
-          </div>
+          </div> -->
+
+          <ProfileAndEmail
+            :textsize="0.8"
+            :email="store.state.user.email"
+            :profilePic="
+              user.value?.photoURL
+                ? user.value?.photoURL
+                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+            "
+          />
 
           <div>
-            <a @click="logout" class="text-decoration-none text-danger"
+            <a
+              @click="logout"
+              class="text-decoration-none text-danger name-size"
               >Logout</a
             >
           </div>
@@ -103,26 +121,21 @@ const isNewUser = computed(() => store.state.isNewUser)
 
         <div
           class="d-flex justify-content-between align-items-center"
-          v-for="n in 5"
-          :key="n"
+          v-for="randomuser in randomUsers"
+          :key="randomuser.id"
         >
-          <div class="d-flex justify-content-start align-items-center gap-2">
-            <img
-              class="circle"
-              :src="
-                user.value?.photoURL
-                  ? user.value?.photoURL
-                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-              "
-              alt="pic"
-            />
-            <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ user.value.email }}
-            </p>
-          </div>
+          <ProfileAndEmail
+            textsize="0.8"
+            :email="randomuser.email"
+            :profilePic="
+              randomuser?.photoURL
+                ? randomuser?.photoURL
+                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+            "
+          />
 
           <div>
-            <a class="text-decoration-none">Follow</a>
+            <a class="text-decoration-none name-size">Follow</a>
           </div>
         </div>
       </div>
@@ -178,6 +191,6 @@ a {
 }
 
 .name-size {
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 </style>

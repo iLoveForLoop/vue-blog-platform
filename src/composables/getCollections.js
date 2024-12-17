@@ -194,3 +194,25 @@ export const getCommentInPost = id => {
 
   return { comments }
 }
+
+//get random users
+export const getRandomUsers = async () => {
+  let randomUsers = []
+
+  try {
+    const allUser = []
+    const usersRef = collection(db, 'users')
+    const users = await getDocs(usersRef)
+
+    users.forEach(doc => {
+      allUser.push({ ...doc.data(), id: doc.id })
+    })
+
+    randomUsers = allUser.sort(() => 0.5 - Math.random())
+    console.log('function fetching random user: ', randomUsers.slice(0, 5))
+    return randomUsers.slice(0, 5)
+  } catch (error) {
+    console.log('error ni yawa ka')
+    console.log(error.message)
+  }
+}
