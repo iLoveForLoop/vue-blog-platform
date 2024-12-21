@@ -24,9 +24,10 @@ import {
 
 const props = defineProps({
   id: String,
+  isViewed: {},
 })
 
-const emit = defineEmits(['closePost'])
+const emit = defineEmits(['closePost', 'isViewed'])
 
 const id = props.id
 
@@ -35,6 +36,7 @@ const newUser = ref(null)
 const { spost } = getSinglePostWithUser(id)
 
 onMounted(() => {
+  emit('isViewed')
   console.log('Single post', spost)
 })
 
@@ -141,7 +143,7 @@ const saveComment = () => {
       </div>
 
       <div class="overflow-scroll hidebar flex-grow-1 pb-5">
-        <Post :post="spost" />
+        <Post :post="spost" :isFromView="true" />
         <div v-for="comment in comments" :key="comment.id">
           <Comment
             :comment="comment"
@@ -167,7 +169,11 @@ const saveComment = () => {
               :placeholder="tmp"
               v-model="comment"
             />
-            <button class="border-0 bg-transparent text-light" type="submit">
+            <button
+              class="border-0 bg-transparent text-secondary"
+              type="submit"
+              style=""
+            >
               Post
             </button>
           </form>
@@ -213,6 +219,7 @@ const saveComment = () => {
 
 .custom-input::placeholder {
   color: rgb(224, 224, 224);
+  font-weight: 150;
 }
 
 .no-focus-effect {

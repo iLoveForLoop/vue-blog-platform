@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import CreateNewPost from '../CreateNewPost.vue'
@@ -19,14 +19,24 @@ const logout = async () => {
   router.push('/login')
 }
 
+// onMounted(() => {
+//   store.commit('setIsOnProfile', true)
+// })
+
+// onUnmounted(() => {
+//   store.commit('setIsOnProfile', false)
+// })
+
 const manageRoute = data => {
   switch (data) {
     case 'rants':
+      store.commit('setIsOnProfile', false)
       console.log('rants')
 
       router.push('/home')
       break
     case 'profile':
+      store.commit('setIsOnProfile', true)
       router.push('/profile')
       break
     case 'create':
@@ -176,7 +186,8 @@ const closeCreatePost = () => {
 }
 
 .side-w {
-  width: 30vw;
+  max-width: 200px;
+  min-width: 200px;
 }
 
 .zindex {

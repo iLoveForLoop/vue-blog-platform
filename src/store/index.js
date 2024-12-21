@@ -15,6 +15,7 @@ const store = createStore({
     user: null,
     isAuthReady: false,
     isNewUser: false,
+    isOnProfile: false,
   },
   mutations: {
     updateUser(state, payload) {
@@ -28,6 +29,9 @@ const store = createStore({
     },
     setIsNewUser(state, payload) {
       state.isNewUser = payload
+    },
+    setIsOnProfile(state, payload) {
+      state.isOnProfile = payload
     },
   },
   actions: {

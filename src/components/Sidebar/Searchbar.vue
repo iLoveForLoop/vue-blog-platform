@@ -54,16 +54,18 @@ watch(
 )
 
 const isNewUser = computed(() => store.state.isNewUser)
+const isOnProfile = computed(() => store.state.isOnProfile)
 </script>
 
 <template >
-  <template v-if="isReady && user?.value && !isNewUser">
+  <template v-if="isReady && user?.value && !isNewUser && !isOnProfile">
     <div
-      class="main-bg d-flex flex-column w-50 gap-5 l-border poppins-regular px-5"
+      class="main-bg d-flex flex-column gap-5 l-border poppins-regular px-5"
+      style="width: 500px"
       v-if="store.state.user"
     >
       <!--Search-->
-      <form class="d-flex mt-3" style="height: 6vh" role="search">
+      <!-- <form class="d-flex mt-3" style="height: 6vh" role="search">
         <div
           class="search-logo bg-dark text-light d-flex justify-content-center align-items-center ps-3 pe-0"
         >
@@ -75,10 +77,10 @@ const isNewUser = computed(() => store.state.isNewUser)
           placeholder="Search"
           aria-label="Search"
         />
-      </form>
+      </form> -->
 
       <!--Log out-->
-      <div class="rounded-4 text-light">
+      <div class="rounded-4 text-light mt-5">
         <div class="d-flex justify-content-between align-items-center">
           <!-- <div class="d-flex justify-content-start align-items-center gap-2">
             <img

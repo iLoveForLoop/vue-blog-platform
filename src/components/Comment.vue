@@ -95,7 +95,11 @@ const timeAgo = computed(() => {
 
 <template>
   <!-- For Styling purposes only -->
-  <div class="backdrop" v-if="showPopover" @click.self="closePopover"></div>
+  <div
+    class="backdrop"
+    v-if="showPopover || isEditing"
+    @click.self="closePopover"
+  ></div>
   <!-- For Styling purposes only -->
 
   <div
@@ -148,12 +152,13 @@ const timeAgo = computed(() => {
                 @closePopover="closePopover"
               />
             </transition>
-
-            <EditComment
-              v-if="isEditing"
-              :comment="props.comment"
-              @closeEdit="closeEdit"
-            />
+            <transition name="pop">
+              <EditComment
+                v-if="isEditing"
+                :comment="props.comment"
+                @closeEdit="closeEdit"
+              />
+            </transition>
 
             <i
               class="bi bi-three-dots"

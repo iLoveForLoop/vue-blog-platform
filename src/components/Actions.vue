@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted, defineProps } from 'vue'
+import { ref, watch, onMounted, onUnmounted, defineProps, computed } from 'vue'
 import { addLike } from '@/composables/addLike'
 
 import { db } from '@/firebase/config'
@@ -30,8 +30,12 @@ const props = defineProps({
   post: [{}],
   id: String,
   userId: String,
+  isFromView: {
+    type: Boolean,
+    default: false,
+  },
 })
-const { post } = props
+const { post, isFromView } = props
 
 const likes = ref(0)
 const comments = ref(0)
@@ -39,13 +43,13 @@ const like_id = ref(null)
 const alreadyLiked = ref(false)
 
 const heart = ref('bi bi-heart')
-
 const comment = ref('bi bi-chat-left')
 
 const heartBreakClick = ref(false)
 const commentClick = ref(false)
 
 const isViewingPost = ref(false)
+const currentlyViewing = ref(false)
 
 onMounted(async () => {
   const likesRef = collection(db, 'likes')
@@ -135,12 +139,21 @@ const toggle = async data => {
 }
 
 const viewPost = () => {
-  console.log('Actions view post', post.id)
-  isViewingPost.value = true
+  if (isFromView) {
+    if (!currentlyViewing) {
+      isViewingPost.value = true
+      currentlyViewing.value = true
+    } else {
+      console.log('already viewing')
+    }
+  } else {
+    isViewingPost.value = true
+  }
 }
 
 const closePost = () => {
   isViewingPost.value = false
+  currentlyViewing.value = false
 }
 </script>
 
@@ -150,7 +163,12 @@ const closePost = () => {
   <!-- For Styling purposes only -->
 
   <transition name="pop">
-    <ViewPost v-if="isViewingPost" :id="post.id" @closePost="closePost" />
+    <ViewPost
+      v-if="isViewingPost"
+      :id="post.id"
+      @closePost="closePost"
+      @isViewed="isViewed = true"
+    />
   </transition>
 
   <div class="d-flex flex-column gap-1">

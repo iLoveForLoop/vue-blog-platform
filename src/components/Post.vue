@@ -18,6 +18,10 @@ const props = defineProps({
   post: [{}],
   isFromProfile: { type: Boolean, default: false },
   isFromSinglePost: { type: Boolean, default: false },
+  isFromView: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const showPopover = ref(false)
@@ -195,7 +199,7 @@ const timeAgo = computed(() => {
         v-if="props.post && props.post.user"
         class="px-3 d-flex justify-content-left align-items-center"
       >
-        <Actions :post="props.post" />
+        <Actions :post="props.post" :isFromView="props.isFromView" />
       </div>
     </div>
   </div>
