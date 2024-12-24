@@ -14,8 +14,10 @@ const { posts } = getSnapCollectionWithUser()
     class="w-100 px-0 container main-bg overflow-scroll hidebar poppins-regular b-pad m-0"
     style="height: 100vh"
   >
-    <div v-for="post in posts" :key="post.id">
-      <Post :post="post" />
+    <div class="my-border mx-5 my-5 p-5 rounded-5">
+      <div class="" v-for="post in posts" :key="post.id">
+        <Post :post="post" />
+      </div>
     </div>
   </div>
 </template>

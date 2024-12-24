@@ -4,20 +4,21 @@ import { ref, computed, onMounted, watch } from 'vue'
 import {
   getCurrentUserInfo,
   getSnapCollectionWithUser,
+  getSnapPostWithUser,
 } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
-import { uploadPicture } from '@/composables/uploadPicture'
 import { cloudinaryConfig } from '@/cloudinary/cloudinaryConfig'
 import { db } from '@/firebase/config'
 import { doc, updateDoc } from 'firebase/firestore'
 import axios from 'axios'
+import EditProfile from '@/components/EditProfile/EditProfile.vue'
 
 const store = useStore()
 const user = ref(null)
 const currentUser = ref(null)
 
 const isReady = computed(() => store.state.isAuthReady)
-const { posts } = getSnapCollectionWithUser()
+const { posts } = getSnapPostWithUser()
 
 const loadUserData = async () => {
   if (store.state.user?.uid) {
@@ -33,10 +34,6 @@ onMounted(async () => {
 watch(isReady, ready => {
   if (ready && store.state.user) {
     loadUserData()
-  }
-
-  if (posts) {
-    currentUser.value = posts.find(obj => obj.user == store.state.user.uid)
   }
 })
 
@@ -81,16 +78,42 @@ const onProfileChange = async e => {
 </script>
 
 <template>
+  <EditProfile />
   <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
       <div
-        class="container d-flex flex-column main-bg w-100 overflow-scroll hidebar"
-        style="height: 100vh"
+        class="container d-flex flex-column main-bg overflow-scroll hidebar my-border mt-5 p-5 rounded-5"
+        style="height: 100vh; width: 60%"
         v-if="user"
       >
-        <div class="text-center overflow-scroll hidebar" style="height: 100vh">
+        <div
+          class="text-center text-center d-flex justify-content-between align-items-stretch py-3 rounded border-bt"
+        >
+          <input
+            class="d-none"
+            type="file"
+            @change="onProfileChange"
+            ref="profile"
+          />
+
           <div
-            class="text-center text-center mt-3 d-flex justify-content-between align-items-center p-5 rounded border-bt mb-3"
+            class="text-light d-flex flex-column justify-content-between align-items-start"
+          >
+            <div class="d-flex flex-column align-items-start">
+              <p class="fs-5 m-0 fw-bold fs-3">{{ user.value?.displayName }}</p>
+              <p class="mb-0 fw-light" style="font-size: 0.9em">
+                {{ user.value?.email }}
+              </p>
+            </div>
+            <div>
+              <p class="m-0">
+                {{ user.value?.bio ? user.value?.bio : 'No bio yet' }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="text-light d-flex flex-column justify-content-center align-items-center gap-4"
           >
             <img
               class="circle"
@@ -102,35 +125,19 @@ const onProfileChange = async e => {
               alt="user"
               @click="toggleProfileChange"
             />
-            <input
-              class="d-none"
-              type="file"
-              @change="onProfileChange"
-              ref="profile"
-            />
-
-            <div class="text-light fw-lighter">
-              <p>{{ user.value?.bio ? user.value?.bio : 'No bio yet' }}</p>
-            </div>
-
-            <div
-              class="text-light d-flex flex-column justify-content-center align-items-center gap-1"
-            >
-              <p class="fs-5 m-0">{{ user.value?.displayName }}</p>
-              <p class="mb-4">{{ user.value?.email }}</p>
-              <button class="btn my-border text-light rounded-pill box">
-                Edit Profile
-              </button>
-            </div>
+            <button class="btn my-border text-light rounded-4 px-5 box">
+              Edit Profile
+            </button>
           </div>
+        </div>
 
+        <div v-if="posts.length > 0">
           <div v-for="post in posts" :key="post.id">
-            <Post
-              :post="post"
-              v-if="post.user_id == user.value.id"
-              :isFromProfile="true"
-            />
+            <Post :post="post" :isFromProfile="true" />
           </div>
+        </div>
+        <div v-else>
+          <p>No post yet</p>
         </div>
       </div>
     </div>

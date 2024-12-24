@@ -8,8 +8,9 @@ import {
   query,
   where,
 } from 'firebase/firestore'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import store from '@/store'
 
 export const getCollection = async () => {
   let posts = ref([])
@@ -205,14 +206,52 @@ export const getRandomUsers = async () => {
     const users = await getDocs(usersRef)
 
     users.forEach(doc => {
-      allUser.push({ ...doc.data(), id: doc.id })
+      if (doc.id !== store.state.user.uid) {
+        allUser.push({ ...doc.data(), id: doc.id })
+      }
     })
 
     randomUsers = allUser.sort(() => 0.5 - Math.random())
-    console.log('function fetching random user: ', randomUsers.slice(0, 5))
+
     return randomUsers.slice(0, 5)
   } catch (error) {
     console.log('error ni yawa ka')
     console.log(error.message)
   }
+}
+
+//gets all the post of a singe user
+export const getSnapPostWithUser = () => {
+  let posts = ref([])
+  const postsRef = collection(db, 'posts')
+  const q = query(postsRef, where('user_id', '==', store.state.user.uid))
+
+  onSnapshot(
+    q,
+    async snapshot => {
+      const postData = snapshot.docs.map(async data => {
+        const post = { ...data.data(), id: data.id }
+
+        if (post.user_id) {
+          const userRef = doc(db, 'users', post.user_id)
+          const userSnapshot = await getDoc(userRef)
+
+          if (userSnapshot.exists()) {
+            post.user = userSnapshot.data()
+          } else {
+            post.user = 'Dont have any'
+          }
+        }
+
+        return post
+      })
+
+      posts.value = await Promise.all(postData)
+    },
+    err => {
+      console.log(err.message)
+    },
+  )
+
+  return { posts }
 }

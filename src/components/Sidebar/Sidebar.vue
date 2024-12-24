@@ -31,8 +31,6 @@ const manageRoute = data => {
   switch (data) {
     case 'rants':
       store.commit('setIsOnProfile', false)
-      console.log('rants')
-
       router.push('/home')
       break
     case 'profile':
@@ -44,13 +42,8 @@ const manageRoute = data => {
       openCreatePost()
       break
     case 'settings':
-      // logout()
-      router.push('/')
+      console.log('settings clicked')
       break
-    // case 'logout':
-    //   await store.dispatch('logout')
-    //   router.push('/login')
-    //   break
   }
 }
 
@@ -81,7 +74,7 @@ const closeCreatePost = () => {
 
   <template v-if="isReady && !isNewUser">
     <div
-      class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border pe-3 gap-3"
+      class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-3 gap-3"
       style="height: 100vh"
       v-if="store.state.user"
     >
@@ -118,14 +111,13 @@ const closeCreatePost = () => {
         Profile
       </router-link>
 
-      <router-link
-        to="/home"
+      <a
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="manageRoute('settings')"
       >
         <i class="bi bi-gear fs-5"></i>
         Settings
-      </router-link>
+      </a>
 
       <!-- <div
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
@@ -186,8 +178,8 @@ const closeCreatePost = () => {
 }
 
 .side-w {
-  max-width: 200px;
-  min-width: 200px;
+  max-width: 250px;
+  min-width: 250px;
 }
 
 .zindex {

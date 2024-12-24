@@ -61,7 +61,7 @@ const isOnProfile = computed(() => store.state.isOnProfile)
   <template v-if="isReady && user?.value && !isNewUser && !isOnProfile">
     <div
       class="main-bg d-flex flex-column gap-5 l-border poppins-regular px-5"
-      style="width: 500px"
+      style="width: 700px"
       v-if="store.state.user"
     >
       <!--Search-->

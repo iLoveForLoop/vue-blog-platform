@@ -62,13 +62,13 @@ const closeCreatePost = () => {
     @click.self="closeCreatePost"
   >
     <div
-      class="text-light text-center p-3 bg-gray border-b rounded-top"
+      class="text-light text-center p-3 bg-gray border-b rounded-top-4"
       style="width: 40%"
     >
       <p class="m-0">Create a new post</p>
     </div>
     <div
-      class="rounded-bottom bg-gray d-flex"
+      class="rounded-bottom-4 bg-gray d-flex"
       style="height: 65vh; width: 40%"
       v-if="user"
     >
