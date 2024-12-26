@@ -22,8 +22,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  currentUserProfilePic: String,
 })
 
+const profilePic = ref(
+  props.post?.user.photoURL
+    ? props.post?.user.photoURL
+    : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+)
 const showPopover = ref(false)
 
 const togglePopover = () => {
@@ -112,7 +118,9 @@ const timeAgo = computed(() => {
           <img
             class="circle"
             :src="
-              props.post?.user.photoURL
+              props.isFromProfile
+                ? props.currentUserProfilePic
+                : props.post?.user.photoURL
                 ? props.post?.user.photoURL
                 : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
             "

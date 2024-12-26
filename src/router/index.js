@@ -71,6 +71,7 @@ router.beforeEach((to, from, next) => {
   }
   // Prevent logged-in users from accessing login page
   else if (to.name === 'login' && user) {
+    store.commit('setIsOnProfile', false)
     next({ name: 'home' })
   }
   // Allow navigation

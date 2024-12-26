@@ -1,113 +1,52 @@
 <script setup>
 import { useStore } from 'vuex'
 import { ref, computed, onMounted, watch } from 'vue'
-import {
-  getCurrentUserInfo,
-  getSnapCollectionWithUser,
-  getSnapPostWithUser,
-} from '@/composables/getCollections'
+import { getSnapPostWithUser } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
-import { cloudinaryConfig } from '@/cloudinary/cloudinaryConfig'
-import { db } from '@/firebase/config'
-import { doc, updateDoc } from 'firebase/firestore'
-import axios from 'axios'
 import EditProfile from '@/components/EditProfile/EditProfile.vue'
+import { getCurrentProfileInfo } from '@/composables/getProfileDetails'
 
-const store = useStore()
-const user = ref(null)
-const currentUser = ref(null)
-
-const isReady = computed(() => store.state.isAuthReady)
+const { user } = getCurrentProfileInfo()
 const { posts } = getSnapPostWithUser()
 
-const loadUserData = async () => {
-  if (store.state.user?.uid) {
-    const { user: fetchedUser } = await getCurrentUserInfo(store.state.user.uid)
-    user.value = fetchedUser
-  }
-}
-
-onMounted(async () => {
-  await loadUserData()
-})
-
-watch(isReady, ready => {
-  if (ready && store.state.user) {
-    loadUserData()
-  }
-})
-
-const profile = ref(null)
-const selectedFile = ref(null)
-const url = ref(user.photoURL)
-
-const toggleProfileChange = () => {
-  profile.value.click()
-}
-
-const onProfileChange = async e => {
-  const file = e.target.files[0]
-  selectedFile.value = file
-  url.value = URL.createObjectURL(file)
-
-  const formData = new FormData()
-  formData.append('file', selectedFile.value)
-  formData.append('upload_preset', cloudinaryConfig.uploadPreset)
-
-  let newUrl = null
-
-  try {
-    const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-      formData
-    )
-    newUrl = res.data.secure_url
-    const userRef = doc(db, 'users', store.state.user.uid)
-    await updateDoc(userRef, {
-      photoURL: newUrl,
-    })
-
-    console.log('upload pic success!')
-    url.value = newUrl
-  } catch (e) {
-    console.error(e.message)
-  }
-}
-
-// URL.revokeObjectURL(imageURL);
+const store = useStore()
+const isEditingProfile = ref(false)
+const isReady = computed(() => store.state.isAuthReady)
 </script>
 
 <template>
-  <EditProfile />
+  <!-- For Styling purposes only -->
+  <div class="backdr" v-if="isEditingProfile"></div>
+  <!-- For Styling purposes only -->
+  <transition name="pop">
+    <EditProfile
+      v-if="isEditingProfile"
+      @close-edit-profile="isEditingProfile = false"
+      :user="user"
+    />
+  </transition>
+
   <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
       <div
         class="container d-flex flex-column main-bg overflow-scroll hidebar my-border mt-5 p-5 rounded-5"
         style="height: 100vh; width: 60%"
-        v-if="user"
       >
         <div
           class="text-center text-center d-flex justify-content-between align-items-stretch py-3 rounded border-bt"
         >
-          <input
-            class="d-none"
-            type="file"
-            @change="onProfileChange"
-            ref="profile"
-          />
-
           <div
             class="text-light d-flex flex-column justify-content-between align-items-start"
           >
             <div class="d-flex flex-column align-items-start">
-              <p class="fs-5 m-0 fw-bold fs-3">{{ user.value?.displayName }}</p>
+              <p class="fs-5 m-0 fw-bold fs-3">{{ user?.displayName }}</p>
               <p class="mb-0 fw-light" style="font-size: 0.9em">
-                {{ user.value?.email }}
+                {{ user?.email }}
               </p>
             </div>
             <div>
               <p class="m-0">
-                {{ user.value?.bio ? user.value?.bio : 'No bio yet' }}
+                {{ user?.bio ? user?.bio : 'No bio yet' }}
               </p>
             </div>
           </div>
@@ -118,14 +57,16 @@ const onProfileChange = async e => {
             <img
               class="circle"
               :src="
-                user.value?.photoURL
-                  ? user.value?.photoURL
+                user?.photoURL
+                  ? user?.photoURL
                   : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               "
               alt="user"
-              @click="toggleProfileChange"
             />
-            <button class="btn my-border text-light rounded-4 px-5 box">
+            <button
+              class="btn my-border text-light rounded-4 px-5 box"
+              @click="isEditingProfile = true"
+            >
               Edit Profile
             </button>
           </div>
@@ -133,7 +74,11 @@ const onProfileChange = async e => {
 
         <div v-if="posts.length > 0">
           <div v-for="post in posts" :key="post.id">
-            <Post :post="post" :isFromProfile="true" />
+            <Post
+              :post="post"
+              :isFromProfile="true"
+              :currentUserProfilePic="user?.photoURL"
+            />
           </div>
         </div>
         <div v-else>
@@ -177,5 +122,35 @@ const onProfileChange = async e => {
 .box:hover {
   background-color: rgb(202, 202, 202);
   color: black !important;
+}
+
+.backdr {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5) !important;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.pop-enter-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.pop-leave-active {
+  transition: none;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.pop-enter-to,
+.pop-leave-from {
+  transform: scale(1);
+  opacity: 1;
 }
 </style>

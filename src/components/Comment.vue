@@ -103,7 +103,7 @@ const timeAgo = computed(() => {
   <!-- For Styling purposes only -->
 
   <div
-    class="poppins-regular w-100 d-flex flex-column align-items-center justify-content-center text-dark p-3 pb-0 pt-0"
+    class="poppins-regular w-100 d-flex flex-column align-items-start justify-content-center text-dark pb-0 pt-0"
   >
     <div
       class="w-75 d-flex flex-column justify-content-start py-0 rounded"

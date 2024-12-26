@@ -142,7 +142,7 @@ const saveComment = () => {
         </h2>
       </div>
 
-      <div class="overflow-scroll hidebar flex-grow-1 pb-5">
+      <div class="overflow-scroll hidebar flex-grow-1 pb-5 px-5">
         <Post :post="spost" :isFromView="true" />
         <div v-for="comment in comments" :key="comment.id">
           <Comment
