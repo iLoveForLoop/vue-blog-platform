@@ -2,7 +2,8 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import EditComment from './EditComment.vue'
 import CommentAction from './CommentAction.vue'
-import TestPopover from './Popover.vue'
+import Popover from './Popover.vue'
+import { useStore } from 'vuex'
 import {
   differenceInSeconds,
   differenceInMinutes,
@@ -11,6 +12,7 @@ import {
 } from 'date-fns'
 
 const isEditing = ref(false)
+const store = useStore()
 
 const props = defineProps({
   comment: [{}],
@@ -20,6 +22,9 @@ const props = defineProps({
 const showPopover = ref(false)
 
 const togglePopover = () => {
+  store.commit('setIsComponentOverLapping', true)
+  console.log('toggled the comment popver')
+  console.log('is over lapping?', store.state.isComponentOverLapping)
   showPopover.value = !showPopover.value
 }
 
@@ -68,7 +73,7 @@ const toggleExpand = () => {
 //Converting date to time ago
 
 const commentDate = computed(() => props.comment.created_at.toDate())
-console.log('comment date: ', commentDate.value)
+
 
 const timeAgo = computed(() => {
   const now = new Date()
@@ -95,20 +100,11 @@ const timeAgo = computed(() => {
 
 <template>
   <!-- For Styling purposes only -->
-  <div
-    class="backdrop"
-    v-if="showPopover || isEditing"
-    @click.self="closePopover"
-  ></div>
+  <div class="backdrop" v-if="showPopover || isEditing" @click.self="closePopover"></div>
   <!-- For Styling purposes only -->
 
-  <div
-    class="poppins-regular w-100 d-flex flex-column align-items-start justify-content-center text-dark pb-0 pt-0"
-  >
-    <div
-      class="w-75 d-flex flex-column justify-content-start py-0 rounded"
-      style="height: auto"
-    >
+  <div class="poppins-regular w-100 d-flex flex-column align-items-start justify-content-center text-dark pb-0 pt-0">
+    <div class="w-75 d-flex flex-column justify-content-start py-0 rounded" style="height: auto">
       <div class="line" style="height: 3vh"></div>
 
       <!-- <div
@@ -120,75 +116,45 @@ const timeAgo = computed(() => {
         </p>
       </div> -->
 
-      <div
-        class="my-border text-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based"
-      >
+      <div class="my-border text-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based">
         <div class="d-flex align-items-center justify-content-between gap-5">
           <div class="d-flex gap-2 align-items-center">
-            <img
-              class="comment-circle"
-              :src="
-                props.comment?.user.photoURL
-                  ? props.comment?.user.photoURL
-                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-              "
-              alt="pic"
-            />
+            <img class="comment-circle" :src="props.comment?.user.photoURL
+              ? props.comment?.user.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              " alt="pic" />
             <p class="p-0 m-0 name-size emailFSize">
               <!--username-->
               {{ props.comment.user_email }} · {{ timeAgo }}
             </p>
           </div>
           <!--3 dots is paking here-->
-          <div
-            class="d-flex align-items-center justify-content-between position-relative"
-          >
+          <div class="d-flex align-items-center justify-content-between position-relative">
             <transition name="pop">
-              <TestPopover
-                v-if="showPopover"
-                :id="props.comment.id"
-                from="comment"
-                @openEdit="openEdit"
-                @closePopover="closePopover"
-              />
+              <Popover v-if="showPopover" :id="props.comment.id" from="comment" @openEdit="openEdit"
+                @closePopover="closePopover" />
             </transition>
             <transition name="pop">
-              <EditComment
-                v-if="isEditing"
-                :comment="props.comment"
-                @closeEdit="closeEdit"
-              />
+              <EditComment v-if="isEditing" :comment="props.comment" @closeEdit="closeEdit" />
             </transition>
 
-            <i
-              class="bi bi-three-dots"
-              @click="togglePopover"
-              v-show="props.isMyComment"
-            ></i>
+            <i class="bi bi-three-dots" @click="togglePopover" v-show="props.isMyComment"></i>
           </div>
         </div>
 
-        <div
-          class="ps-4 d-flex align-items-center justify-content-between gap-4"
-          style="cursor: default"
-        >
+        <div class="ps-4 d-flex align-items-center justify-content-between gap-4" style="cursor: default">
           <!--COMMENT CONTENT-->
           <p @click="toggleExpand" class="p-0 m-0 fw-light">
             {{ trimmedText }}
-            <span
-              v-if="canBeToggle"
-              class="text-secondary"
-              style="cursor: pointer !important"
-              >{{ isExpanded ? '' : '...See more' }}
+            <span v-if="canBeToggle" class="text-secondary" style="cursor: pointer !important">{{ isExpanded ? '' :
+              '...See more' }}
             </span>
           </p>
           <CommentAction :comment="props.comment" />
         </div>
       </div>
 
-      <div
-        class="px-3 bg-light d-flex justify-content-left align-items-center content-based"
-      ></div>
+      <div class="px-3 bg-light d-flex justify-content-left align-items-center content-based"></div>
     </div>
   </div>
 </template>

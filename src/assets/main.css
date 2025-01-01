@@ -34,6 +34,7 @@ i:hover {
 
 .main-bg {
   background-color: #121212 !important;
+  /* background-color: #ffffff !important; */
 }
 
 .logo-font {
@@ -48,8 +49,8 @@ i:hover {
 
 .circle {
   border-radius: 50%;
-  width: 47px;
-  height: 47px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
   object-position: center;
 }

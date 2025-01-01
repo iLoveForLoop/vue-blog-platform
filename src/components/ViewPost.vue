@@ -2,7 +2,7 @@
 import Post from '@/components/Post.vue'
 import { usePostStore } from '@/store/piniaStore'
 import { useRouter } from 'vue-router'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import Comment from '@/components/Comment.vue'
 import { addComment } from '@/composables/addComment'
@@ -27,9 +27,13 @@ const props = defineProps({
   isViewed: {},
 })
 
+const myViewPost = ref(null)
+
 const emit = defineEmits(['closePost', 'isViewed'])
 
 const id = props.id
+const error = ref(null)
+
 
 //post with user
 const newUser = ref(null)
@@ -37,7 +41,6 @@ const { spost } = getSinglePostWithUser(id)
 
 onMounted(() => {
   emit('isViewed')
-  console.log('Single post', spost)
 })
 
 //stores
@@ -51,7 +54,9 @@ const comments = ref([])
 //placeholder
 const tmp = ref(`Reply as ${store.state.user?.email}`)
 
-//fetch comments
+
+
+
 
 //kill switch
 let killCommentsWithUser
@@ -64,7 +69,41 @@ const loadUserData = async () => {
   }
 }
 
+const closeOnEscape = (e) => {
+
+  if (e.key == 'Escape') {
+    console.log('clicked view post escape edit')
+    emit('closePost')
+  }
+}
+
+
+//Component checker
+
+// store.commit('setIsComponentOverLapping', false)
+const isCompomentOverLaps = computed(() => store.state.isComponentOverLapping)
+console.log('is over lapping?', isCompomentOverLaps.value)
+
+watch(isCompomentOverLaps, (newVal) => {
+  console.log('trigger the watcher')
+  if (newVal) {
+    console.log('is over lapping?', isCompomentOverLaps.value)
+    myViewPost.value.removeEventListener('keydown', closeOnEscape)
+  } else {
+    setTimeout(() => {
+      console.log('is over lapping?', isCompomentOverLaps.value)
+      myViewPost.value.focus()
+      myViewPost.value.addEventListener('keydown', closeOnEscape)
+    }, 500)
+
+
+
+  }
+})
+
 onMounted(async () => {
+  myViewPost.value.focus()
+  myViewPost.value.addEventListener('keydown', closeOnEscape)
   await loadUserData()
   const commentsRef = collection(db, 'comments')
   const postComments = query(commentsRef, where('post_id', '==', id))
@@ -106,7 +145,7 @@ onUnmounted(() => {
 //add comment
 const comment = ref('')
 const saveComment = () => {
-  if (comment.value != '') {
+  if (comment.value !== '') {
     try {
       const data = {
         user_id: store.state.user.uid,
@@ -119,61 +158,54 @@ const saveComment = () => {
     } catch (error) {
       console.log(error.message)
     }
+  } else {
+    error.value = "You can't leave me empty :("
+    setTimeout(() => {
+      error.value = null
+    }, 2000)
   }
 
   comment.value = ''
 }
+
 </script>
 
 <template>
-  <div
-    class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
-    @click.self="emit('closePost')"
-  >
-    <div
-      class="container w-75 main-bg hidebar poppins-regular d-flex flex-column p-0"
-      style="height: 90vh; z-index: 10"
-    >
-      <div
-        class="d-flex justify-content-end align-items-center gap-2 mt-3 pe-3"
-      >
+  <div class="back d-flex flex-column justify-content-center align-items-center poppins-regular" id="viewPostBody"
+    @click.self="emit('closePost')" ref="myViewPost" tabindex="0">
+    <transition name="slide">
+      <div class="alert alert-danger errpos" role="alert" v-if="error" style="z-index: 11">
+        {{ error }}
+      </div>
+    </transition>
+
+    <div class="container w-50 main-bg hidebar poppins-regular d-flex flex-column p-0 rounded-4"
+      style="height: 90vh; z-index: 10">
+      <div class="d-flex justify-content-end align-items-center gap-2 mt-3 pe-3">
         <h2>
-          <i class="bi bi-x text-light" @click="emit('closePost')"></i>
+          <i class="bi bi-three-dots text-light" @click="emit('closePost')" style="font-size: .7em;"></i>
         </h2>
       </div>
 
       <div class="overflow-scroll hidebar flex-grow-1 pb-5 px-5">
         <Post :post="spost" :isFromView="true" />
         <div v-for="comment in comments" :key="comment.id">
-          <Comment
-            :comment="comment"
-            :isMyComment="comment.user_id == store.state.user.uid"
-          />
+          <Comment :comment="comment" :isMyComment="comment.user_id == store.state.user.uid" />
         </div>
       </div>
       <div class="d-flex align-items-center gap-3" v-if="currentUser">
         <div class="d-flex main-bg py-3 px-3 w-100 gap-3 top-bor">
-          <img
-            class="my-circle"
-            :src="
-              currentUser.value?.photoURL
-                ? currentUser.value?.photoURL
-                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-            "
-            alt="pic"
-          />
+          <div>
+            <img class="my-circle" :src="currentUser.value?.photoURL
+              ? currentUser.value?.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              " alt="pic" />
+          </div>
+
           <form class="d-flex w-100" @submit.prevent="saveComment">
-            <input
-              class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded"
-              type="text"
-              :placeholder="tmp"
-              v-model="comment"
-            />
-            <button
-              class="border-0 bg-transparent text-secondary"
-              type="submit"
-              style=""
-            >
+            <input class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded" type="text"
+              :placeholder="tmp" v-model="comment" />
+            <button class="border-0 bg-transparent text-secondary" type="submit" style="">
               Post
             </button>
           </form>
@@ -192,6 +224,10 @@ const saveComment = () => {
   width: 100%;
   z-index: 10;
   background: rgba(36, 35, 35, 0) !important;
+}
+
+.back:focus {
+  outline: none;
 }
 
 .hidebar {
@@ -243,5 +279,30 @@ const saveComment = () => {
   height: 35px;
   object-fit: cover;
   object-position: center;
+}
+
+.errpos {
+  position: fixed;
+  right: 1em;
+  top: 1em;
+  transition: 0.3s ease-in-out;
+}
+
+.slide-enter-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: 0.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.slide-enter {
+  transform: translateX(-50%);
+  /* Start position off-screen */
+  opacity: 0;
+  /* Optional: fade in along with the slide */
+}
+
+.slide-leave-to {
+  opacity: 0;
+  /* Optional: fade out along with the slide */
 }
 </style>

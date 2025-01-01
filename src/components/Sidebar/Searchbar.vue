@@ -14,30 +14,30 @@ const store = useStore()
 
 const isReady = computed(() => store.state.isAuthReady)
 
+const user = ref(null)
+const randomUsers = ref(null)
+
 const logout = async () => {
   store.commit('setIsNewUser', false)
   await store.dispatch('logout')
   router.push('/login')
 }
 
-const user = ref(null)
-const randomUsers = ref(null)
-
 const loadUserData = async () => {
-  randomUsers.value = await getRandomUsers()
   try {
     if (store.state.user?.uid) {
       const { user: fetchedUser } = await getCurrentUserInfo(
         store.state.user.uid
       )
-      user.value = fetchedUser || {} // Default to empty object if null
+      user.value = fetchedUser || {}
     }
   } catch (error) {
     console.error('Failed to load user data:', error)
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  randomUsers.value = await getRandomUsers()
   loadUserData()
 })
 
@@ -128,7 +128,7 @@ const isOnProfile = computed(() => store.state.isOnProfile)
         >
           <ProfileAndEmail
             textsize="0.8"
-            :email="randomuser.email"
+            :email="randomuser.displayName"
             :profilePic="
               randomuser?.photoURL
                 ? randomuser?.photoURL

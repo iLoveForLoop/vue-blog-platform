@@ -14,6 +14,7 @@ const id = computed(() => store.state.user.uid)
 const user = ref(null)
 const post = ref('')
 const myTextArea = ref(null)
+const error = ref(null)
 
 const loadUserData = async () => {
   if (store.state.user?.uid) {
@@ -36,18 +37,25 @@ watch(isReady, ready => {
 })
 
 const handleSubmit = async () => {
-  try {
-    const data = {
-      content: post.value,
-      user_id: id.value,
-      created_at: Timestamp.now(),
-    }
+  if (post.value.trim() !== '') {
+    try {
+      const data = {
+        content: post.value,
+        user_id: id.value,
+        created_at: Timestamp.now(),
+      }
 
-    await addPost(data)
-    post.value = ''
-    closeCreatePost()
-  } catch (error) {
-    console.log(error.message)
+      await addPost(data)
+      post.value = ''
+      closeCreatePost()
+    } catch (error) {
+      console.log(error.message)
+    }
+  } else {
+    error.value = "Please don't leave me empty :("
+    setTimeout(() => {
+      error.value = null
+    }, 2500)
   }
 }
 
@@ -61,6 +69,16 @@ const closeCreatePost = () => {
     class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
     @click.self="closeCreatePost"
   >
+    <transition name="slide">
+      <div
+        class="alert alert-danger errpos"
+        role="alert"
+        v-if="error"
+        style="z-index: 11"
+      >
+        {{ error }}
+      </div>
+    </transition>
     <div
       class="text-light text-center p-3 bg-gray border-b rounded-top-4"
       style="width: 40%"
@@ -171,5 +189,25 @@ const closeCreatePost = () => {
 textarea::placeholder {
   color: white;
   font-weight: 100;
+}
+
+.errpos {
+  position: fixed;
+  right: 1em;
+  top: 1em;
+  transition: 0.3s ease-in-out;
+}
+
+.slide-enter-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: 0.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+.slide-enter {
+  transform: translateX(-50%); /* Start position off-screen */
+  opacity: 0; /* Optional: fade in along with the slide */
+}
+.slide-leave-to {
+  opacity: 0; /* Optional: fade out along with the slide */
 }
 </style>

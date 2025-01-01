@@ -53,68 +53,58 @@ const isNewUser = computed(() => store.state.isNewUser)
 const closeCreatePost = () => {
   isCreatingPost.value = false
 }
+
+const closeOnEscape = e => {
+  if (isCreatingPost.value && e.key === 'Escape') {
+    console.log('click the escape in the create post')
+    closeCreatePost()
+  }
+}
+
+onMounted(() => document.addEventListener('keydown', closeOnEscape))
+onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
 </script>
 
 <template>
   <!-- For Styling purposes only -->
-  <div
-    class="backdrop"
-    v-if="isCreatingPost"
-    @click.self="closeCreatePost"
-  ></div>
+  <div class="backdrop" v-if="isCreatingPost" @click.self="closeCreatePost"></div>
   <!-- For Styling purposes only -->
 
   <!-- Creating Post -->
   <transition name="pop">
-    <CreateNewPost
-      v-if="isCreatingPost"
-      @closeCreatePost="isCreatingPost = false"
-    />
+    <CreateNewPost v-if="isCreatingPost" @closeCreatePost="isCreatingPost = false" />
   </transition>
 
   <template v-if="isReady && !isNewUser">
-    <div
-      class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-3 gap-3"
-      style="height: 100vh"
-      v-if="store.state.user"
-    >
-      <div
-        class="w-100 pt-4 ps-4 d-flex align-items-center justify-content-between"
-      >
+    <div class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-3 gap-3"
+      style="height: 100vh" v-if="store.state.user">
+      <div class="w-100 pt-4 ps-4 d-flex align-items-center justify-content-between">
         <div class="fs-3 logo-font">
           <!-- <i class="bi bi-bootstrap-fill"></i> -->
           Rants
         </div>
       </div>
-      <router-link
-        to="/home"
+      <router-link to="/home"
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
-        @click="manageRoute('rants')"
-      >
+        @click="manageRoute('rants')">
         <i class="bi bi-house-door fs-5"></i>
         Home
       </router-link>
-      <a
-        class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
-        @click="manageRoute('create')"
-      >
+      <a class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        @click="manageRoute('create')">
         <i class="bi bi-pencil-square fs-5"></i>
         Create
       </a>
 
-      <router-link
-        to="/profile"
+      <router-link to="/profile"
         class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
-        @click="manageRoute('profile')"
-      >
+        @click="manageRoute('profile')">
         <i class="bi bi-person fs-5"></i>
         Profile
       </router-link>
 
-      <a
-        class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
-        @click="manageRoute('settings')"
-      >
+      <a class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        @click="manageRoute('settings')">
         <i class="bi bi-gear fs-5"></i>
         Settings
       </a>

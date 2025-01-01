@@ -11,13 +11,21 @@ const emit = defineEmits(['closeEdit'])
 const { comment } = props
 
 const editedComment = ref(comment.content)
+const error = ref(null)
 
 const handleSubmit = async () => {
-  try {
-    await updateComment(comment.id, editedComment.value)
-    emit('closeEdit', false)
-  } catch (error) {
-    console.log(error.message)
+  if (editedComment.value.trim() !== '') {
+    try {
+      await updateComment(comment.id, editedComment.value)
+      emit('closeEdit', false)
+    } catch (error) {
+      console.log(error.message)
+    }
+  } else {
+    error.value = "You can't leave me empty par :("
+    setTimeout(() => {
+      error.value = null
+    }, 2000)
   }
 }
 
@@ -31,6 +39,16 @@ const closeEdit = () => {
     class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
     @click.self="closeEdit"
   >
+    <transition name="slide">
+      <div
+        class="alert alert-danger errpos"
+        role="alert"
+        v-if="error"
+        style="z-index: 11"
+      >
+        {{ error }}
+      </div>
+    </transition>
     <div
       class="text-light text-center p-3 bg-gray border-b rounded-top"
       style="width: 40%"
@@ -138,5 +156,25 @@ const closeEdit = () => {
 textarea::placeholder {
   color: white;
   font-weight: 100;
+}
+
+.errpos {
+  position: fixed;
+  right: 1em;
+  top: 1em;
+  transition: 0.3s ease-in-out;
+}
+
+.slide-enter-active {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: 0.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+.slide-enter {
+  transform: translateX(-50%); /* Start position off-screen */
+  opacity: 0; /* Optional: fade in along with the slide */
+}
+.slide-leave-to {
+  opacity: 0; /* Optional: fade out along with the slide */
 }
 </style>

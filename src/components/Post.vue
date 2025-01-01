@@ -10,7 +10,7 @@ import {
   differenceInDays,
   formatDistanceToNow,
 } from 'date-fns'
-import TestPopover from './Popover.vue'
+import Popover from './Popover.vue'
 
 const isEdit = ref(false)
 
@@ -105,66 +105,41 @@ const timeAgo = computed(() => {
 
 <template>
   <div
-    class="poppins-regular d-flex flex-column align-items-center justify-content-center text-light py-3 pb-0 main-bg"
-  >
-    <div
-      class="w-100 d-flex flex-column justify-content-start p-3 rounded main-bg my-border"
-      style="height: auto"
-    >
+    class="poppins-regular d-flex flex-column align-items-center justify-content-center text-light py-3 pb-0 main-bg">
+    <div class="w-100 d-flex flex-column justify-content-start p-3 rounded main-bg my-border" style="height: auto">
       <div class="d-flex justify-content-between">
-        <div
-          class="p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based"
-        >
-          <img
-            class="circle"
-            :src="
-              props.isFromProfile
-                ? props.currentUserProfilePic
-                : props.post?.user.photoURL
+        <div class="p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based">
+          <img class="circle" :src="props.isFromProfile
+              ? props.currentUserProfilePic
+              : props.post?.user.photoURL
                 ? props.post?.user.photoURL
                 : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-            "
-            alt="profile pic"
-          />
+            " alt="profile pic" />
           <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
-            {{ props.post.user.email }} · {{ timeAgo }}
+            {{
+              props.post.user.displayName
+                ? props.post.user.displayName
+                : 'notset'
+            }}
+            · <span class="fw-lighter">{{ timeAgo }}</span>
           </p>
         </div>
         <!--3 dots-->
-        <div
-          class="p-2 px-3 d-flex align-items-center justify-content-between position-relative"
-        >
+        <div class="p-2 px-3 d-flex align-items-center justify-content-between position-relative">
           <!-- For Styling purposes only -->
-          <div
-            class="backdrop"
-            v-if="showPopover || isEdit"
-            @click.self="closePopover"
-          ></div>
+          <div class="backdrop" v-if="showPopover || isEdit" @click.self="closePopover"></div>
           <!-- For Styling purposes only -->
 
           <transition name="pop">
-            <EditPost
-              v-if="isEdit"
-              :post="props.post"
-              @closeEditPost="closeEditPost"
-            />
+            <EditPost v-if="isEdit" :post="props.post" @closeEditPost="closeEditPost" />
           </transition>
 
           <transition name="pop">
-            <TestPopover
-              v-if="showPopover"
-              :id="props.post.id"
-              from="post"
-              @openEdit="openEdit"
-              @closePopover="closePopover"
-            />
+            <Popover v-if="showPopover" :id="props.post.id" from="post" @openEdit="openEdit"
+              @closePopover="closePopover" />
           </transition>
 
-          <i
-            class="bi bi-three-dots"
-            v-if="props.isFromProfile"
-            @click="togglePopover"
-          ></i>
+          <i class="bi bi-three-dots" v-if="props.isFromProfile" @click="togglePopover"></i>
         </div>
       </div>
 
@@ -186,27 +161,15 @@ const timeAgo = computed(() => {
           </p> -->
         <!-- </div> -->
         <!-- <div v-else> -->
-        <p
-          @click="toggleExpand"
-          v-if="props.post && props.post.content"
-          class="p-0 m-0"
-          style="cursor: default"
-        >
+        <p @click="toggleExpand" v-if="props.post && props.post.content" class="p-0 m-0" style="cursor: default">
           {{ trimmedText }}
-          <span
-            v-if="canBeToggle"
-            class="text-secondary"
-            style="cursor: pointer !important"
-            >{{ isExpanded ? '' : '...See more' }}</span
-          >
+          <span v-if="canBeToggle" class="text-secondary" style="cursor: pointer !important">{{ isExpanded ? '' :
+            '...See more' }}</span>
         </p>
         <!-- </div> -->
       </div>
       <hr />
-      <div
-        v-if="props.post && props.post.user"
-        class="px-3 d-flex justify-content-left align-items-center"
-      >
+      <div v-if="props.post && props.post.user" class="px-3 d-flex justify-content-left align-items-center">
         <Actions :post="props.post" :isFromView="props.isFromView" />
       </div>
     </div>

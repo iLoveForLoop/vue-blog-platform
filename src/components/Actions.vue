@@ -19,8 +19,7 @@ import { useRouter } from 'vue-router'
 import { usePostStore } from '@/store/piniaStore'
 import ViewPost from './ViewPost.vue'
 
-const piniaStore = usePostStore()
-const router = useRouter()
+
 
 const store = useStore()
 
@@ -51,7 +50,16 @@ const commentClick = ref(false)
 const isViewingPost = ref(false)
 const currentlyViewing = ref(false)
 
+
+// const closeOnEscape = (e) => {
+//   console.log('tried to close')
+//   if (isViewingPost && e.key == 'Escape') {
+//     closePost()
+//   }
+// }
+
 onMounted(async () => {
+  // document.addEventListener('keydown', closeOnEscape)
   const likesRef = collection(db, 'likes')
   const commentsRef = collection(db, 'comments')
   const postComments = query(commentsRef, where('post_id', '==', post.id))
@@ -80,12 +88,18 @@ onMounted(async () => {
     }
   })
 
+
+
   onUnmounted(() => {
     killPostLikes()
     killUserLikes()
     killPostComments()
+
   })
 })
+
+// onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
+
 
 watch(alreadyLiked, newVal => {
   if (newVal) {
@@ -127,6 +141,7 @@ const toggle = async data => {
       break
 
     case 3:
+
       commentClick.value = !commentClick.value
       if (commentClick.value) {
         comment.value = 'bi bi-chat-left-fill text-light'
@@ -163,24 +178,14 @@ const closePost = () => {
   <!-- For Styling purposes only -->
 
   <transition name="pop">
-    <ViewPost
-      v-if="isViewingPost"
-      :id="post.id"
-      @closePost="closePost"
-      @isViewed="isViewed = true"
-    />
+    <ViewPost v-if="isViewingPost" :id="post.id" @closePost="closePost" @isViewed="isViewed = true" />
   </transition>
 
   <div class="d-flex flex-column gap-1">
     <div class="d-flex align-items-center gap-4 fs-5">
       <i :class="heart" @click="toggle(1)"></i>
       <!-- <i :class="heartBreak" @click="toggle(2)"></i> -->
-      <i
-        :class="comment"
-        @mouseenter="toggle(3)"
-        @mouseleave="toggle(3)"
-        @click="viewPost"
-      ></i>
+      <i :class="comment" @mouseenter="toggle(3)" @mouseleave="toggle(3)" @click="viewPost"></i>
     </div>
     <div class="d-flex gap-2 fw-light">
       <p class="small-text">{{ likes }} {{ likes > 1 ? 'likes' : 'like' }}</p>
