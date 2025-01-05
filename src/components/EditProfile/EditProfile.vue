@@ -39,12 +39,14 @@ const handleNewData = data => {
 
 const profile = ref(null)
 const selectedFile = ref(null)
-const formData = new FormData()
+// const formData = new FormData()
 const url = ref(props.user.photoURL)
 console.log('url value:', url.value)
 
+
 const update = async () => {
-  let newURL = null
+  console.log('clicked')
+
   try {
     if (newUserName.value !== props.user.displayName) {
       await updateDisplayName(newUserName.value)
@@ -53,13 +55,9 @@ const update = async () => {
       await updateBio(newBio.value)
     }
     if (url.value !== props.user.photoURL) {
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
-        formData
-      )
-      newURL = res.data.secure_url
-      url.value = newURL
-      await updateProfilePic(newURL)
+      console.log('tried to change profile')
+      deleteProfilePicture()
+      uploadProfilePicture()
     }
     emit('close-edit-profile')
   } catch (error) {
@@ -76,8 +74,9 @@ const onProfileChange = async e => {
   selectedFile.value = file
   url.value = URL.createObjectURL(file)
 
-  formData.append('file', selectedFile.value)
-  formData.append('upload_preset', cloudinaryConfig.uploadPreset)
+  // formData.append('file', file)
+  // formData.append('upload_preset', cloudinaryConfig.uploadPreset)
+
 }
 
 const closeOnEscape = (e) => {
@@ -117,11 +116,60 @@ const openEdits = (type) => {
       break
   }
 }
+
+const deleteProfilePicture = async () => {
+
+  const extractPublicId = (imageUrl) => {
+    const regex = /\/upload\/(?:v\d+\/)?([^\.]+)/;
+    const match = imageUrl.match(regex);
+    return match ? match[1] : null;
+  };
+
+
+  const publicId = extractPublicId(
+    props.user.photoURL
+  );
+
+
+  console.log(publicId);
+
+  try {
+    const res = await axios.post('http://localhost:3000/delete-file', {
+      publicId: publicId
+    })
+    console.log('Delete Response: ', res)
+  } catch (error) {
+    console.log('Failed to delelte: ', error.message)
+  }
+
+}
+
+const uploadProfilePicture = async () => {
+
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
+  formData.append('upload_preset', cloudinaryConfig.uploadPreset)
+
+  try {
+
+    const res = await axios.post('http://localhost:3000/upload',
+      formData
+      , {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+    const { url } = res.data
+    await updateProfilePic(url)
+
+  } catch (error) {
+    console.log('Failed to upload in edit profile: ', error.message)
+  }
+
+}
 </script>
 
 <template>
   <div class="back d-flex flex-column align-items-center justify-content-center poppins-regular"
-    @click.self="emit('close-edit-profile')" ref="myEditProfile" tabindex="0">
+    @mousedown.self="emit('close-edit-profile')" ref="myEditProfile" tabindex="0">
     <!-- For Styling purposes only -->
     <div class="backdr" v-if="isEditUsernameOpen || isEditBioOpen"></div>
     <!-- For Styling purposes only -->

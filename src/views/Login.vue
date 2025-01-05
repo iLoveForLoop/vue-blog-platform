@@ -31,6 +31,7 @@ const login = async () => {
       email: email.value,
       password: password.value,
     })
+    window.location.reload()
     router.push('/home')
   } catch (err) {
     error.value = err.message
@@ -154,13 +155,8 @@ const switchToggle = () => {
 </script>
 
 <template>
-  <VerificationModal
-    v-if="isVerifying"
-    :email="email"
-    :code="verificationCode"
-    @closePopover="showVerificationCodeModal"
-    @isEmailVerified="isEmailVerified"
-  />
+  <VerificationModal v-if="isVerifying" :email="email" :code="verificationCode"
+    @closePopover="showVerificationCodeModal" @isEmailVerified="isEmailVerified" />
   <VerifySuccessModal v-if="showingSuccess" />
 
   <div class="w-100 main-bg poppins-regular" style="height: 100vh">
@@ -171,60 +167,35 @@ const switchToggle = () => {
     </transition>
 
     <transition name="fade">
-      <div
-        class="container poppins-regular main-bg d-flex flex-column align-items-center justify-content-center gap-3"
-        style="height: 100vh"
-        v-if="toggleLogin"
-      >
+      <div class="container poppins-regular main-bg d-flex flex-column align-items-center justify-content-center gap-3"
+        style="height: 100vh" v-if="toggleLogin">
         <!--Log in-->
         <div class="b-size my-border">
-          <form
-            @submit.prevent="login"
-            class="text-light d-flex flex-column gap-3 h-auto p-5"
-            style="height: 60vh"
-          >
+          <form @submit.prevent="login" class="text-light d-flex flex-column gap-3 h-auto p-5" style="height: 60vh">
             <div class="d-flex align-items-center justify-content-center">
               <h1 class="m-0 logo-font">Rants</h1>
             </div>
 
             <div class="mb-3">
               <label for="email" class="form-label small-fs">Email</label>
-              <input
-                class="form-control i-style p-0 text-light"
-                type="email"
-                id="email"
-                v-model="email"
-                required
-              />
+              <input class="form-control i-style p-0 text-light" type="email" id="email" v-model="email" required />
             </div>
 
             <div class="mb-3">
-              <label for="password" id="password" class="form-label small-fs"
-                >Password</label
-              >
-              <input
-                class="form-control i-style p-0 text-light"
-                type="password"
-                id="password"
-                v-model="password"
-                required
-              />
+              <label for="password" id="password" class="form-label small-fs">Password</label>
+              <input class="form-control i-style p-0 text-light" type="password" id="password" v-model="password"
+                required />
             </div>
 
             <div class="d-flex justify-content-center">
-              <button
-                class="btn color-btn rounded form-control text-light small-fs fw-light"
-                type="submit"
-              >
+              <button class="btn color-btn rounded form-control text-light small-fs fw-light" type="submit">
                 Log in
               </button>
             </div>
           </form>
         </div>
 
-        <div
-          class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-2"
-        >
+        <div class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-2">
           <p class="m-0 small-fs fw-light">Doesn't have an account?</p>
           <a @click="switchToggle" class="blue">Sign up</a>
         </div>
@@ -232,83 +203,48 @@ const switchToggle = () => {
     </transition>
 
     <transition name="fade">
-      <div
-        class="container poppins-regular main-bg d-flex flex-column gap-3 align-items-center justify-content-center"
-        style="height: 100vh"
-        v-if="toggleSignup"
-      >
+      <div class="container poppins-regular main-bg d-flex flex-column gap-3 align-items-center justify-content-center"
+        style="height: 100vh" v-if="toggleSignup">
         <!--Sign Up-->
         <div class="b-size my-border text-light">
-          <form
-            @submit.prevent="verifyEmail"
-            class="p-5 d-flex flex-column gap-3 justify-content-between h-auto"
-            style="height: 60vh"
-          >
+          <form @submit.prevent="verifyEmail" class="p-5 d-flex flex-column gap-3 justify-content-between h-auto"
+            style="height: 60vh">
             <div class="d-flex align-items-center justify-content-center">
               <h1 class="m-0 logo-font">Rants</h1>
             </div>
 
             <div class="mb-1">
               <label for="email" class="form-label small-fs">Email</label>
-              <input
-                class="form-control i-style text-light p-0 small-fs"
-                type="email"
-                id="email"
-                v-model="email"
-                required
-              />
+              <input class="form-control i-style text-light p-0 small-fs" type="email" id="email" v-model="email"
+                required />
             </div>
 
             <div class="mb-1">
               <label for="username" class="form-label small-fs">Username</label>
-              <input
-                class="form-control i-style text-light p-0 small-fs"
-                type="text"
-                id="username"
-                v-model="username"
-                required
-              />
+              <input class="form-control i-style text-light p-0 small-fs" type="text" id="username" v-model="username"
+                required />
             </div>
 
             <div class="mb-1">
-              <label for="password" id="password" class="form-label small-fs"
-                >Password</label
-              >
-              <input
-                class="form-control i-style text-light p-0 small-fs"
-                type="password"
-                id="password"
-                v-model="password"
-                required
-              />
+              <label for="password" id="password" class="form-label small-fs">Password</label>
+              <input class="form-control i-style text-light p-0 small-fs" type="password" id="password"
+                v-model="password" required />
             </div>
 
             <div class="mb-1">
-              <label for="password" id="password" class="form-label small-fs"
-                >Confirm Password</label
-              >
-              <input
-                class="form-control i-style text-light p-0 small-fs"
-                type="password"
-                id="password"
-                v-model="confirmPassword"
-                required
-              />
+              <label for="password" id="password" class="form-label small-fs">Confirm Password</label>
+              <input class="form-control i-style text-light p-0 small-fs" type="password" id="password"
+                v-model="confirmPassword" required />
             </div>
 
             <div class="d-flex justify-content-center">
-              <button
-                class="btn color-btn rounded form-control text-light small-fs fw-light"
-                type="submit"
-              >
+              <button class="btn color-btn rounded form-control text-light small-fs fw-light" type="submit">
                 Sign up
               </button>
             </div>
           </form>
         </div>
-        <div
-          class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-1"
-        >
+        <div class="my-border b-size text-light d-flex justify-content-center align-items-center py-4 gap-1">
           <p class="m-0 small-fs fw-light">Already have an account?</p>
           <a @click="switchToggle" class="blue">Log in</a>
         </div>
@@ -369,14 +305,17 @@ input:focus {
 .fade-enter-active {
   transition: opacity 0.5s ease;
 }
+
 .fade-leave-active {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
 .fade-enter {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
 .fade-leave-to {
   transition: opacity 0.5s ease;
   opacity: 0;
@@ -387,12 +326,17 @@ input:focus {
   transform: translateX(-50%);
   transition: 0.5s ease-in-out, opacity 0.3s ease-in-out;
 }
+
 .slide-enter {
-  transform: translateX(-50%); /* Start position off-screen */
-  opacity: 0; /* Optional: fade in along with the slide */
+  transform: translateX(-50%);
+  /* Start position off-screen */
+  opacity: 0;
+  /* Optional: fade in along with the slide */
 }
+
 .slide-leave-to {
-  opacity: 0; /* Optional: fade out along with the slide */
+  opacity: 0;
+  /* Optional: fade out along with the slide */
 }
 
 .b-size {

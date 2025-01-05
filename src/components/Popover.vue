@@ -5,26 +5,34 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 
 const props = defineProps({
-  id: {},
+  id: String,
   from: String,
+  fromProfile: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const store = useStore()
 const emit = defineEmits(['openEdit', 'closePopover'])
 
-const { id, from } = props
 
 const myPopover = ref(null)
 
 const handleDelete = async () => {
-  if (from == 'post') {
+  if (props.from == 'post') {
     await deletePost(id)
   }
 
-  if (from == 'comment') {
+  if (props.from == 'comment') {
     await deleteComment(id)
     console.log('Delete comment')
   }
+}
+
+const handleReport = () => {
+  alert('Post Already Reported!')
+  closePopover()
 }
 
 const openEdit = () => {
@@ -42,6 +50,7 @@ const closeOnEscape = (e) => {
 }
 
 onMounted(() => {
+  console.log('Props in Popover:', props);
   if (myPopover.value) {
     myPopover.value.focus()
   }
@@ -52,17 +61,25 @@ onMounted(() => {
 
 })
 
+console.log('From Popover boolean: ', props.fromProfile)
+console.log('From Popover: ', props.id)
+console.log('From Popover: ', props.from)
+
+
 </script>
 
 <template>
-  <div @click.self="closePopover" class="backdrop poppins-regular" ref="myPopover" tabindex="0">
+  <div @mousedown.self="closePopover" class="backdrop poppins-regular" ref="myPopover" tabindex="0">
     <div class="modal-color w-25 z-3 d-flex justify-content-center rounded-3 p-0">
       <ul class="d-flex flex-column align-items-center justify-content-evenly m-0 p-0 w-100">
-        <li @click="handleDelete" class="text-danger w-100 text-center py-3 border-bt">
+        <li v-if="fromProfile" @click="handleDelete" class="text-danger w-100 text-center py-3 border-bt">
           Delete
         </li>
-        <li @click="openEdit" class="text-light w-100 text-center py-3 border-bt">
+        <li v-if="fromProfile" @click="openEdit" class="text-light w-100 text-center py-3 border-bt">
           Edit
+        </li>
+        <li v-if="!fromProfile" @click="handleReport" class="text-danger w-100 text-center py-3 border-bt">
+          Report
         </li>
         <li @click="closePopover" class="text-light w-100 text-center py-3">
           Cancel

@@ -1,4 +1,4 @@
 export const cloudinaryConfig = {
   cloudName: 'dgfjrmpfn',
-  uploadPreset: 'upload_preset1',
+  uploadPreset: 'my-signed-preset',
 }

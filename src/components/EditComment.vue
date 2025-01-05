@@ -35,60 +35,35 @@ const closeEdit = () => {
 </script>
 
 <template>
-  <div
-    class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
-    @click.self="closeEdit"
-  >
+  <div class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
+    @mousedown.self="closeEdit">
     <transition name="slide">
-      <div
-        class="alert alert-danger errpos"
-        role="alert"
-        v-if="error"
-        style="z-index: 11"
-      >
+      <div class="alert alert-danger errpos" role="alert" v-if="error" style="z-index: 11">
         {{ error }}
       </div>
     </transition>
-    <div
-      class="text-light text-center p-3 bg-gray border-b rounded-top"
-      style="width: 40%"
-    >
+    <div class="text-light text-center p-3 bg-gray border-b rounded-top" style="width: 40%">
       <p class="m-0">Edit comment</p>
     </div>
     <div class="rounded-bottom bg-gray d-flex" style="height: 65vh; width: 40%">
-      <form
-        @submit.prevent="handleSubmit"
-        class="d-flex flex-column justify-content-between w-100 p-3 pb-4"
-      >
+      <form @submit.prevent="handleSubmit" class="d-flex flex-column justify-content-between w-100 p-3 pb-4">
         <div class="d-flex flex-column flex-grow-1 w-100">
           <div class="d-flex justify-content-start align-items-center gap-3">
-            <img
-              class="create-circle"
-              :src="
-                comment?.user.photoURL
-                  ? comment?.user.photoURL
-                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-              "
-              alt="user"
-              @click="toggleProfileChange"
-            />
+            <img class="create-circle" :src="comment?.user.photoURL
+                ? comment?.user.photoURL
+                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              " alt="user" @click="toggleProfileChange" />
             <p class="m-0 text-light" style="font-size: 1em">
               {{ comment?.user.email }}
             </p>
           </div>
 
-          <textarea
-            class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
-            v-model="editedComment"
-            ref="myTextArea"
-          ></textarea>
+          <textarea class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"
+            v-model="editedComment" ref="myTextArea"></textarea>
         </div>
 
         <!-- <p class="text-info m-0 text-end">Share</p> -->
-        <button
-          type="submit"
-          class="btn my-border rounded-pill mt-4 text-light w-100 btn-u"
-        >
+        <button type="submit" class="btn my-border rounded-pill mt-4 text-light w-100 btn-u">
           <a class="text-decoration-none">Save</a>
         </button>
       </form>
@@ -170,11 +145,16 @@ textarea::placeholder {
   transform: translateX(-50%);
   transition: 0.5s ease-in-out, opacity 0.3s ease-in-out;
 }
+
 .slide-enter {
-  transform: translateX(-50%); /* Start position off-screen */
-  opacity: 0; /* Optional: fade in along with the slide */
+  transform: translateX(-50%);
+  /* Start position off-screen */
+  opacity: 0;
+  /* Optional: fade in along with the slide */
 }
+
 .slide-leave-to {
-  opacity: 0; /* Optional: fade out along with the slide */
+  opacity: 0;
+  /* Optional: fade out along with the slide */
 }
 </style>

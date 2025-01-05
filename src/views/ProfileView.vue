@@ -19,25 +19,15 @@ const isReady = computed(() => store.state.isAuthReady)
   <div class="backdr" v-if="isEditingProfile"></div>
   <!-- For Styling purposes only -->
   <transition name="pop">
-    <EditProfile
-      v-if="isEditingProfile"
-      @close-edit-profile="isEditingProfile = false"
-      :user="user"
-    />
+    <EditProfile v-if="isEditingProfile" @close-edit-profile="isEditingProfile = false" :user="user" />
   </transition>
 
   <div v-if="isReady" class="w-100 poppins-regular" style="height: 100vh">
     <div v-if="store.state.user">
-      <div
-        class="container d-flex flex-column main-bg overflow-scroll hidebar my-border mt-5 p-5 rounded-5"
-        style="height: 100vh; width: 60%"
-      >
-        <div
-          class="text-center text-center d-flex justify-content-between align-items-stretch py-3 rounded border-bt"
-        >
-          <div
-            class="text-light d-flex flex-column justify-content-between align-items-start"
-          >
+      <div class="container d-flex flex-column main-bg overflow-scroll hidebar my-border mt-5 p-5 rounded-5"
+        style="height: 100vh; width: 60%">
+        <div class="text-center text-center d-flex justify-content-between align-items-stretch py-3 rounded border-bt">
+          <div class="text-light d-flex flex-column justify-content-between align-items-start">
             <div class="d-flex flex-column align-items-start">
               <p class="fs-5 m-0 fw-bold fs-3">{{ user?.displayName }}</p>
               <p class="mb-0 fw-light" style="font-size: 0.9em">
@@ -51,22 +41,12 @@ const isReady = computed(() => store.state.isAuthReady)
             </div>
           </div>
 
-          <div
-            class="text-light d-flex flex-column justify-content-center align-items-center gap-4"
-          >
-            <img
-              class="circle"
-              :src="
-                user?.photoURL
-                  ? user?.photoURL
-                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-              "
-              alt="user"
-            />
-            <button
-              class="btn my-border text-light rounded-4 px-5 box"
-              @click="isEditingProfile = true"
-            >
+          <div class="text-light d-flex flex-column justify-content-center align-items-center gap-4">
+            <img class="circle" :src="user?.photoURL
+              ? user?.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              " alt="user" />
+            <button class="btn my-border text-light rounded-4 px-5 box" @click="isEditingProfile = true">
               Edit Profile
             </button>
           </div>
@@ -74,15 +54,12 @@ const isReady = computed(() => store.state.isAuthReady)
 
         <div v-if="posts.length > 0">
           <div v-for="post in posts" :key="post.id">
-            <Post
-              :post="post"
-              :isFromProfile="true"
-              :currentUserProfilePic="user?.photoURL"
-            />
+            <Post :post="post" :isFromProfile="true" :currentUserProfilePic="user?.photoURL"
+              :currentUsername="user?.displayName" />
           </div>
         </div>
-        <div v-else>
-          <p>No post yet</p>
+        <div class="pt-3" v-else>
+          <h5>No post yet</h5>
         </div>
       </div>
     </div>
@@ -107,7 +84,8 @@ const isReady = computed(() => store.state.isAuthReady)
   /* width: 200px;  */
   height: 150px;
   width: 150px;
-  object-fit: cover; /* Ensures the image is cropped */
+  object-fit: cover;
+  /* Ensures the image is cropped */
   object-position: center;
 }
 

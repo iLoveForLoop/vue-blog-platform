@@ -119,26 +119,27 @@ const timeAgo = computed(() => {
       <div class="my-border text-light rounded py-3 px-4 d-flex flex-column justify-content-start content-based">
         <div class="d-flex align-items-center justify-content-between gap-5">
           <div class="d-flex gap-2 align-items-center">
-            <img class="comment-circle" :src="props.comment?.user.photoURL
-              ? props.comment?.user.photoURL
+            <img class="comment-circle" :src="comment?.user.photoURL
+              ? comment?.user.photoURL
               : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               " alt="pic" />
             <p class="p-0 m-0 name-size emailFSize">
               <!--username-->
-              {{ props.comment.user_email }} · {{ timeAgo }}
+              {{ comment.user.displayName ? comment.user.displayName : comment.user.email }} · {{
+                timeAgo }}
             </p>
           </div>
           <!--3 dots is paking here-->
           <div class="d-flex align-items-center justify-content-between position-relative">
             <transition name="pop">
-              <Popover v-if="showPopover" :id="props.comment.id" from="comment" @openEdit="openEdit"
+              <Popover v-if="showPopover" :id="comment.id" from="comment" @openEdit="openEdit"
                 @closePopover="closePopover" />
             </transition>
             <transition name="pop">
-              <EditComment v-if="isEditing" :comment="props.comment" @closeEdit="closeEdit" />
+              <EditComment v-if="isEditing" :comment="comment" @closeEdit="closeEdit" />
             </transition>
 
-            <i class="bi bi-three-dots" @click="togglePopover" v-show="props.isMyComment"></i>
+            <i class="bi bi-three-dots" @click="togglePopover" v-show="isMyComment"></i>
           </div>
         </div>
 
@@ -150,7 +151,7 @@ const timeAgo = computed(() => {
               '...See more' }}
             </span>
           </p>
-          <CommentAction :comment="props.comment" />
+          <CommentAction :comment="comment" />
         </div>
       </div>
 

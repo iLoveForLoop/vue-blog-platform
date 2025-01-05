@@ -16,17 +16,14 @@ const { posts } = getSnapCollectionWithUser()
 </script>
 
 
-
 <template>
-  <div class="position-relative poppins-regular">
+
+  <div class="position-relative poppins-regular w-75">
     <transition name="pop">
       <Header v-if="showHeader" />
     </transition>
 
-    <div
-      class="px-0 container main-bg overflow-scroll hidebar b-pad m-0"
-      style="height: 100vh"
-    >
+    <div class="px-0 container main-bg overflow-scroll hidebar b-pad m-0" style="height: 100vh">
       <div class="mx-5 my-5 p-5 rounded-5">
         <div class="" v-for="post in posts" :key="post.id">
           <Post :post="post" />
@@ -34,6 +31,7 @@ const { posts } = getSnapCollectionWithUser()
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped>

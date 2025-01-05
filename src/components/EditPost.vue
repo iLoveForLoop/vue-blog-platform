@@ -57,7 +57,7 @@ onMounted(() => {
 
 <template>
   <div class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
-    @click.self="closeEditPost" ref="myEditPost" tabindex="0">
+    @mousedown.self="closeEditPost" ref="myEditPost" tabindex="0">
     <transition name="slide">
       <div class="alert alert-danger errpos" role="alert" v-if="error" style="z-index: 11">
         {{ error }}

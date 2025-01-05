@@ -14,5 +14,4 @@ import Searchbar from './components/Sidebar/Searchbar.vue'
 </template>
 
 
-<style scoped>
-</style>
+<style scoped></style>

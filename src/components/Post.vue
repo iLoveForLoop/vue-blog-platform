@@ -23,6 +23,7 @@ const props = defineProps({
     default: false,
   },
   currentUserProfilePic: String,
+  currentUsername: String,
 })
 
 const profilePic = ref(
@@ -109,17 +110,19 @@ const timeAgo = computed(() => {
     <div class="w-100 d-flex flex-column justify-content-start p-3 rounded main-bg my-border" style="height: auto">
       <div class="d-flex justify-content-between">
         <div class="p-2 px-3 d-flex align-items-center justify-content-between gap-2 content-based">
-          <img class="circle" :src="props.isFromProfile
-              ? props.currentUserProfilePic
-              : props.post?.user.photoURL
-                ? props.post?.user.photoURL
-                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+          <img class="circle" :src="isFromProfile
+            ? currentUserProfilePic
+            : post?.user.photoURL
+              ? post?.user.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
             " alt="profile pic" />
-          <p v-if="props.post && props.post.user" class="p-0 m-0 name-size">
+          <p v-if="post && post.user" class="p-0 m-0 name-size">
             {{
-              props.post.user.displayName
-                ? props.post.user.displayName
-                : 'notset'
+              isFromProfile
+                ? currentUsername
+                : post?.user.displayName
+                  ? post?.user.displayName
+                  : 'not set'
             }}
             · <span class="fw-lighter">{{ timeAgo }}</span>
           </p>
@@ -131,22 +134,22 @@ const timeAgo = computed(() => {
           <!-- For Styling purposes only -->
 
           <transition name="pop">
-            <EditPost v-if="isEdit" :post="props.post" @closeEditPost="closeEditPost" />
+            <EditPost v-if="isEdit" :post="post" @closeEditPost="closeEditPost" />
           </transition>
 
           <transition name="pop">
-            <Popover v-if="showPopover" :id="props.post.id" from="post" @openEdit="openEdit"
+            <Popover v-if="showPopover" :id="post.id" from="post" :fromProfile="isFromProfile" @openEdit="openEdit"
               @closePopover="closePopover" />
           </transition>
 
-          <i class="bi bi-three-dots" v-if="props.isFromProfile" @click="togglePopover"></i>
+          <i class="bi bi-three-dots" @click="togglePopover"></i>
         </div>
       </div>
 
       <!-- <div
         class="p-2 px-3 d-flex align-items-center justify-content-between content-based"
       >
-        <p v-if="props.post && props.post.created_at" class="p-0 m-0 name-size">
+        <p v-if="post && post.created_at" class="p-0 m-0 name-size">
 
           {{ timeAgo }}
         </p>
@@ -156,12 +159,12 @@ const timeAgo = computed(() => {
       <div class="py-3 px-3 d-flex align-items-center justify-content-start">
         <!--CONTENT-->
         <!-- <div v-if="isFromSinglePost"> -->
-        <!-- <p v-if="props.post && props.post.content" class="p-0 m-0">
-            {{ props.post.content }}
+        <!-- <p v-if="post && post.content" class="p-0 m-0">
+            {{ post.content }}
           </p> -->
         <!-- </div> -->
         <!-- <div v-else> -->
-        <p @click="toggleExpand" v-if="props.post && props.post.content" class="p-0 m-0" style="cursor: default">
+        <p @click="toggleExpand" v-if="post && post.content" class="p-0 m-0" style="cursor: default">
           {{ trimmedText }}
           <span v-if="canBeToggle" class="text-secondary" style="cursor: pointer !important">{{ isExpanded ? '' :
             '...See more' }}</span>
@@ -169,8 +172,8 @@ const timeAgo = computed(() => {
         <!-- </div> -->
       </div>
       <hr />
-      <div v-if="props.post && props.post.user" class="px-3 d-flex justify-content-left align-items-center">
-        <Actions :post="props.post" :isFromView="props.isFromView" />
+      <div v-if="post && post.user" class="px-3 d-flex justify-content-left align-items-center">
+        <Actions :post="post" :isFromView="isFromView" />
       </div>
     </div>
   </div>

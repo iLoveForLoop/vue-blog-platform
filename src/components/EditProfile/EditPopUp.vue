@@ -21,6 +21,7 @@ const sendData = async () => {
       console.log('sending new username', type.value, text.value)
       emit('send-data', { type: type.value, text: text.value })
       emit('close-popover')
+      store.commit('setIsComponentOverLapping', false)
     } else {
       error.value = 'Wag nang agawin par, may nag mamayari na!'
       setTimeout(() => {
@@ -30,6 +31,7 @@ const sendData = async () => {
   } else {
     emit('send-data', { type: type.value, text: text.value })
     emit('close-popover')
+    store.commit('setIsComponentOverLapping', false)
   }
 }
 
@@ -57,7 +59,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="backdrop d-flex justify-content-center align-items-center poppins-regular" @click.self="closePopOver">
+  <div class="backdrop d-flex justify-content-center align-items-center poppins-regular" @mousedown.self="closePopOver">
     <transition name="slide">
       <div class="alert alert-danger errpos" role="alert" v-if="error">
         {{ error }}

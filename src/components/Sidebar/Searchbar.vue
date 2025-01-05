@@ -3,116 +3,93 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import {
-  getCurrentUserInfo,
   getRandomUsers,
 } from '@/composables/getCollections'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import ProfileAndEmail from '../ProfileAndEmail.vue'
+import { getCurrentProfileInfo } from '@/composables/getProfileDetails'
+
+
+
 
 const router = useRouter()
 const store = useStore()
 
 const isReady = computed(() => store.state.isAuthReady)
 
-const user = ref(null)
+
+const { user } = getCurrentProfileInfo()
 const randomUsers = ref(null)
 
 const logout = async () => {
   store.commit('setIsNewUser', false)
   await store.dispatch('logout')
-  router.push('/login')
-}
 
-const loadUserData = async () => {
-  try {
-    if (store.state.user?.uid) {
-      const { user: fetchedUser } = await getCurrentUserInfo(
-        store.state.user.uid
-      )
-      user.value = fetchedUser || {}
-    }
-  } catch (error) {
-    console.error('Failed to load user data:', error)
-  }
+  router.push('/login')
 }
 
 onMounted(async () => {
   randomUsers.value = await getRandomUsers()
-  loadUserData()
+
 })
 
-watch(
-  () => store.state.user,
-  async newUser => {
-    if (newUser?.uid) {
-      await loadUserData()
-    } else {
-      user.value = null // Clear data if no user
-    }
-  },
-  { immediate: true }
-)
 
 const isNewUser = computed(() => store.state.isNewUser)
 const isOnProfile = computed(() => store.state.isOnProfile)
+
+
+const links = (data) => {
+  switch (data) {
+    case 1:
+      window.open('https://www.facebook.com/jeferson.bayking.2024', '_blank');
+      break
+    case 2:
+      window.open('https://www.instagram.com/jeferson.bayking/', '_blank');
+      break
+    case 3:
+      window.open('https://github.com/iLoveForLoop', '_blank');
+      break
+    case 4:
+      window.open('https://www.linkedin.com/in/jeferson-bayking-883290324', '_blank');
+      break
+  }
+}
 </script>
 
-<template >
-  <template v-if="isReady && user?.value && !isNewUser && !isOnProfile">
-    <div
-      class="main-bg d-flex flex-column gap-5 l-border poppins-regular px-5"
-      style="width: 700px"
-      v-if="store.state.user"
-    >
+<template>
+  <template v-if="isReady && user && !isNewUser && !isOnProfile">
+    <div class="main-bg d-flex flex-column gap-5 l-border poppins-regular px-5" style="width: 700px"
+      v-if="store.state.user">
       <!--Search-->
       <!-- <form class="d-flex mt-3" style="height: 6vh" role="search">
-        <div
-          class="search-logo bg-dark text-light d-flex justify-content-center align-items-center ps-3 pe-0"
-        >
+        <div class="search-logo bg-dark text-light d-flex justify-content-center align-items-center ps-3 pe-0">
           <i class="bi bi-search opacity-50"></i>
         </div>
-        <input
-          class="form-control search-bar bg-dark border-0 text-light m-0"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
+        <input class="form-control search-bar bg-dark border-0 text-light m-0" type="search" placeholder="Search"
+          aria-label="Search" />
       </form> -->
 
       <!--Log out-->
       <div class="rounded-4 text-light mt-5">
-        <div class="d-flex justify-content-between align-items-center">
-          <!-- <div class="d-flex justify-content-start align-items-center gap-2">
-            <img
-              class="circle"
-              :src="
-                user.value?.photoURL
-                  ? user.value?.photoURL
-                  : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-              "
-              alt="pic"
-            />
-            <p v-if="store.state.user.email" class="m-0 name-size">
-              {{ store.state.user.email }}
-            </p>
-          </div> -->
+        <div class="d-flex justify-content-between align-items-center px-3">
+          <div class="d-flex justify-content-start align-items-center gap-2">
+            <img class="circle" :src="user?.photoURL
+              ? user?.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              " alt="pic" />
+            <div class="d-flex flex-column">
+              <p class="m-0 name-size">
+                {{ user?.displayName }}
+              </p>
+              <p class="m-0 name-size fw-lighter">
+                {{ user?.email }}
+              </p>
+            </div>
 
-          <ProfileAndEmail
-            :textsize="0.8"
-            :email="store.state.user.email"
-            :profilePic="
-              user.value?.photoURL
-                ? user.value?.photoURL
-                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-            "
-          />
+          </div>
 
           <div>
-            <a
-              @click="logout"
-              class="text-decoration-none text-danger name-size"
-              >Logout</a
-            >
+            <a @click="logout" class="text-decoration-none text-danger name-size">Logout</a>
           </div>
         </div>
       </div>
@@ -121,28 +98,26 @@ const isOnProfile = computed(() => store.state.isOnProfile)
       <div class="rounded-4 text-light d-flex flex-column gap-4 my-border p-3">
         <p>Suggested for you</p>
 
-        <div
-          class="d-flex justify-content-between align-items-center"
-          v-for="randomuser in randomUsers"
-          :key="randomuser.id"
-        >
-          <ProfileAndEmail
-            textsize="0.8"
-            :email="randomuser.displayName"
-            :profilePic="
-              randomuser?.photoURL
-                ? randomuser?.photoURL
-                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
-            "
-          />
+        <div class="d-flex justify-content-between align-items-center" v-for="randomuser in randomUsers"
+          :key="randomuser.id">
+          <ProfileAndEmail textsize="0.8" :email="randomuser.displayName" :profilePic="randomuser?.photoURL
+            ? randomuser?.photoURL
+            : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+            " />
 
           <div>
             <a class="text-decoration-none name-size">Follow</a>
           </div>
         </div>
       </div>
-      <div>
-        <p class="text-center">&copy;Jeferson Bayking</p>
+      <div class="text-secondary d-flex flex-column justify-content-center align-items-center flex-grow-1">
+        <!-- <p class="text-center m-0 fw-light">Jeferson Bayking</p> -->
+        <div class="d-flex gap-3">
+          <i @click="links(1)" class="bi bi-facebook"></i>
+          <i @click="links(2)" class="bi bi-instagram"></i>
+          <i @click="links(3)" class="bi bi-github"></i>
+          <i @click="links(4)" class="bi bi-linkedin"></i>
+        </div>
       </div>
     </div>
   </template>

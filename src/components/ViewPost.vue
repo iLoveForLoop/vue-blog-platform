@@ -94,7 +94,7 @@ watch(isCompomentOverLaps, (newVal) => {
       console.log('is over lapping?', isCompomentOverLaps.value)
       myViewPost.value.focus()
       myViewPost.value.addEventListener('keydown', closeOnEscape)
-    }, 500)
+    }, 200)
 
 
 
@@ -172,7 +172,7 @@ const saveComment = () => {
 
 <template>
   <div class="back d-flex flex-column justify-content-center align-items-center poppins-regular" id="viewPostBody"
-    @click.self="emit('closePost')" ref="myViewPost" tabindex="0">
+    @mousedown.self="emit('closePost')" ref="myViewPost" tabindex="0">
     <transition name="slide">
       <div class="alert alert-danger errpos" role="alert" v-if="error" style="z-index: 11">
         {{ error }}
@@ -181,9 +181,9 @@ const saveComment = () => {
 
     <div class="container w-50 main-bg hidebar poppins-regular d-flex flex-column p-0 rounded-4"
       style="height: 90vh; z-index: 10">
-      <div class="d-flex justify-content-end align-items-center gap-2 mt-3 pe-3">
+      <div class="d-flex justify-content-end align-items-center gap-2 pe-3">
         <h2>
-          <i class="bi bi-three-dots text-light" @click="emit('closePost')" style="font-size: .7em;"></i>
+          <i class="bi bi-x-lg text-light" @click="emit('closePost')" style="font-size: .5em;"></i>
         </h2>
       </div>
 
