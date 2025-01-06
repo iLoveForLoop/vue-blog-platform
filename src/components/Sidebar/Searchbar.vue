@@ -7,7 +7,7 @@ import {
 } from '@/composables/getCollections'
 import { ref, onMounted } from 'vue'
 import ProfileAndEmail from '../ProfileAndEmail.vue'
-import { getCurrentProfileInfo } from '@/composables/getProfileDetails'
+import { getCurrentProfileInfo, getCurrentProfileInfoDocAndSnap } from '@/composables/getProfileDetails'
 
 
 
@@ -18,19 +18,21 @@ const store = useStore()
 const isReady = computed(() => store.state.isAuthReady)
 
 
-const { user } = getCurrentProfileInfo()
+
+// const { user } = getCurrentProfileInfo()
+const user = ref(null)
 const randomUsers = ref(null)
 
 const logout = async () => {
   store.commit('setIsNewUser', false)
   await store.dispatch('logout')
-
   router.push('/login')
 }
 
 onMounted(async () => {
   randomUsers.value = await getRandomUsers()
-
+  const { user: data } = await getCurrentProfileInfoDocAndSnap()
+  user.value = data.value
 })
 
 
@@ -54,6 +56,8 @@ const links = (data) => {
       break
   }
 }
+
+
 </script>
 
 <template>
@@ -70,7 +74,7 @@ const links = (data) => {
       </form> -->
 
       <!--Log out-->
-      <div class="rounded-4 text-light mt-5">
+      <div v-if="user" class="rounded-4 text-light mt-5">
         <div class="d-flex justify-content-between align-items-center px-3">
           <div class="d-flex justify-content-start align-items-center gap-2">
             <img class="circle" :src="user?.photoURL

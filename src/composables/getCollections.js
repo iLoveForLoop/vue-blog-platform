@@ -7,6 +7,7 @@ import {
   doc,
   query,
   where,
+  orderBy,
 } from 'firebase/firestore'
 import { computed, ref } from 'vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -50,9 +51,10 @@ export const getSnapCollection = () => {
 export const getSnapCollectionWithUser = () => {
   let posts = ref([])
   const postRef = collection(db, 'posts')
+  const orderedByDate = query(postRef, orderBy('created_at', 'desc'))
 
   onSnapshot(
-    postRef,
+    orderedByDate,
     async snapshot => {
       const postData = snapshot.docs.map(async data => {
         const post = { ...data.data(), id: data.id }
@@ -179,21 +181,24 @@ export const getSinglePost = async id => {
 }
 
 export const getCommentInPost = id => {
-  const comments = ref(null)
+  const commentss = ref(null)
   const commentsRef = collection(db, 'comments')
   const postComments = query(commentsRef, where('post_id', '==', id))
 
   onSnapshot(
     postComments,
     snapshot => {
-      comments.value = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+      commentss.value = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
     },
     err => {
       console.log(err.message)
     },
   )
 
-  return { comments }
+  return { commentss }
 }
 
 //get random users

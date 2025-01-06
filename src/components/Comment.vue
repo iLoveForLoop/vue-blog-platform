@@ -96,6 +96,9 @@ const timeAgo = computed(() => {
   const days = differenceInDays(now, commentDate.value)
   return `${days}d`
 })
+
+//my comment checker
+
 </script>
 
 <template>
@@ -132,14 +135,14 @@ const timeAgo = computed(() => {
           <!--3 dots is paking here-->
           <div class="d-flex align-items-center justify-content-between position-relative">
             <transition name="pop">
-              <Popover v-if="showPopover" :id="comment.id" from="comment" @openEdit="openEdit"
-                @closePopover="closePopover" />
+              <Popover v-if="showPopover" :id="comment.id" from="comment" :isMyComment="isMyComment"
+                @openEdit="openEdit" @closePopover="closePopover" />
             </transition>
             <transition name="pop">
               <EditComment v-if="isEditing" :comment="comment" @closeEdit="closeEdit" />
             </transition>
 
-            <i class="bi bi-three-dots" @click="togglePopover" v-show="isMyComment"></i>
+            <i class="bi bi-three-dots" @click="togglePopover"></i>
           </div>
         </div>
 

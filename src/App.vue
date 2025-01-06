@@ -1,6 +1,9 @@
 <script setup>
 import Sidebar from './components/Sidebar/Sidebar.vue'
 import Searchbar from './components/Sidebar/Searchbar.vue'
+
+
+
 </script>
 
 <template>

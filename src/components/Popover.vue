@@ -10,6 +10,10 @@ const props = defineProps({
   fromProfile: {
     type: Boolean,
     default: false,
+  },
+  isMyComment: {
+    type: Boolean,
+    default: false,
   }
 })
 
@@ -21,11 +25,11 @@ const myPopover = ref(null)
 
 const handleDelete = async () => {
   if (props.from == 'post') {
-    await deletePost(id)
+    await deletePost(props.id)
   }
 
   if (props.from == 'comment') {
-    await deleteComment(id)
+    await deleteComment(props.id)
     console.log('Delete comment')
   }
 }
@@ -62,6 +66,7 @@ onMounted(() => {
 })
 
 console.log('From Popover boolean: ', props.fromProfile)
+console.log('From Popover comment: ', props.isMyComment)
 console.log('From Popover: ', props.id)
 console.log('From Popover: ', props.from)
 
@@ -72,13 +77,15 @@ console.log('From Popover: ', props.from)
   <div @mousedown.self="closePopover" class="backdrop poppins-regular" ref="myPopover" tabindex="0">
     <div class="modal-color w-25 z-3 d-flex justify-content-center rounded-3 p-0">
       <ul class="d-flex flex-column align-items-center justify-content-evenly m-0 p-0 w-100">
-        <li v-if="fromProfile" @click="handleDelete" class="text-danger w-100 text-center py-3 border-bt">
+        <li v-if="fromProfile || isMyComment" @click="handleDelete"
+          class="text-danger w-100 text-center py-3 border-bt">
           Delete
         </li>
-        <li v-if="fromProfile" @click="openEdit" class="text-light w-100 text-center py-3 border-bt">
+        <li v-if="fromProfile || isMyComment" @click="openEdit" class="text-light w-100 text-center py-3 border-bt">
           Edit
         </li>
-        <li v-if="!fromProfile" @click="handleReport" class="text-danger w-100 text-center py-3 border-bt">
+        <li v-if="!fromProfile && !isMyComment" @click="handleReport"
+          class="text-danger w-100 text-center py-3 border-bt">
           Report
         </li>
         <li @click="closePopover" class="text-light w-100 text-center py-3">

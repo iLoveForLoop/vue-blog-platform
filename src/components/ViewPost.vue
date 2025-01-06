@@ -9,8 +9,9 @@ import { addComment } from '@/composables/addComment'
 import { useRoute } from 'vue-router'
 import {
   getSinglePostWithUser,
-  getCurrentUserInfo,
+  getCommentInPost
 } from '@/composables/getCollections'
+import { getCurrentProfileInfo } from '@/composables/getProfileDetails'
 import { db } from '@/firebase/config'
 import {
   collection,
@@ -20,6 +21,7 @@ import {
   Timestamp,
   doc,
   getDoc,
+  orderBy,
 } from 'firebase/firestore'
 
 const props = defineProps({
@@ -36,12 +38,10 @@ const error = ref(null)
 
 
 //post with user
-const newUser = ref(null)
 const { spost } = getSinglePostWithUser(id)
+const { user } = getCurrentProfileInfo()
 
-onMounted(() => {
-  emit('isViewed')
-})
+const { commentss } = getCommentInPost(id)
 
 //stores
 const store = useStore()
@@ -51,23 +51,9 @@ const router = useRouter()
 //comments
 const comments = ref([])
 
-//placeholder
-const tmp = ref(`Reply as ${store.state.user?.email}`)
-
-
-
-
 
 //kill switch
 let killCommentsWithUser
-
-const currentUser = ref(null)
-const loadUserData = async () => {
-  if (store.state.user?.uid) {
-    const { user: fetchedUser } = await getCurrentUserInfo(store.state.user.uid)
-    currentUser.value = fetchedUser
-  }
-}
 
 const closeOnEscape = (e) => {
 
@@ -80,7 +66,7 @@ const closeOnEscape = (e) => {
 
 //Component checker
 
-// store.commit('setIsComponentOverLapping', false)
+
 const isCompomentOverLaps = computed(() => store.state.isComponentOverLapping)
 console.log('is over lapping?', isCompomentOverLaps.value)
 
@@ -102,11 +88,11 @@ watch(isCompomentOverLaps, (newVal) => {
 })
 
 onMounted(async () => {
+  emit('isViewed')
   myViewPost.value.focus()
   myViewPost.value.addEventListener('keydown', closeOnEscape)
-  await loadUserData()
   const commentsRef = collection(db, 'comments')
-  const postComments = query(commentsRef, where('post_id', '==', id))
+  const postComments = query(commentsRef, where('post_id', '==', id), orderBy('created_at', 'desc'))
 
   killCommentsWithUser = onSnapshot(
     postComments,
@@ -193,18 +179,18 @@ const saveComment = () => {
           <Comment :comment="comment" :isMyComment="comment.user_id == store.state.user.uid" />
         </div>
       </div>
-      <div class="d-flex align-items-center gap-3" v-if="currentUser">
+      <div class="d-flex align-items-center gap-3" v-if="user">
         <div class="d-flex main-bg py-3 px-3 w-100 gap-3 top-bor">
           <div>
-            <img class="my-circle" :src="currentUser.value?.photoURL
-              ? currentUser.value?.photoURL
+            <img class="my-circle" :src="user?.photoURL
+              ? user?.photoURL
               : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               " alt="pic" />
           </div>
 
           <form class="d-flex w-100" @submit.prevent="saveComment">
             <input class="w-100 me-2 custom-input main-bg text-light no-focus-effect rounded" type="text"
-              :placeholder="tmp" v-model="comment" />
+              :placeholder="`Reply as ${user.displayName}`" v-model="comment" />
             <button class="border-0 bg-transparent text-secondary" type="submit" style="">
               Post
             </button>
