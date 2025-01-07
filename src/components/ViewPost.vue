@@ -92,7 +92,7 @@ onMounted(async () => {
   myViewPost.value.focus()
   myViewPost.value.addEventListener('keydown', closeOnEscape)
   const commentsRef = collection(db, 'comments')
-  const postComments = query(commentsRef, where('post_id', '==', id), orderBy('created_at', 'desc'))
+  const postComments = query(commentsRef, where('post_id', '==', id))
 
   killCommentsWithUser = onSnapshot(
     postComments,
@@ -114,7 +114,11 @@ onMounted(async () => {
         return comment
       })
 
-      comments.value = await Promise.all(commentData)
+      const unOrderedComments = await Promise.all(commentData)
+      comments.value = unOrderedComments.sort(
+        (a, b) => b.created_at.toMillis() - a.created_at.toMillis()
+      )
+
     },
     err => {
       console.log(err.message)
@@ -122,6 +126,11 @@ onMounted(async () => {
   )
 
   ///
+})
+
+
+watch(comments, (newVal) => {
+  console.log('new comments', newVal)
 })
 
 onUnmounted(() => {

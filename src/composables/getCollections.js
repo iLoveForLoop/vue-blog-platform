@@ -225,7 +225,7 @@ export const getRandomUsers = async () => {
   }
 }
 
-//gets all the post of a singe user
+//gets all the post of the current user
 export const getSnapPostWithUser = () => {
   let posts = ref([])
   const postsRef = collection(db, 'posts')
@@ -251,7 +251,10 @@ export const getSnapPostWithUser = () => {
         return post
       })
 
-      posts.value = await Promise.all(postData)
+      const unOrderePost = await Promise.all(postData)
+      posts.value = unOrderePost.sort(
+        (a, b) => b.created_at.toMillis() - a.created_at.toMillis(),
+      )
     },
     err => {
       console.log(err.message)

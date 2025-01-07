@@ -1,6 +1,6 @@
 <script setup>
 import Actions from './Actions.vue'
-
+import { useStore } from 'vuex'
 import { ref, computed, watch } from 'vue'
 import EditPost from './EditPost.vue'
 import {
@@ -12,6 +12,7 @@ import {
 } from 'date-fns'
 import Popover from './Popover.vue'
 
+const store = useStore()
 const isEdit = ref(false)
 
 const props = defineProps({
@@ -138,8 +139,8 @@ const timeAgo = computed(() => {
           </transition>
 
           <transition name="pop">
-            <Popover v-if="showPopover" :id="post.id" from="post" :fromProfile="isFromProfile" @openEdit="openEdit"
-              @closePopover="closePopover" />
+            <Popover v-if="showPopover" :id="post.id" from="post" :fromProfile="isFromProfile"
+              :isMyPost="store.state.user.uid === post.user.id" @openEdit="openEdit" @closePopover="closePopover" />
           </transition>
 
           <i class="bi bi-three-dots" @click="togglePopover"></i>

@@ -1,7 +1,7 @@
 <script setup>
 import { deletePost } from '@/composables/deletePost'
 import { deleteComment } from '@/composables/deleteComment'
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
 
 const props = defineProps({
@@ -14,6 +14,10 @@ const props = defineProps({
   isMyComment: {
     type: Boolean,
     default: false,
+  },
+  isMyPost: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -54,7 +58,6 @@ const closeOnEscape = (e) => {
 }
 
 onMounted(() => {
-  console.log('Props in Popover:', props);
   if (myPopover.value) {
     myPopover.value.focus()
   }
@@ -65,10 +68,6 @@ onMounted(() => {
 
 })
 
-console.log('From Popover boolean: ', props.fromProfile)
-console.log('From Popover comment: ', props.isMyComment)
-console.log('From Popover: ', props.id)
-console.log('From Popover: ', props.from)
 
 
 </script>
@@ -77,14 +76,16 @@ console.log('From Popover: ', props.from)
   <div @mousedown.self="closePopover" class="backdrop poppins-regular" ref="myPopover" tabindex="0">
     <div class="modal-color w-25 z-3 d-flex justify-content-center rounded-3 p-0">
       <ul class="d-flex flex-column align-items-center justify-content-evenly m-0 p-0 w-100">
-        <li v-if="fromProfile || isMyComment" @click="handleDelete"
+        {{ console.log(store.state.user.uid) }}
+        <li v-if="fromProfile || isMyComment || isMyPost" @click="handleDelete"
           class="text-danger w-100 text-center py-3 border-bt">
           Delete
         </li>
-        <li v-if="fromProfile || isMyComment" @click="openEdit" class="text-light w-100 text-center py-3 border-bt">
+        <li v-if="fromProfile || isMyComment || isMyPost" @click="openEdit"
+          class="text-light w-100 text-center py-3 border-bt">
           Edit
         </li>
-        <li v-if="!fromProfile && !isMyComment" @click="handleReport"
+        <li v-if="!fromProfile && !isMyComment && !isMyPost" @click="handleReport"
           class="text-danger w-100 text-center py-3 border-bt">
           Report
         </li>
