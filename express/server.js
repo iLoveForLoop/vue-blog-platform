@@ -1,3 +1,4 @@
+/**
 import express from 'express'
 import bodyParser from 'body-parser'
 import cloudinary from 'cloudinary'
@@ -80,4 +81,13 @@ const PORT = 3000
 
 app.listen(PORT, () => {
   console.log(`Serving is running on http://localhost:${PORT}`)
+})
+*/
+
+import app from './scr/app.js'
+
+const PORT = 3000
+
+app.listen(PORT, () => {
+  console.log(`Server running at the http://localhost:${PORT}`)
 })

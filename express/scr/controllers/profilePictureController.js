@@ -1,4 +1,4 @@
-import cloudinary from '../config/cloudinary'
+import cloudinary from '../config/cloudinary.js'
 
 export const uploadFile = async (req, res) => {
   try {
@@ -10,7 +10,7 @@ export const uploadFile = async (req, res) => {
     }
 
     const base64Data = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
-    const result = await cloudinary.v2.uploade.upload(base64Data, {
+    const result = await cloudinary.v2.uploader.upload(base64Data, {
       resource_type: 'image',
       folder: 'upload/profiles',
     })
@@ -29,7 +29,23 @@ export const uploadFile = async (req, res) => {
 }
 
 export const deleteFile = async (req, res) => {
+  const { publicId } = req.body
+
   try {
+    const result = await cloudinary.uploader.destroy(publicId)
+    if (result.result == '200') {
+      res.json({
+        success: true,
+        message: 'Image deleted successfully',
+        result,
+      })
+    } else {
+      res.json({
+        success: false,
+        message: 'Image not found',
+        result,
+      })
+    }
   } catch (error) {
     console.log('Failed to delete: ', error.message)
     res.status(500).json({
