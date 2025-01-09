@@ -1,15 +1,18 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { updateComment } from '@/composables/updateComment'
+import { useStore } from 'vuex'
 
 const props = defineProps({
   comment: {},
 })
 
 const emit = defineEmits(['closeEdit'])
+const store = useStore()
 
 const { comment } = props
 
+const myEditComment = ref(null)
 const editedComment = ref(comment.content)
 const error = ref(null)
 
@@ -17,7 +20,7 @@ const handleSubmit = async () => {
   if (editedComment.value.trim() !== '') {
     try {
       await updateComment(comment.id, editedComment.value)
-      emit('closeEdit', false)
+      closeEdit()
     } catch (error) {
       console.log(error.message)
     }
@@ -30,13 +33,26 @@ const handleSubmit = async () => {
 }
 
 const closeEdit = () => {
+  store.commit('setIsComponentOverLapping', false)
   emit('closeEdit', false)
 }
+
+const closeOnEscape = (e) => {
+  console.log('triggered')
+  if (e.key == 'Escape') {
+    closeEdit()
+  }
+}
+
+onMounted(() => {
+  myEditComment.value.focus()
+  myEditComment.value.addEventListener('keydown', closeOnEscape)
+})
 </script>
 
 <template>
   <div class="back d-flex flex-column justify-content-center align-items-center poppins-regular"
-    @mousedown.self="closeEdit">
+    @mousedown.self="closeEdit" ref="myEditComment" tabindex="0">
     <transition name="slide">
       <div class="alert alert-danger errpos" role="alert" v-if="error" style="z-index: 11">
         {{ error }}
@@ -50,8 +66,8 @@ const closeEdit = () => {
         <div class="d-flex flex-column flex-grow-1 w-100">
           <div class="d-flex justify-content-start align-items-center gap-3">
             <img class="create-circle" :src="comment?.user.photoURL
-                ? comment?.user.photoURL
-                : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
+              ? comment?.user.photoURL
+              : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               " alt="user" @click="toggleProfileChange" />
             <p class="m-0 text-light" style="font-size: 1em">
               {{ comment?.user.email }}
@@ -80,6 +96,10 @@ const closeEdit = () => {
   width: 100%;
   z-index: 11;
   background: rgba(0, 0, 0, 0) !important;
+}
+
+.back:focus {
+  outline: none;
 }
 
 .bg-gray {

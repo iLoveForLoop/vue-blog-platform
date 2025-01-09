@@ -51,6 +51,8 @@ const router = useRouter()
 //comments
 const comments = ref([])
 
+//component overlapping checker
+const isComponentOverLapping = computed(() => store.state.isComponentOverLapping)
 
 //kill switch
 let killCommentsWithUser
@@ -131,6 +133,18 @@ onMounted(async () => {
 
 watch(comments, (newVal) => {
   console.log('new comments', newVal)
+})
+
+
+//component overlapping watcher
+watch(isCompomentOverLaps, (newVal) => {
+  if (newVal) {
+    myViewPost.value.removeEventListener('keydown', closeOnEscape)
+  } else {
+    setTimeout(() => {
+      myViewPost.value.addEventListener('keydown', closeOnEscape)
+    }, 200)
+  }
 })
 
 onUnmounted(() => {

@@ -58,6 +58,7 @@ const closeOnEscape = (e) => {
 }
 
 onMounted(() => {
+  store.commit('setIsComponentOverLapping', true)
   if (myPopover.value) {
     myPopover.value.focus()
   }

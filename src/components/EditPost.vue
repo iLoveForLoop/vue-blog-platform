@@ -1,12 +1,15 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { updatePost } from '@/composables/updatePost'
+import { useStore } from 'vuex'
 
 const emit = defineEmits(['closeEditPost'])
 
 const props = defineProps({
   post: [{}],
 })
+
+const store = useStore()
 
 const { post } = props
 const error = ref(null)
@@ -22,7 +25,7 @@ const editPost = async () => {
   if (postContent.value.trim() !== '') {
     try {
       await updatePost(id.value, postContent.value)
-      closeBackdrop()
+      closeEditPost()
     } catch (error) {
       console.log(error.message)
     }
@@ -34,11 +37,10 @@ const editPost = async () => {
   }
 }
 
-const closeBackdrop = () => {
-  emit('closeEditPost', false)
-}
+
 
 const closeEditPost = () => {
+  store.commit('setIsComponentOverLapping', false)
   emit('closeEditPost')
 }
 
@@ -50,6 +52,7 @@ const closeOnEscape = (e) => {
 }
 
 onMounted(() => {
+  store.commit('setIsComponentOverLapping', true)
   myEditPost.value.focus()
   myEditPost.value.addEventListener('keydown', closeOnEscape)
 })

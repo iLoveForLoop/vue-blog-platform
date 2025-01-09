@@ -1,7 +1,7 @@
 <script setup>
 import Actions from './Actions.vue'
 import { useStore } from 'vuex'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import EditPost from './EditPost.vue'
 import {
   differenceInSeconds,
@@ -101,6 +101,10 @@ const timeAgo = computed(() => {
 
   const days = differenceInDays(now, postDate.value)
   return `${days}d`
+})
+
+onMounted(() => {
+
 })
 </script>
 

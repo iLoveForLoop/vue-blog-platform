@@ -12,7 +12,7 @@ export const uploadFile = async (req, res) => {
     const base64Data = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
     const result = await cloudinary.v2.uploader.upload(base64Data, {
       resource_type: 'image',
-      folder: 'upload/profiles',
+      folder: 'uploads/profiles',
     })
 
     res.status(200).json({
