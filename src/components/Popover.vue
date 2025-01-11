@@ -39,7 +39,7 @@ const handleDelete = async () => {
 }
 
 const handleReport = () => {
-  alert('Post Already Reported!')
+  alert('Post Reported!')
   closePopover()
 }
 

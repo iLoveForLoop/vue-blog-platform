@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import CreateNewPost from '../CreateNewPost.vue'
+import Searchbar from './Searchbar.vue'
 
 const emit = defineEmits(['openCreatePost'])
 
@@ -75,35 +76,50 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
     <CreateNewPost v-if="isCreatingPost" @closeCreatePost="isCreatingPost = false" />
   </transition>
 
+
+
   <template v-if="isReady && !isNewUser">
-    <div class="side-w main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-3 gap-3"
+    <div
+      class=" main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-2   gap-3 possition-relative"
       style="height: 100vh" v-if="store.state.user">
-      <div class="w-100 pt-4 ps-4 d-flex align-items-center justify-content-between">
+      <!-- <Searchbar /> -->
+      <div class="w-100 pt-4 ps-3 d-flex align-items-center justify-content-between ">
+
         <div class="fs-3 logo-font">
           <!-- <i class="bi bi-bootstrap-fill"></i> -->
           Rants
         </div>
       </div>
       <router-link to="/home"
-        class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center justify-content-start gap-3 sideBarText"
         @click="manageRoute('rants')">
+
         <i class="bi bi-house-door fs-5"></i>
         Home
       </router-link>
-      <a class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        @click="manageRoute('')">
+        <i class="bi bi-search fs-5"></i>
+        Search
+      </a>
+      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="manageRoute('create')">
         <i class="bi bi-pencil-square fs-5"></i>
         Create
       </a>
-
+      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        @click="manageRoute('')">
+        <i class="bi bi-heart fs-5"></i>
+        Notifications
+      </a>
       <router-link to="/profile"
-        class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+        class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="manageRoute('profile')">
         <i class="bi bi-person fs-5"></i>
         Profile
       </router-link>
 
-      <a class="w-100 py-2 ps-4 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
         @click="manageRoute('settings')">
         <i class="bi bi-gear fs-5"></i>
         Settings
@@ -182,5 +198,9 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
 
 .sideBarText {
   font-size: 0.9em;
+}
+
+a {
+  padding: 3.5em;
 }
 </style>

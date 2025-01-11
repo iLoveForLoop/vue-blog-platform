@@ -146,10 +146,15 @@ const showVerificationCodeModal = data => {
 }
 
 const switchToggle = () => {
+
   toggleSignup.value = !toggleSignup.value
 
   setTimeout(() => {
     toggleLogin.value = !toggleLogin.value
+    email.value = ''
+    password.value = ''
+    confirmPassword.value = ''
+    username.value = ''
   }, 350)
 }
 </script>

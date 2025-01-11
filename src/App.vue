@@ -1,6 +1,6 @@
 <script setup>
-import Sidebar from './components/Sidebar/Sidebar.vue'
-import Searchbar from './components/Sidebar/Searchbar.vue'
+import Leftbar from './components/Sidebars/Leftbar.vue'
+import Rightbar from './components/Sidebars/Rightbar.vue'
 
 
 
@@ -9,9 +9,9 @@ import Searchbar from './components/Sidebar/Searchbar.vue'
 <template>
   <div class="main-bg">
     <div class="d-flex justify-content-center">
-      <Sidebar />
+      <Leftbar />
       <RouterView />
-      <Searchbar />
+      <Rightbar />
     </div>
   </div>
 </template>

@@ -17,7 +17,7 @@
   top: 0;
   left: 0;
   box-sizing: border-box;
-  z-index: 5;
+  z-index: 1;
 }
 
 .blur {
