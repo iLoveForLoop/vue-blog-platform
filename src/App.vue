@@ -2,13 +2,11 @@
 import Leftbar from './components/Sidebars/Leftbar.vue'
 import Rightbar from './components/Sidebars/Rightbar.vue'
 
-
-
 </script>
 
 <template>
   <div class="main-bg">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-start">
       <Leftbar />
       <RouterView />
       <Rightbar />

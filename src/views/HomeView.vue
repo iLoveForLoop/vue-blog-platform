@@ -2,11 +2,23 @@
 import { getSnapCollectionWithUser } from '@/composables/getCollections'
 import Post from '@/components/Post.vue'
 import Header from '@/components/Header.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useStore } from 'vuex'
 
 const showHeader = ref(false)
+const store = useStore()
+
+const handleClick = (e) => {
+  if (!e.target.closest('.leftbar')) {
+    console.log('home handle click')
+    console.log(store.state.isSidebarOpen)
+    store.commit('setIsSidebarOpen', false)
+  }
+
+}
 
 onMounted(() => {
+  document.addEventListener('click', handleClick)
   setTimeout(() => {
     showHeader.value = true
   }, 700)

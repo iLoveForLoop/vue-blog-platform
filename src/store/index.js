@@ -17,6 +17,7 @@ const store = createStore({
     isNewUser: false,
     isOnProfile: false,
     isComponentOverLapping: false,
+    isSidebarOpen: false,
   },
   mutations: {
     updateUser(state, payload) {
@@ -36,6 +37,9 @@ const store = createStore({
     },
     setIsComponentOverLapping(state, payload) {
       state.isComponentOverLapping = payload
+    },
+    setIsSidebarOpen(state, payload) {
+      state.isSidebarOpen = payload
     },
   },
   actions: {

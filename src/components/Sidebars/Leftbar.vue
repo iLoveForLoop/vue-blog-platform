@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import CreateNewPost from '../CreateNewPost.vue'
-import Searchbar from './Searchbar.vue'
+import Notificationbar from './Notificationbar.vue'
 
 const emit = defineEmits(['openCreatePost'])
 
@@ -64,6 +64,18 @@ const closeOnEscape = e => {
 
 onMounted(() => document.addEventListener('keydown', closeOnEscape))
 onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
+
+const isViewingNotification = computed(() => store.state.isSidebarOpen)
+
+
+const toggleNotification = () => {
+
+  store.commit('setIsSidebarOpen', !store.state.isSidebarOpen)
+  console.log('handle click in the left bar')
+  console.log(store.state.isSidebarOpen)
+}
+
+
 </script>
 
 <template>
@@ -80,9 +92,12 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
 
   <template v-if="isReady && !isNewUser">
     <div
-      class=" main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-2   gap-3 possition-relative"
+      class="leftbar main-bg d-flex flex-column poppins-regular text-size zindex text-light r-border px-2   gap-3 possition-relative"
       style="height: 100vh" v-if="store.state.user">
-      <!-- <Searchbar /> -->
+      <transition name="slide">
+        <Notificationbar v-if="isViewingNotification" @closebar="toggleNotification" />
+      </transition>
+
       <div class="w-100 pt-4 ps-3 d-flex align-items-center justify-content-between ">
 
         <div class="fs-3 logo-font">
@@ -108,7 +123,7 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
         Create
       </a>
       <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
-        @click="manageRoute('')">
+        @click="toggleNotification">
         <i class="bi bi-heart fs-5"></i>
         Notifications
       </a>
@@ -202,5 +217,24 @@ onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
 
 a {
   padding: 3.5em;
+}
+
+.slide-enter-active {
+  opacity: 0;
+  transform: translateX(-75%);
+  transition: 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.slide-enter {
+  transform: translateX(-75%);
+  /* Start position off-screen */
+  opacity: 0;
+  /* Optional: fade in along with the slide */
+}
+
+.slide-leave-to {
+  transform: translateX(-75%);
+  opacity: 0;
+  /* Optional: fade out along with the slide */
 }
 </style>
