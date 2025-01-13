@@ -1,7 +1,9 @@
 <script setup>
+import { getNotifications } from '@/composables/Notifications/getNotifications';
 const emit = defineEmits(['closebar'])
 
 const num = 5
+const { notifications } = getNotifications()
 
 
 
@@ -18,12 +20,11 @@ const num = 5
       <h4 class="text-light m-0">Notifications</h4>
       <i class="bi bi-arrow-left-short" @click="emit('closebar')" style="font-size: 1.9em;"></i>
     </div>
-    <div class="" v-for="n in num" :key="n">
+    <div class="" v-for="notif in notifications" :key="notif.id">
       <div class="d-flex justify-content-start align-items-start gap-2 p-2 mb-3">
-        <img class="my-circle"
-          :src="'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'"
-          alt="pic" />
-        <p class="m-0" style="font-size: .8em;">jefersonbayking liked you the quick little brown fox jumps </p>
+        <img class="my-circle" :src="notif.from_user.photoURL" alt="pic" />
+        <p class="m-0" style="font-size: .8em;">{{ notif.from_user.displayName }} liked you the quick little brown fox
+          jumps </p>
       </div>
     </div>
   </div>

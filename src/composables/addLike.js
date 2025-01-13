@@ -14,7 +14,7 @@ export const addLike = async data => {
   }
 
   const notifData = {
-    from_user: store.state.user.uid,
+    from_user: data.user,
     to_user: data.to_user,
     type: 'likepost',
     status: 'saved',

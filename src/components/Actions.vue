@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted, defineProps, computed } from 'vue'
 import { addLike } from '@/composables/addLike'
+import { getCurrentProfileInfo } from '@/composables/getProfileDetails'
 
 import { db } from '@/firebase/config'
 
@@ -14,9 +15,7 @@ import {
 } from 'firebase/firestore'
 import { useStore } from 'vuex'
 
-import { useRouter } from 'vue-router'
 
-import { usePostStore } from '@/store/piniaStore'
 import ViewPost from './ViewPost.vue'
 
 
@@ -49,6 +48,8 @@ const commentClick = ref(false)
 
 const isViewingPost = ref(false)
 const currentlyViewing = ref(false)
+
+const { user } = getCurrentProfileInfo()
 
 
 // const closeOnEscape = (e) => {
@@ -118,7 +119,9 @@ const toggle = async data => {
             post_id: post.id,
             user_id: store.state.user.uid,
             created_at: Timestamp.now(),
-            to_user: post.user.id
+            to_user: post.user.id,
+            user: user.value,
+
           }
           await addLike(likeData)
           alreadyLiked.value = true
