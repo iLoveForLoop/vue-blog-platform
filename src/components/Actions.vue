@@ -119,7 +119,7 @@ const toggle = async data => {
             post_id: post.id,
             user_id: store.state.user.uid,
             created_at: Timestamp.now(),
-            to_user: post.user.id,
+            to_user_id: post.user.id,
             user: user.value,
 
           }

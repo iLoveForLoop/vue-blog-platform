@@ -15,7 +15,8 @@ export const addLike = async data => {
 
   const notifData = {
     from_user: data.user,
-    to_user: data.to_user,
+    to_user_id: data.to_user_id,
+    from_user_id: store.state.user.uid,
     type: 'likepost',
     status: 'saved',
     post_id: data.post_id,
@@ -31,8 +32,11 @@ export const addLike = async data => {
   try {
     const likesRef = collection(db, 'likes')
     addDoc(likesRef, LikeData)
-
-    if (!isNotifExist) {
+    console.log(
+      'empty? so means the data notif not exist: ',
+      await checkIfNotifExist(notifCheckerData),
+    )
+    if (await checkIfNotifExist(notifCheckerData)) {
       try {
         addNotification(notifData)
         console.log('adding notification success')

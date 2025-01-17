@@ -5,10 +5,10 @@ export const checkIfNotifExist = async data => {
   const notifRef = collection(db, 'notifications')
   const q = query(
     notifRef,
-    where('from_user', '==', data.from_user),
+    where('from_user.id', '==', data.from_user),
     where('post_id', '==', data.type_id),
   )
 
   const notifSnapshot = await getDocs(q)
-  return !notifSnapshot.empty
+  return notifSnapshot.empty
 }

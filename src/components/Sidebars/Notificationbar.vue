@@ -10,6 +10,7 @@ const { notifications } = getNotifications()
 
 
 
+
 </script>
 
 <template>
@@ -22,7 +23,10 @@ const { notifications } = getNotifications()
     </div>
     <div class="" v-for="notif in notifications" :key="notif.id">
       <div class="d-flex justify-content-start align-items-start gap-2 p-2 mb-3">
-        <img class="my-circle" :src="notif.from_user.photoURL" alt="pic" />
+        <div>
+          <img class="my-circle" :src="notif.from_user.photoURL" alt="pic" />
+        </div>
+
         <p class="m-0" style="font-size: .8em;">{{ notif.from_user.displayName }} liked you the quick little brown fox
           jumps </p>
       </div>
