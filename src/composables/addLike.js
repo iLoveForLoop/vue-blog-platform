@@ -50,3 +50,12 @@ export const addLike = async data => {
     console.log(error.message)
   }
 }
+
+export const addCommentLike = async data => {
+  try {
+    const likesRef = collection(db, 'likes')
+    await addDoc(likesRef, data)
+  } catch (err) {
+    console.log('Error adding comment: ', err.message)
+  }
+}

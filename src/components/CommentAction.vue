@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { db } from '@/firebase/config'
-import { addLike } from '@/composables/addLike'
+import { addCommentLike } from '@/composables/addLike'
 import { deleteLike } from '@/composables/deleteLike'
 import {
   collection,
@@ -85,7 +85,7 @@ const toggleReact = async () => {
         created_at: Timestamp.now(),
       }
 
-      await addLike(data)
+      await addCommentLike(data)
       isClicked.value = true
     } catch (error) {
       console.log(error.message)
@@ -103,9 +103,7 @@ watch(isClicked, newVal => {
 </script>
 
 <template>
-  <div
-    class="text-light d-flex flex-column justify-content-between align-items-center mt-1"
-  >
+  <div class="text-light d-flex flex-column justify-content-between align-items-center mt-1">
     <div class="d-flex flex-column align-items-center">
       <i :class="heart" @click="toggleReact"></i>
       <p class="m-0 ts">{{ likesCount == 0 ? '' : likesCount }}</p>
