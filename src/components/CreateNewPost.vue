@@ -83,7 +83,7 @@ const closeCreatePost = () => {
               ? user.value?.photoURL
               : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               " alt="user" @click="toggleProfileChange" />
-            <p class="m-0 text-light" style="font-size: 1em">{{ email }}</p>
+            <p class="m-0 text-light" style="font-size: 1em">{{ user.value?.displayName }}</p>
           </div>
 
           <textarea class="form-control w-100 bg-transparent no-border my-border text-light px-3 mt-3 flex-grow-1"

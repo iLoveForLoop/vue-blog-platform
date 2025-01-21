@@ -70,7 +70,7 @@ onMounted(() => {
               : 'https://res.cloudinary.com/dgfjrmpfn/image/upload/v1733405834/ofc-default-profile_vjgusy.jpg'
               " alt="user" @click="toggleProfileChange" />
             <p class="m-0 text-light" style="font-size: 1em">
-              {{ comment?.user.email }}
+              {{ comment?.user.displayName }}
             </p>
           </div>
 

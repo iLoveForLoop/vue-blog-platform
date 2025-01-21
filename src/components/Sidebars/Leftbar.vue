@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import CreateNewPost from '../CreateNewPost.vue'
@@ -51,6 +51,13 @@ const manageRoute = data => {
 const isReady = computed(() => store.state.isAuthReady)
 const isNewUser = computed(() => store.state.isNewUser)
 
+
+
+const isThereNewNotif = computed(() => store.state.isThereNewNotif)
+const newNotif = computed(() => isThereNewNotif.value ? 'small-red-circle' : '')
+console.log('From leftbar notif: ', isThereNewNotif.value)
+
+
 const closeCreatePost = () => {
   isCreatingPost.value = false
 }
@@ -62,7 +69,13 @@ const closeOnEscape = e => {
   }
 }
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape))
+// store.commit('setIsThereNewNotif', true)
+
+
+
+
+onMounted(() => document.addEventListener('keydown', closeOnEscape)
+)
 onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
 
 const isViewingNotification = computed(() => store.state.isSidebarOpen)
@@ -70,10 +83,13 @@ const isViewingNotification = computed(() => store.state.isSidebarOpen)
 
 const toggleNotification = () => {
 
+
   store.commit('setIsSidebarOpen', !store.state.isSidebarOpen)
   console.log('handle click in the left bar')
   console.log(store.state.isSidebarOpen)
 }
+
+
 
 
 </script>
@@ -122,8 +138,11 @@ const toggleNotification = () => {
         <i class="bi bi-pencil-square fs-5"></i>
         Create
       </a>
-      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText"
+      <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText position-relative"
         @click="toggleNotification">
+        <div class="bg-danger position-absolute" :class="newNotif">
+
+        </div>
         <i class="bi bi-heart fs-5"></i>
         Notifications
       </a>
@@ -236,5 +255,15 @@ a {
   transform: translateX(-75%);
   opacity: 0;
   /* Optional: fade out along with the slide */
+}
+
+.small-red-circle {
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  border-radius: 50%;
+  top: 0.7em;
+  left: 2em;
+  z-index: 10;
 }
 </style>

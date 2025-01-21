@@ -2,6 +2,7 @@ import { db } from '@/firebase/config'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import store from '@/store'
 import { ref } from 'vue'
+import { isEqual } from 'lodash'
 
 export const getNotifications = () => {
   const notifications = ref([])
@@ -26,9 +27,13 @@ export const getNotifications = () => {
           })
           .filter(item => item !== null)
 
-        notifications.value = unordereNotifs.sort(
+        const sortedNotifs = unordereNotifs.sort(
           (a, b) => b.created_at.toMillis() - a.created_at.toMillis(),
         )
+
+        if (!isEqual(sortedNotifs, notifications.value)) {
+          notifications.value = sortedNotifs
+        }
       },
       err => {
         console.log('Error getting notification: ', err.message)

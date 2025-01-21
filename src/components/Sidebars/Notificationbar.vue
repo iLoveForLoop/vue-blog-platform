@@ -1,14 +1,29 @@
 <script setup>
 import { getNotifications } from '@/composables/Notifications/getNotifications';
+import { onMounted, watch } from 'vue';
+import { useStore } from 'vuex';
+import { isEqual } from 'lodash';
+
 const emit = defineEmits(['closebar'])
+const store = useStore()
 
 const num = 5
 const { notifications } = getNotifications()
 
 
+watch(notifications, (newNotifs, oldNotifs) => {
+  // console.log('watching notifs')
+  if (!isEqual(newNotifs, oldNotifs)) {
+    console.log('New notifications detected');
+    store.commit('setIsThereNewNotif', true)
+  }
+
+})
 
 
-
+onMounted(() => {
+  store.commit('setIsThereNewNotif', false)
+})
 
 
 </script>
