@@ -19,6 +19,7 @@ const store = createStore({
     isComponentOverLapping: false,
     isSidebarOpen: false,
     isThereNewNotif: false,
+    currentNotifCount: 0,
   },
   mutations: {
     updateUser(state, payload) {
@@ -44,6 +45,9 @@ const store = createStore({
     },
     setIsThereNewNotif(state, payload) {
       state.isThereNewNotif = payload
+    },
+    setCurrentNotifCount(state, payload) {
+      state.currentNotifCount = payload
     },
   },
   actions: {

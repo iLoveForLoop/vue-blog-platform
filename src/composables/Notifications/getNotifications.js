@@ -8,6 +8,7 @@ export const getNotifications = () => {
   const notifications = ref([])
   try {
     const notifRef = collection(db, 'notifications')
+    const q = query(notifRef, where('to_user_id', '==', store.state.user.uid))
 
     onSnapshot(
       notifRef,
@@ -16,10 +17,7 @@ export const getNotifications = () => {
           .map(doc => {
             const data = doc.data()
 
-            if (
-              data.from_user.id !== store.state.user.uid &&
-              data.to_user_id === store.state.user.uid
-            ) {
+            if (data.from_user.id !== store.state.user.uid) {
               return { ...doc.data(), id: doc.id }
             }
 
@@ -31,8 +29,10 @@ export const getNotifications = () => {
           (a, b) => b.created_at.toMillis() - a.created_at.toMillis(),
         )
 
-        if (!isEqual(sortedNotifs, notifications.value)) {
-          notifications.value = sortedNotifs
+        notifications.value = sortedNotifs
+
+        if (sortedNotifs.length !== store.state.currentNotifCount) {
+          store.commit('setIsThereNewNotif', true)
         }
       },
       err => {

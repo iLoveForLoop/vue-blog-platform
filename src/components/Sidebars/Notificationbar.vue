@@ -12,17 +12,17 @@ const { notifications } = getNotifications()
 
 
 watch(notifications, (newNotifs, oldNotifs) => {
-  // console.log('watching notifs')
-  if (!isEqual(newNotifs, oldNotifs)) {
-    console.log('New notifications detected');
-    store.commit('setIsThereNewNotif', true)
-  }
+  console.log('notif component')
+  store.commit('setCurrentNotifCount', newNotifs.length)
+
+
 
 })
 
 
 onMounted(() => {
   store.commit('setIsThereNewNotif', false)
+
 })
 
 
