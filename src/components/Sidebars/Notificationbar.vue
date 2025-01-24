@@ -15,8 +15,6 @@ watch(notifications, (newNotifs, oldNotifs) => {
   console.log('notif component')
   store.commit('setCurrentNotifCount', newNotifs.length)
 
-
-
 })
 
 

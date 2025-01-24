@@ -33,6 +33,7 @@ export const getNotifications = () => {
 
         if (sortedNotifs.length !== store.state.currentNotifCount) {
           store.commit('setIsThereNewNotif', true)
+          store.commit('setCurrentNotifCount', sortedNotifs.length)
         }
       },
       err => {

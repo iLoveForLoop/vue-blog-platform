@@ -83,7 +83,7 @@ const isViewingNotification = computed(() => store.state.isSidebarOpen)
 
 const toggleNotification = () => {
 
-
+  store.commit('setIsThereNewNotif', false)
   store.commit('setIsSidebarOpen', !store.state.isSidebarOpen)
   console.log('handle click in the left bar')
   console.log(store.state.isSidebarOpen)
