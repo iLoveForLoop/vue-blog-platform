@@ -25,6 +25,14 @@ onMounted(() => {
 })
 
 const { posts } = getSnapCollectionWithUser()
+
+// const logout = async () => {
+//   store.commit('setIsNewUser', false)
+//   await store.dispatch('logout')
+//   router.push('/login')
+// }
+
+// logout()
 </script>
 
 

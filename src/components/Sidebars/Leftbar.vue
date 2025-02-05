@@ -54,7 +54,7 @@ const isNewUser = computed(() => store.state.isNewUser)
 
 
 const isThereNewNotif = computed(() => store.state.isThereNewNotif)
-const newNotif = computed(() => isThereNewNotif.value ? 'small-red-circle' : '')
+// const newNotif = computed(() => isThereNewNotif.value ? 'small-red-circle' : '')
 console.log('From leftbar notif: ', isThereNewNotif.value)
 
 
@@ -140,7 +140,7 @@ const toggleNotification = () => {
       </a>
       <a class="w-100 py-2 ps-3 sideHover pointer text-light rounded text-decoration-none d-flex align-items-center gap-3 sideBarText position-relative"
         @click="toggleNotification">
-        <div class="bg-danger position-absolute" :class="newNotif">
+        <div v-if="isThereNewNotif" class="bg-danger position-absolute small-red-circle">
 
         </div>
         <i class="bi bi-heart fs-5"></i>

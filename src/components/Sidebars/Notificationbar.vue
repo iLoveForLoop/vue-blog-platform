@@ -11,7 +11,7 @@ const num = 5
 const { notifications } = getNotifications()
 
 
-watch(notifications, (newNotifs, oldNotifs) => {
+watch(notifications, (newNotifs) => {
   console.log('notif component')
   store.commit('setCurrentNotifCount', newNotifs.length)
 
@@ -23,7 +23,12 @@ onMounted(() => {
 
 })
 
+const typeIdentifier = (data) => {
+  if (data == 'likepost') return 'liked your post'
 
+  return ''
+
+}
 </script>
 
 <template>
@@ -35,13 +40,14 @@ onMounted(() => {
       <i class="bi bi-arrow-left-short" @click="emit('closebar')" style="font-size: 1.9em;"></i>
     </div>
     <div class="" v-for="notif in notifications" :key="notif.id">
-      <div class="d-flex justify-content-start align-items-start gap-2 p-2 mb-3">
+      <div class="d-flex justify-content-start align-items-center gap-2 p-2 mb-3">
+
         <div>
           <img class="my-circle" :src="notif.from_user.photoURL" alt="pic" />
         </div>
 
-        <p class="m-0" style="font-size: .8em;">{{ notif.from_user.displayName }} liked you the quick little brown fox
-          jumps </p>
+        <p class="m-0" style="font-size: .8em;">{{ notif.from_user.displayName }} <span class="fw-lighter">{{
+          typeIdentifier(notif.type) }}</span> </p>
       </div>
     </div>
   </div>

@@ -11,7 +11,7 @@ export const getNotifications = () => {
     const q = query(notifRef, where('to_user_id', '==', store.state.user.uid))
 
     onSnapshot(
-      notifRef,
+      q,
       snapshot => {
         const unordereNotifs = snapshot.docs
           .map(doc => {
